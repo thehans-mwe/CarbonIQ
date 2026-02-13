@@ -32,7 +32,6 @@ const team = [
 const milestones = [
   { value: 2024, label: 'Founded', suffix: '' },
   { value: 2400, label: 'Organizations', suffix: '+' },
-  { value: 18, label: 'Countries', suffix: '' },
   { value: 4.2, label: 'Mt CO₂ Tracked', suffix: 'M' },
 ];
 
@@ -82,6 +81,9 @@ export default function About() {
             CarbonIQ was founded on a simple belief: you can't fix what you don't
             measure. We're a team of climate scientists, engineers, and designers
             on a mission to make carbon tracking effortless and actionable.
+            <span className="block mt-3 text-accent-green/80 font-medium text-base">
+              Your privacy matters — we don't store, save, or keep any of your personal data. Ever.
+            </span>
           </p>
         </motion.div>
 
@@ -90,7 +92,7 @@ export default function About() {
           variants={containerVariants}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-24"
+          className="grid grid-cols-3 gap-5 mb-24"
         >
           {milestones.map((m) => (
             <motion.div
