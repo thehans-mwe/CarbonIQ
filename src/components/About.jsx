@@ -4,28 +4,10 @@ import CountUp from 'react-countup';
 
 const team = [
   {
-    name: 'Alex Rivera',
-    role: 'Co-Founder & CEO',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&h=300&fit=crop&crop=face',
-    bio: 'Former climate scientist at NASA. Built CarbonIQ to bridge the gap between data and action.',
-  },
-  {
-    name: 'Maya Thompson',
-    role: 'Co-Founder & CTO',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&h=300&fit=crop&crop=face',
-    bio: 'Ex-Google engineering lead. Passionate about using technology to solve the climate crisis.',
-  },
-  {
-    name: 'Omar Hassan',
-    role: 'Head of AI',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&h=300&fit=crop&crop=face',
-    bio: 'PhD in ML from Stanford. Previously built predictive models at DeepMind.',
-  },
-  {
-    name: 'Priya Sharma',
-    role: 'Head of Sustainability',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&h=300&fit=crop&crop=face',
-    bio: 'Former IPCC advisor. Ensures our methodology meets the highest scientific standards.',
+    name: 'Thehan Sandaneth',
+    role: 'Founder & Developer',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face',
+    bio: 'Full-stack developer and climate enthusiast. Built CarbonIQ to make carbon tracking accessible to everyone.',
   },
 ];
 
@@ -155,13 +137,13 @@ export default function About() {
           transition={{ duration: 0.7, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
           <h3 className="text-2xl md:text-3xl font-bold text-center mb-12 tracking-tight">
-            The <span className="gradient-text">Team</span>
+            The <span className="gradient-text">Creator</span>
           </h3>
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="flex justify-center"
           >
             {team.map((member) => (
               <motion.div
