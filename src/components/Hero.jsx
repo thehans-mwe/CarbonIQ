@@ -36,7 +36,7 @@ const itemVariants = {
   },
 };
 
-export default function Hero() {
+export default function Hero({ onGetStarted, onDemo }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background shapes */}
@@ -96,22 +96,22 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <motion.a
-            href="#cta"
+          <motion.button
+            onClick={onGetStarted}
             whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0,232,143,0.3)' }}
             whileTap={{ scale: 0.97 }}
             className="btn-glow px-8 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow transition-all duration-300"
           >
             Start Tracking &mdash; Free
-          </motion.a>
-          <motion.a
-            href="#dashboard"
+          </motion.button>
+          <motion.button
+            onClick={onDemo}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             className="px-8 py-4 rounded-2xl glass text-white/80 font-medium text-base hover:text-white transition-all duration-300 hover:border-white/10"
           >
-            View Live Demo
-          </motion.a>
+            Try Demo Account
+          </motion.button>
         </motion.div>
 
         {/* Scroll indicator */}

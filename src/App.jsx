@@ -1,3 +1,4 @@
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -5,6 +6,12 @@ import Dashboard from './components/Dashboard';
 import Features from './components/Features';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
+import Calculator from './components/Calculator';
+import ResultsDashboard from './components/ResultsDashboard';
+import { fetchCarbonEstimate, fetchRecommendations } from './services/api';
+import { DEMO_INPUTS, DEMO_CARBON, DEMO_RECOMMENDATIONS } from './services/demoData';
+
+// views: 'landing' | 'calculator' | 'results'
 
 const pageVariants = {
   initial: { opacity: 0 },
@@ -15,20 +22,77 @@ const pageVariants = {
 };
 
 export default function App() {
+  const [view, setView] = useState('landing');
+  const [carbonData, setCarbonData] = useState(null);
+  const [recommendations, setRecommendations] = useState(null);
+  const [inputs, setInputs] = useState(null);
+
+  const goLanding = useCallback(() => { setView('landing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+  const goCalculator = useCallback(() => { setView('calculator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
+
+  // Calculate from user input
+  const handleCalculate = useCallback(async (formData) => {
+    setInputs(formData);
+
+    // Step 1: carbon estimate (API with offline fallback)
+    const carbon = await fetchCarbonEstimate(formData);
+    setCarbonData(carbon);
+    setRecommendations(null); // clear while loading
+    setView('results');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Step 2: AI recommendations (async, arrives after)
+    const recs = await fetchRecommendations(carbon, formData);
+    setRecommendations(recs);
+  }, []);
+
+  // Demo mode
+  const handleDemo = useCallback(() => {
+    setInputs(DEMO_INPUTS);
+    setCarbonData(DEMO_CARBON);
+    setRecommendations(DEMO_RECOMMENDATIONS);
+    setView('results');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
       <motion.div
+        key={view}
         variants={pageVariants}
         initial="initial"
         animate="animate"
         className="min-h-screen animated-gradient-bg"
       >
-        <Navbar />
-        <Hero />
-        <Dashboard />
-        <Features />
-        <CTA />
-        <Footer />
+        <Navbar onDashboard={goCalculator} />
+
+        {view === 'landing' && (
+          <>
+            <Hero onGetStarted={goCalculator} onDemo={handleDemo} />
+            <Dashboard />
+            <Features />
+            <CTA onGetStarted={goCalculator} />
+            <Footer />
+          </>
+        )}
+
+        {view === 'calculator' && (
+          <Calculator
+            onCalculate={handleCalculate}
+            onBack={goLanding}
+            onDemo={handleDemo}
+          />
+        )}
+
+        {view === 'results' && carbonData && (
+          <ResultsDashboard
+            carbonData={carbonData}
+            recommendations={recommendations}
+            inputs={inputs}
+            onBack={goLanding}
+            onRecalculate={goCalculator}
+          />
+        )}
       </motion.div>
     </AnimatePresence>
   );

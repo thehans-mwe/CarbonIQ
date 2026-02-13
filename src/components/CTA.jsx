@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-export default function CTA() {
+export default function CTA({ onGetStarted }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
@@ -51,28 +51,24 @@ export default function CTA() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <motion.a
-                href="#"
+              <motion.button
+                onClick={onGetStarted}
                 whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0,232,143,0.25)' }}
                 whileTap={{ scale: 0.97 }}
                 className="btn-glow px-10 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow"
               >
-                Start Free Trial
-              </motion.a>
-              <motion.a
-                href="#"
+                Start Tracking Now
+              </motion.button>
+              <motion.button
+                onClick={onGetStarted}
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 className="px-10 py-4 rounded-2xl glass text-white/80 font-medium text-base hover:text-white transition-all duration-300"
               >
                 Book a Demo
-              </motion.a>
+              </motion.button>
             </div>
 
-            <p className="text-gray-500 text-sm mt-6">
-              No credit card required &middot; 14-day free trial &middot; Cancel
-              anytime
-            </p>
           </motion.div>
         </motion.div>
       </div>

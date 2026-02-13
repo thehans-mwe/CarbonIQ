@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const navLinks = [
-  { label: 'Dashboard', href: '#dashboard' },
+const staticLinks = [
   { label: 'Features', href: '#features' },
   { label: 'About', href: '#about' },
 ];
 
-export default function Navbar() {
+export default function Navbar({ onDashboard }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -43,7 +42,14 @@ export default function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+          <button
+            onClick={onDashboard}
+            className="text-sm text-gray-400 hover:text-white transition-colors duration-300 relative group"
+          >
+            Dashboard
+            <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-green transition-all duration-300 group-hover:w-full" />
+          </button>
+          {staticLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
@@ -53,14 +59,14 @@ export default function Navbar() {
               <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-green transition-all duration-300 group-hover:w-full" />
             </a>
           ))}
-          <motion.a
-            href="#cta"
+          <motion.button
+            onClick={onDashboard}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
             className="btn-glow px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 text-sm font-semibold transition-shadow duration-300 hover:shadow-glow"
           >
             Get Started
-          </motion.a>
+          </motion.button>
         </div>
 
         {/* Mobile toggle */}
@@ -94,7 +100,13 @@ export default function Navbar() {
             className="md:hidden overflow-hidden glass"
           >
             <div className="px-6 py-4 flex flex-col gap-4">
-              {navLinks.map((link) => (
+              <button
+                onClick={() => { setMobileOpen(false); onDashboard(); }}
+                className="text-gray-300 hover:text-white transition-colors text-left"
+              >
+                Dashboard
+              </button>
+              {staticLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
@@ -104,13 +116,12 @@ export default function Navbar() {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="#cta"
-                onClick={() => setMobileOpen(false)}
+              <button
+                onClick={() => { setMobileOpen(false); onDashboard(); }}
                 className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 text-sm font-semibold text-center"
               >
                 Get Started
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
