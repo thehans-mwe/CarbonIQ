@@ -23,7 +23,7 @@ export default function Navbar({ onDashboard }) {
       transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? 'glass shadow-glass py-3'
+          ? 'bg-navy-900/80 backdrop-blur-xl shadow-glass py-3'
           : 'bg-transparent py-5'
       }`}
     >

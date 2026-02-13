@@ -50,7 +50,7 @@ export default function CTA({ onGetStarted }) {
               to drive measurable climate action.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="flex items-center justify-center">
               <motion.button
                 onClick={onGetStarted}
                 whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0,232,143,0.25)' }}
@@ -58,14 +58,6 @@ export default function CTA({ onGetStarted }) {
                 className="btn-glow px-10 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow"
               >
                 Start Tracking Now
-              </motion.button>
-              <motion.button
-                onClick={onGetStarted}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                className="px-10 py-4 rounded-2xl glass text-white/80 font-medium text-base hover:text-white transition-all duration-300"
-              >
-                Book a Demo
               </motion.button>
             </div>
 
