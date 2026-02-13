@@ -5,6 +5,8 @@ import Hero from './components/Hero';
 import Dashboard from './components/Dashboard';
 import Features from './components/Features';
 import CTA from './components/CTA';
+import Testimonials from './components/Testimonials';
+import About from './components/About';
 import Footer from './components/Footer';
 import Calculator from './components/Calculator';
 import ResultsDashboard from './components/ResultsDashboard';
@@ -71,6 +73,8 @@ export default function App() {
             <Hero onGetStarted={goCalculator} onDemo={handleDemo} />
             <Dashboard />
             <Features />
+            <Testimonials />
+            <About />
             <CTA onGetStarted={goCalculator} />
             <Footer />
           </>
