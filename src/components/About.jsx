@@ -6,7 +6,7 @@ const team = [
   {
     name: 'Thehan Sandaneth',
     role: 'Founder & Developer',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face',
+    image: null,
     bio: 'Full-stack developer and climate enthusiast. Built CarbonIQ to make carbon tracking accessible to everyone.',
   },
 ];
@@ -154,12 +154,18 @@ export default function About() {
               >
                 <div className="absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br from-accent-green/10 to-accent-blue/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 <div className="relative z-10">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-20 h-20 rounded-2xl object-cover mx-auto mb-4 ring-2 ring-white/10 group-hover:ring-accent-green/30 transition-all duration-300"
-                    loading="lazy"
-                  />
+                  {member.image ? (
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-20 h-20 rounded-2xl object-cover mx-auto mb-4 ring-2 ring-white/10 group-hover:ring-accent-green/30 transition-all duration-300"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-2xl mx-auto mb-4 ring-2 ring-white/10 group-hover:ring-accent-green/30 transition-all duration-300 bg-gradient-to-br from-accent-green/20 to-accent-blue/20 flex items-center justify-center">
+                      <span className="text-2xl font-bold gradient-text">{member.name.split(' ').map(n => n[0]).join('')}</span>
+                    </div>
+                  )}
                   <h4 className="text-base font-semibold text-white">{member.name}</h4>
                   <p className="text-xs text-accent-green font-medium mt-1 mb-3">{member.role}</p>
                   <p className="text-sm text-gray-400 leading-relaxed">{member.bio}</p>
