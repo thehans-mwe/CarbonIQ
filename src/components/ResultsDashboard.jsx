@@ -387,15 +387,18 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                       className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors duration-300"
                     >
-                      <span className="text-2xl">{c.icon}</span>
+                      <span className="text-3xl">{c.icon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-base text-white font-medium">{c.label}</span>
-                          <span className="text-base font-bold text-white">
-                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-amber-400/70">kg</span>
+                          <div>
+                            <span className="text-lg text-white font-semibold block">{c.label}</span>
+                            <span className="text-xs text-amber-400/60">{carbonData.totalKg > 0 ? Math.round((c.value / carbonData.totalKg) * 100) : 0}% of total</span>
+                          </div>
+                          <span className="text-lg font-bold text-white">
+                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-amber-400">kg</span>
                           </span>
                         </div>
-                        <div className="mt-2 h-2 rounded-full bg-white/[0.06] overflow-hidden">
+                        <div className="mt-2.5 h-2.5 rounded-full bg-white/[0.08] overflow-hidden">
                           <motion.div
                             className="h-full rounded-full"
                             style={{ background: c.color }}
@@ -526,10 +529,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         </div>
                         <div className="grid grid-cols-2 gap-3 mt-5">
                           {pieData.map((d) => (
-                            <div key={d.name} className="flex items-center gap-2.5 text-sm">
-                              <span className="w-3 h-3 rounded-full flex-shrink-0 ring-2 ring-white/[0.06]" style={{ background: d.color }} />
-                              <span className="text-white/80">{d.name}</span>
-                              <span className="text-white font-semibold ml-auto">{d.value.toFixed(1)}</span>
+                            <div key={d.name} className="flex items-center gap-3 text-base">
+                              <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 ring-2 ring-white/[0.08]" style={{ background: d.color }} />
+                              <span className="text-white font-medium">{d.name}</span>
+                              <span className="text-amber-400 font-bold ml-auto">{d.value.toFixed(1)} <span className="text-xs font-normal text-amber-400/60">kg</span></span>
                             </div>
                           ))}
                         </div>
@@ -589,10 +592,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             </span>
                           </div>
                           <div className="text-2xl font-bold text-white">
-                            <CountUp end={c.value} duration={1.8} decimals={1} /> <span className="text-sm text-amber-400/60 font-normal">kg</span>
+                            <CountUp end={c.value} duration={1.8} decimals={1} /> <span className="text-sm text-amber-400 font-normal">kg</span>
                           </div>
-                          <p className="text-sm text-amber-400/80 mt-1 font-medium">{c.label}</p>
-                          <p className="text-xs text-white/40 mt-2">{c.detail}</p>
+                          <p className="text-base text-white/90 mt-1 font-semibold">{c.label}</p>
+                          <p className="text-sm text-amber-400/70 mt-1">{c.detail}</p>
                           <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}

@@ -55,7 +55,7 @@ export default function Footer() {
             {/* Creator */}
             <div className="flex items-center gap-3 mt-6 mb-4">
               <img
-                src="https://api.dicebear.com/8.x/notionists/svg?seed=CarbonIQCreator&backgroundColor=0a0a0a"
+                src="https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a"
                 alt="Creator"
                 className="w-10 h-10 rounded-full ring-2 ring-accent-green/30 bg-navy-800"
                 loading="lazy"
