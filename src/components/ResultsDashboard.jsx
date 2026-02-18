@@ -83,8 +83,8 @@ function ComparisonBar({ label, value, maxValue, color, delay }) {
       className="space-y-1.5"
     >
       <div className="flex items-center justify-between">
-        <span className="text-base text-gray-200 font-medium">{label}</span>
-        <span className="text-base font-bold text-white">{value.toFixed(0)} <span className="text-sm font-normal text-gray-400">kg CO₂</span></span>
+        <span className="text-base text-white font-medium">{label}</span>
+        <span className="text-base font-bold text-white">{value.toFixed(0)} <span className="text-sm font-normal text-amber-400/70">kg CO₂</span></span>
       </div>
       <div className="h-3.5 rounded-full bg-white/[0.06] overflow-hidden">
         <motion.div
@@ -209,7 +209,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
         >
           <motion.button
             onClick={onBack}
-            className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors group"
+            className="flex items-center gap-2 text-sm text-amber-400/60 hover:text-white transition-colors group"
           >
             <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -283,7 +283,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         <span className="text-4xl font-serif font-semibold gradient-text">
                           <CountUp end={recs?.score || 0} duration={2.5} delay={0.3} />
                         </span>
-                        <span className="block text-xs text-gray-400 mt-1">Green Score</span>
+                        <span className="block text-xs text-amber-400/70 mt-1">Green Score</span>
                       </div>
                     </motion.div>
                   </div>
@@ -300,7 +300,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                   >
                     <h2 className="font-serif text-5xl md:text-6xl font-semibold tracking-tight mb-2">
                       <CountUp end={carbonData.totalKg} duration={2.5} delay={0.5} decimals={1} separator="," />
-                      <span className="text-xl text-gray-500 font-normal ml-2">kg CO₂</span>
+                      <span className="text-xl text-amber-400/60 font-normal ml-2">kg CO₂</span>
                     </h2>
                     <motion.span
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -322,7 +322,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 0.6 }}
-                    className="text-gray-400 text-base max-w-lg mx-auto mt-4 leading-relaxed"
+                    className="text-gray-300 text-base max-w-lg mx-auto mt-4 leading-relaxed"
                   >
                     {recs?.summary || 'Calculating your personalized insights…'}
                   </motion.p>
@@ -390,9 +390,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       <span className="text-2xl">{c.icon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-base text-gray-200 font-medium">{c.label}</span>
+                          <span className="text-base text-white font-medium">{c.label}</span>
                           <span className="text-base font-bold text-white">
-                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-gray-400">kg</span>
+                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-amber-400/70">kg</span>
                           </span>
                         </div>
                         <div className="mt-2 h-2 rounded-full bg-white/[0.06] overflow-hidden">
@@ -432,7 +432,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                       activeTab === tab.id
                         ? 'bg-accent-green/15 text-accent-green border border-accent-green/20'
-                        : 'bg-white/[0.03] border border-white/[0.06] text-gray-400 hover:text-white'
+                        : 'bg-white/[0.03] border border-white/[0.06] text-gray-300 hover:text-white'
                     }`}
                   >
                     {tab.label}
@@ -470,9 +470,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           <span className="text-2xl">{s.icon}</span>
                           <div className={`text-2xl md:text-3xl font-bold mt-2 ${s.color}`}>
                             <CountUp end={s.value} duration={2} separator="," />
-                            <span className="text-sm text-gray-500 font-normal">{s.suffix}</span>
+                            <span className="text-sm text-amber-400/60 font-normal">{s.suffix}</span>
                           </div>
-                          <span className="text-xs text-gray-500 mt-1">{s.label}</span>
+                          <span className="text-xs text-amber-400/70 mt-1">{s.label}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -486,7 +486,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         className="lg:col-span-3 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
                       >
                         <h3 className="text-xl font-semibold text-white font-serif mb-1">Weekly Trend</h3>
-                        <p className="text-sm text-gray-400 mb-6">Your emissions over the past 5 weeks</p>
+                        <p className="text-sm text-amber-400/70 mb-6">Your emissions over the past 5 weeks</p>
                         <ResponsiveContainer width="100%" height={260}>
                           <AreaChart data={trendData}>
                             <defs>
@@ -496,8 +496,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                               </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                            <XAxis dataKey="week" tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                            <YAxis tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                            <XAxis dataKey="week" tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                            <YAxis tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
                             <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="total" stroke="#f5c842" strokeWidth={2.5} fill="url(#trendGrad)" name="CO₂" />
                           </AreaChart>
@@ -511,7 +511,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         className="lg:col-span-2 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 flex flex-col"
                       >
                         <h3 className="text-xl font-semibold text-white font-serif mb-1">Breakdown</h3>
-                        <p className="text-sm text-gray-400 mb-4">By category</p>
+                        <p className="text-sm text-amber-400/70 mb-4">By category</p>
                         <div className="flex-1 flex items-center justify-center">
                           <ResponsiveContainer width="100%" height={200}>
                             <PieChart>
@@ -528,7 +528,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           {pieData.map((d) => (
                             <div key={d.name} className="flex items-center gap-2.5 text-sm">
                               <span className="w-3 h-3 rounded-full flex-shrink-0 ring-2 ring-white/[0.06]" style={{ background: d.color }} />
-                              <span className="text-gray-300">{d.name}</span>
+                              <span className="text-white/80">{d.name}</span>
                               <span className="text-white font-semibold ml-auto">{d.value.toFixed(1)}</span>
                             </div>
                           ))}
@@ -554,12 +554,12 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
                     >
                       <h3 className="text-xl font-semibold text-white font-serif mb-1">Daily Breakdown</h3>
-                      <p className="text-sm text-gray-400 mb-6">Estimated distribution by day</p>
+                      <p className="text-sm text-amber-400/70 mb-6">Estimated distribution by day</p>
                       <ResponsiveContainer width="100%" height={320}>
                         <BarChart data={dailyData} barGap={2}>
                           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                          <XAxis dataKey="day" tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                          <YAxis tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                          <XAxis dataKey="day" tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
                           <Bar dataKey="transport" stackId="a" fill="#f5c842" radius={[0, 0, 0, 0]} name="Transport" />
                           <Bar dataKey="energy" stackId="a" fill="#d4a017" name="Energy" />
@@ -589,10 +589,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             </span>
                           </div>
                           <div className="text-2xl font-bold text-white">
-                            <CountUp end={c.value} duration={1.8} decimals={1} /> <span className="text-sm text-gray-500 font-normal">kg</span>
+                            <CountUp end={c.value} duration={1.8} decimals={1} /> <span className="text-sm text-amber-400/60 font-normal">kg</span>
                           </div>
-                          <p className="text-sm text-gray-400 mt-1 font-medium">{c.label}</p>
-                          <p className="text-xs text-gray-500 mt-2">{c.detail}</p>
+                          <p className="text-sm text-amber-400/80 mt-1 font-medium">{c.label}</p>
+                          <p className="text-xs text-white/40 mt-2">{c.detail}</p>
                           <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
@@ -624,7 +624,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
                           className="inline-block w-10 h-10 border-3 border-accent-green/20 border-t-accent-green rounded-full mb-4"
                         />
-                        <p className="text-gray-400">Generating AI-powered recommendations…</p>
+                        <p className="text-amber-400/70">Generating AI-powered recommendations…</p>
                       </div>
                     ) : recs?.recommendations?.length ? (
                       recs.recommendations.map((rec, i) => (
@@ -646,7 +646,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                                 {rec.impact} impact
                               </span>
                             </div>
-                            <p className="text-sm text-gray-400 leading-relaxed">{rec.description}</p>
+                            <p className="text-sm text-gray-300 leading-relaxed">{rec.description}</p>
                             {rec.savingsKg > 0 && (
                               <p className="text-xs text-accent-green mt-2">
                                 Potential savings: ~{rec.savingsKg} kg CO₂/week
@@ -657,12 +657,12 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       ))
                     ) : (
                       <div className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-12 text-center">
-                        <p className="text-gray-400">No recommendations available yet.</p>
+                        <p className="text-amber-400/70">No recommendations available yet.</p>
                       </div>
                     )}
 
                     {recs?.source && (
-                      <p className="text-center text-xs text-gray-600 pt-4">
+                      <p className="text-center text-xs text-amber-400/40 pt-4">
                         {recs.source === 'ai' ? 'Recommendations powered by AI' : recs.source === 'demo' ? 'Showing demo recommendations' : 'Recommendations generated offline'}
                       </p>
                     )}
