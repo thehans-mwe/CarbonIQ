@@ -58,7 +58,7 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold tracking-tight">
+              <span className="text-xl font-serif font-semibold tracking-tight">
                 Carbon<span className="gradient-text">IQ</span>
               </span>
             </a>

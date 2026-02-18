@@ -58,11 +58,12 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 60 },
+  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
+    filter: 'blur(0px)',
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -82,14 +83,14 @@ export default function Features() {
           transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-blue tracking-widest uppercase mb-6">
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-blue tracking-[0.2em] uppercase mb-6">
             Features
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
             Everything you need to{' '}
-            <span className="gradient-text">decarbonize.</span>
+            <span className="gradient-text italic">decarbonize.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-lg">
+          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
             Powerful tools, beautiful interface, zero learning curve.
           </p>
         </motion.div>
@@ -125,10 +126,10 @@ export default function Features() {
                   {f.icon}
                 </div>
 
-                <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight">
+                <h3 className="text-xl md:text-2xl font-serif font-semibold text-white mb-3 tracking-tight">
                   {f.title}
                 </h3>
-                <p className="text-gray-400 leading-relaxed text-base">
+                <p className="text-gray-400 leading-relaxed text-[15px]">
                   {f.description}
                 </p>
 

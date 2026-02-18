@@ -71,12 +71,12 @@ function SelectField({ label, icon, options, ...props }) {
 
 export default function Calculator({ onCalculate, onBack, onDemo }) {
   const [form, setForm] = useState({
-    carMiles: '',
+    carMiles: '50',
     fuelType: 'gasoline',
-    electricityKwh: '',
-    gasUsage: '',
-    shortFlights: '',
-    longFlights: '',
+    electricityKwh: '60',
+    gasUsage: '2',
+    shortFlights: '0',
+    longFlights: '0',
     dietType: 'medium_meat',
   });
 
@@ -124,12 +124,12 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
             <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
             Carbon Calculator
           </span>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-            Your past <span className="gradient-text">7 days</span>
+          <h1 className="font-serif text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+            Your past <span className="gradient-text italic">7 days</span>
           </h1>
-          <p className="text-gray-400 text-lg max-w-md mx-auto">
-            Enter your activity for the last week. We'll calculate your carbon
-            footprint and give you personalized tips.
+          <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
+            We've pre-filled typical values — just adjust what's different for
+            you and hit calculate. Takes under 30 seconds.
           </p>
         </motion.div>
 
@@ -245,9 +245,9 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
             <motion.button
               type="submit"
               disabled={loading}
-              whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(0,232,143,0.25)' }}
+              whileHover={{ scale: 1.03, boxShadow: '0 0 40px rgba(212,160,23,0.25)' }}
               whileTap={{ scale: 0.97 }}
-              className="w-full sm:w-auto btn-glow px-10 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              className="w-full sm:w-auto btn-glow px-10 py-4 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-sm tracking-wide shadow-glow disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
             >
               {loading ? (
                 <>
@@ -267,7 +267,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
               onClick={onDemo}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full sm:w-auto px-10 py-4 rounded-2xl glass text-white/70 font-medium text-base hover:text-white transition-all duration-300"
+              className="w-full sm:w-auto px-10 py-4 rounded-full glass text-white/70 font-medium text-sm hover:text-white transition-all duration-500"
             >
               Try Demo Account
             </motion.button>

@@ -37,11 +37,12 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
+  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] },
+    filter: 'blur(0px)',
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -65,7 +66,7 @@ function StatCard({ label, value, suffix, icon, inView }) {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -6, boxShadow: '0 12px 40px rgba(0,232,143,0.12)' }}
+      whileHover={{ y: -6, boxShadow: '0 12px 40px rgba(212,160,23,0.12)' }}
       className="glass rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-300 cursor-default"
     >
       <span className="text-2xl mb-3">{icon}</span>
@@ -95,14 +96,14 @@ export default function Dashboard() {
           transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-green tracking-widest uppercase mb-6">
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-green tracking-[0.2em] uppercase mb-6">
             Live Dashboard
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
             Your impact,{' '}
-            <span className="gradient-text">visualized.</span>
+            <span className="gradient-text italic">visualized.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-lg">
+          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
             Real-time analytics that transform raw emissions data into clear,
             actionable insights.
           </p>

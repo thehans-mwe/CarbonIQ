@@ -32,6 +32,21 @@ export default function App() {
   const goLanding = useCallback(() => { setView('landing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
   const goCalculator = useCallback(() => { setView('calculator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
+  // Navigate to a section on the landing page (used by Navbar)
+  const goToSection = useCallback((sectionId) => {
+    if (view !== 'landing') {
+      setView('landing');
+      // Wait for landing to render, then scroll
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [view]);
+
   // Calculate from user input
   const handleCalculate = useCallback(async (formData) => {
     setInputs(formData);
@@ -66,7 +81,7 @@ export default function App() {
         animate="animate"
         className="min-h-screen animated-gradient-bg"
       >
-        <Navbar onDashboard={goCalculator} />
+        <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} />
 
         {view === 'landing' && (
           <>

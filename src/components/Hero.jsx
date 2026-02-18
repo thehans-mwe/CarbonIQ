@@ -1,14 +1,13 @@
 import { motion } from 'framer-motion';
 
-/* Floating abstract shapes */
-function FloatingShape({ className, delay = 0, duration = 6 }) {
+/* Floating abstract shapes — slower, subtler */
+function FloatingShape({ className, delay = 0, duration = 12 }) {
   return (
     <motion.div
-      className={`absolute rounded-full opacity-20 blur-3xl ${className}`}
+      className={`absolute rounded-full blur-3xl ${className}`}
       animate={{
-        y: [0, -30, 0],
-        x: [0, 15, 0],
-        scale: [1, 1.08, 1],
+        y: [0, -20, 0],
+        scale: [1, 1.05, 1],
       }}
       transition={{
         duration,
@@ -20,41 +19,50 @@ function FloatingShape({ className, delay = 0, duration = 6 }) {
   );
 }
 
+/* Smooth staggered text reveal */
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.15, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.12, delayChildren: 0.2 },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
+const fadeUp = {
+  hidden: { opacity: 0, y: 60, filter: 'blur(8px)' },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, ease: [0.4, 0, 0.2, 1] },
+    filter: 'blur(0px)',
+    transition: { duration: 1, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const fadeScale = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 export default function Hero({ onGetStarted, onDemo }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background shapes */}
-      <FloatingShape className="w-[500px] h-[500px] bg-accent-green/30 -top-40 -left-40" delay={0} duration={8} />
-      <FloatingShape className="w-[400px] h-[400px] bg-accent-blue/30 top-1/3 -right-32" delay={2} duration={10} />
-      <FloatingShape className="w-[300px] h-[300px] bg-accent-purple/20 bottom-20 left-1/4" delay={4} duration={7} />
-      <FloatingShape className="w-[200px] h-[200px] bg-accent-cyan/20 top-20 right-1/3" delay={1} duration={9} />
+      {/* Background shapes — muted, elegant */}
+      <FloatingShape className="w-[600px] h-[600px] bg-accent-green/10 -top-40 -left-40 opacity-40" delay={0} duration={14} />
+      <FloatingShape className="w-[400px] h-[400px] bg-accent-blue/10 top-1/3 -right-32 opacity-30" delay={3} duration={16} />
+      <FloatingShape className="w-[300px] h-[300px] bg-accent-purple/8 bottom-20 left-1/4 opacity-25" delay={5} duration={12} />
 
       {/* Radial gradient overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#0a0e1a_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#000000_70%)]" />
 
-      {/* Grid pattern overlay */}
+      {/* Subtle dot grid */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.025]"
         style={{
-          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-          backgroundSize: '60px 60px',
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.3) 1px, transparent 0)`,
+          backgroundSize: '32px 32px',
         }}
       />
 
@@ -65,66 +73,84 @@ export default function Hero({ onGetStarted, onDemo }) {
         className="relative z-10 max-w-5xl mx-auto px-6 text-center"
       >
         {/* Badge */}
-        <motion.div variants={itemVariants} className="mb-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs font-medium text-gray-300 tracking-wide uppercase">
-            <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
+        <motion.div variants={fadeUp} className="mb-10">
+          <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full glass text-xs font-medium text-gray-400 tracking-[0.2em] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-green animate-pulse" />
             Intelligent Carbon Analytics
           </span>
         </motion.div>
 
-        {/* Headline */}
+        {/* Headline — elegant serif */}
         <motion.h1
-          variants={itemVariants}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold leading-[1.05] tracking-tight mb-8"
+          variants={fadeUp}
+          className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-semibold leading-[1.08] tracking-tight mb-8"
         >
           Track your
           <br />
-          <span className="gradient-text">carbon impact</span>
+          <span className="gradient-text italic">carbon impact</span>
           <br />
-          <span className="text-white/60">intelligently.</span>
+          <span className="text-white/40">intelligently.</span>
         </motion.h1>
 
-        {/* Subheading */}
+        {/* Subheading — clean, readable */}
         <motion.p
-          variants={itemVariants}
-          className="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 leading-relaxed mb-12"
+          variants={fadeUp}
+          className="max-w-xl mx-auto text-base md:text-lg text-gray-400 leading-relaxed mb-14 font-light"
         >
-          CarbonIQ gives your organization real-time visibility into emissions
-          data, actionable reduction strategies, and beautifully simple reporting
-          &mdash; all in one platform.
+          Real-time visibility into your emissions, actionable reduction
+          strategies, and beautifully simple reporting — all in one platform.
         </motion.p>
 
         {/* CTA Buttons */}
-        <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <motion.button
             onClick={onGetStarted}
-            whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0,232,143,0.3)' }}
+            whileHover={{ scale: 1.04, boxShadow: '0 0 50px rgba(212,160,23,0.2)' }}
             whileTap={{ scale: 0.97 }}
-            className="btn-glow px-8 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow transition-all duration-300"
+            className="btn-glow px-10 py-4 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-sm tracking-wide shadow-glow transition-all duration-500"
           >
-            Start Tracking &mdash; Free
+            Start Tracking — Free
           </motion.button>
           <motion.button
             onClick={onDemo}
-            whileHover={{ scale: 1.04 }}
+            whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="px-8 py-4 rounded-2xl glass text-white/80 font-medium text-base hover:text-white transition-all duration-300 hover:border-white/10"
+            className="px-10 py-4 rounded-full glass text-white/70 font-medium text-sm hover:text-white transition-all duration-500"
           >
             Try Demo Account
           </motion.button>
         </motion.div>
 
+        {/* Trust badges */}
+        <motion.div
+          variants={fadeScale}
+          className="mt-20 flex flex-wrap items-center justify-center gap-6 text-xs text-gray-600 tracking-wide"
+        >
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-green/60" />
+            EPA & DEFRA Data
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-blue/60" />
+            AI-Powered Insights
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent-purple/60" />
+            100% Private
+          </span>
+        </motion.div>
+
         {/* Scroll indicator */}
         <motion.div
-          variants={itemVariants}
-          className="mt-20 flex justify-center"
+          variants={fadeScale}
+          className="mt-16 flex justify-center"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-6 h-10 rounded-full border border-white/20 flex justify-center pt-2"
+            transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-5 h-9 rounded-full border border-white/10 flex justify-center pt-2"
           >
-            <motion.div className="w-1 h-2.5 rounded-full bg-accent-green/60" />
+            <motion.div className="w-0.5 h-2 rounded-full bg-accent-green/40" />
           </motion.div>
         </motion.div>
       </motion.div>

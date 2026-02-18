@@ -1,32 +1,42 @@
 /**
  * Offline fallback carbon calculations.
- * Uses EPA / DEFRA average emission factors so the app works
+ * Uses EPA / DEFRA / IPCC emission factors so the app works
  * even when the Carbon Interface API is unreachable.
  *
- * All results in kg CO₂e.
+ * All results in kg CO₂e (carbon-dioxide equivalent).
  */
 
-// ── Emission factors ─────────────────────────────────────
+// ── Emission factors (EPA 2024 / DEFRA 2024 / IPCC AR6) ──
 const FACTORS = {
   car: {
-    gasoline: 0.411,   // kg CO₂ per mile
-    diesel: 0.372,
-    hybrid: 0.228,
-    electric: 0.1,     // grid-dependent average
+    gasoline: 0.404,   // kg CO₂e per mile — EPA avg passenger vehicle
+    diesel: 0.367,     // slightly lower CO₂ but higher NOx
+    hybrid: 0.213,     // ~47% less than gasoline (EPA)
+    electric: 0.092,   // US grid avg 0.386 kg/kWh × 0.3 kWh/mi (DOE)
   },
-  electricity: 0.417,  // kg CO₂ per kWh  (US grid average)
-  naturalGas: 5.3,     // kg CO₂ per therm
+  electricity: 0.386,  // kg CO₂e per kWh — EPA eGRID US national avg 2024
+  naturalGas: 5.31,    // kg CO₂e per therm — EPA GHG factors hub
   flight: {
-    shortHaul: 255,    // kg CO₂ per short-haul flight (~500 mi)
-    longHaul: 1100,    // kg CO₂ per long-haul flight (~3500 mi)
+    shortHaul: 244,    // kg CO₂e per pax short-haul (~500 mi) — DEFRA 2024 economy
+    longHaul: 1020,    // kg CO₂e per pax long-haul (~3 500 mi) — DEFRA 2024 economy
   },
   diet: {
-    heavy_meat: 7.2,   // kg CO₂ per day
-    medium_meat: 5.6,
-    vegetarian: 3.8,
-    vegan: 2.9,
+    heavy_meat: 7.19,  // kg CO₂e per day — Scarborough et al. 2023
+    medium_meat: 5.63,
+    vegetarian: 3.81,
+    vegan: 2.89,
   },
 };
+
+// US per-capita weekly benchmarks (used for green-score grading)
+const BENCHMARKS = {
+  transport: 78,       // 193 mi/wk × 0.404 (avg American)
+  energy: 55,          // ~100 kWh + ~2.5 therms
+  flight: 10,          // annualised per-capita
+  diet: 39.4,          // medium-meat × 7
+};
+
+const WEEKLY_AVG = BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet; // ~182
 
 // ── Calculator ────────────────────────────────────────────
 export function calculateOffline(inputs) {
@@ -51,13 +61,16 @@ export function calculateOffline(inputs) {
 
   const totalKg = Math.round((transportKg + energyKg + flightKg + dietKg) * 100) / 100;
 
+  // A mature tree absorbs ~22 kg CO₂/year → ~0.42 kg/week
+  const treesEquivalent = Math.round(totalKg / 0.42);
+
   return {
     totalKg,
     transportKg: Math.round(transportKg * 100) / 100,
     energyKg: Math.round(energyKg * 100) / 100,
     flightKg: Math.round(flightKg * 100) / 100,
     dietKg: Math.round(dietKg * 100) / 100,
-    treesEquivalent: Math.round(totalKg / 0.06),      // ~60g CO₂ absorbed/tree/day × 7d
+    treesEquivalent,
     source: 'offline',
   };
 }
@@ -66,7 +79,8 @@ export function calculateOffline(inputs) {
 export function offlineRecommendations(carbonData) {
   const recs = [];
 
-  if (carbonData.transportKg > 30) {
+  // Category-specific advice with accurate thresholds
+  if (carbonData.transportKg > 25) {
     recs.push({
       title: 'Reduce driving',
       description: 'Consider carpooling, biking, or public transit for short trips to cut transport emissions significantly.',
@@ -74,8 +88,16 @@ export function offlineRecommendations(carbonData) {
       savingsKg: Math.round(carbonData.transportKg * 0.3),
     });
   }
+  if (carbonData.transportKg > 0 && carbonData.transportKg <= 25) {
+    recs.push({
+      title: 'Keep up efficient transport',
+      description: 'Your driving footprint is low — maintaining this or switching to an EV could reduce it further.',
+      impact: 'low',
+      savingsKg: Math.round(carbonData.transportKg * 0.15),
+    });
+  }
 
-  if (carbonData.energyKg > 20) {
+  if (carbonData.energyKg > 40) {
     recs.push({
       title: 'Optimize energy use',
       description: 'Switch to LED bulbs, unplug idle devices, and set your thermostat 2°F lower to save energy and emissions.',
@@ -109,20 +131,32 @@ export function offlineRecommendations(carbonData) {
     savingsKg: 0,
   });
 
-  // green score: 100 = zero, 0 = very high
-  const weeklyAvg = 200; // US average weekly kg CO₂
-  const score = Math.max(0, Math.min(100, Math.round((1 - carbonData.totalKg / (weeklyAvg * 1.5)) * 100)));
+  // ── Green Score (0-100) ────────────────────────────────
+  // Weighted category scoring against US benchmarks
+  const catScores = {
+    transport: Math.max(0, Math.min(100, Math.round((1 - carbonData.transportKg / (BENCHMARKS.transport * 2)) * 100))),
+    energy:    Math.max(0, Math.min(100, Math.round((1 - carbonData.energyKg    / (BENCHMARKS.energy * 2))    * 100))),
+    flight:    Math.max(0, Math.min(100, Math.round((1 - carbonData.flightKg    / (BENCHMARKS.flight * 6))    * 100))),
+    diet:      Math.max(0, Math.min(100, Math.round((1 - carbonData.dietKg      / (BENCHMARKS.diet * 2))      * 100))),
+  };
+  const weights = { transport: 0.3, energy: 0.3, flight: 0.2, diet: 0.2 };
+  const score = Math.max(0, Math.min(100, Math.round(
+    catScores.transport * weights.transport +
+    catScores.energy    * weights.energy +
+    catScores.flight    * weights.flight +
+    catScores.diet      * weights.diet
+  )));
 
   return {
     score,
-    summary: carbonData.totalKg < weeklyAvg
-      ? `Your weekly footprint of ${carbonData.totalKg} kg CO₂ is below the US average — great work!`
-      : `Your weekly footprint of ${carbonData.totalKg} kg CO₂ is above average. Small changes can make a big difference.`,
+    summary: carbonData.totalKg < WEEKLY_AVG
+      ? `Your weekly footprint of ${carbonData.totalKg} kg CO₂ is below the US average of ~${WEEKLY_AVG} kg — great work!`
+      : `Your weekly footprint of ${carbonData.totalKg} kg CO₂ is above the US average of ~${WEEKLY_AVG} kg. Small changes can make a big difference.`,
     recommendations: recs.slice(0, 5),
     weeklyTarget: Math.round(carbonData.totalKg * 0.85),
-    comparedToAverage: carbonData.totalKg < weeklyAvg
-      ? `${Math.round(((weeklyAvg - carbonData.totalKg) / weeklyAvg) * 100)}% below US average`
-      : `${Math.round(((carbonData.totalKg - weeklyAvg) / weeklyAvg) * 100)}% above US average`,
+    comparedToAverage: carbonData.totalKg < WEEKLY_AVG
+      ? `${Math.round(((WEEKLY_AVG - carbonData.totalKg) / WEEKLY_AVG) * 100)}% below US average`
+      : `${Math.round(((carbonData.totalKg - WEEKLY_AVG) / WEEKLY_AVG) * 100)}% above US average`,
     source: 'offline',
   };
 }

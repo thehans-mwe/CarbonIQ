@@ -9,8 +9,8 @@ import {
 /* ── animation variants ───────────────────────────────── */
 const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.1 } } };
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
+  hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
 const COLORS = ['#f5c842', '#d4a017', '#c49b12', '#e6b830'];
@@ -135,13 +135,13 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               className="inline-flex items-center justify-center w-32 h-32 rounded-full border-4 border-accent-green/30 mb-6"
             >
               <div className="text-center">
-                <span className="text-4xl font-extrabold gradient-text">
+                <span className="text-4xl font-serif font-semibold gradient-text">
                   <CountUp end={recs?.score || 0} duration={2} />
                 </span>
                 <span className="block text-xs text-gray-400 mt-1">Green Score</span>
               </div>
             </motion.div>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-3">
+            <h2 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight mb-3">
               <CountUp end={carbonData.totalKg} duration={2} decimals={1} separator="," /> <span className="text-xl text-gray-400 font-normal">kg CO₂</span>
             </h2>
             <p className="text-gray-400 text-base max-w-md mx-auto">
@@ -196,7 +196,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                   <motion.div
                     key={s.label}
                     variants={cardVariants}
-                    whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,232,143,0.08)' }}
+                    whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(212,160,23,0.08)' }}
                     className="glass rounded-2xl p-5 text-center cursor-default"
                   >
                     <span className="text-2xl">{s.icon}</span>

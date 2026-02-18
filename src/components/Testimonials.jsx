@@ -3,61 +3,61 @@ import { useInView } from 'react-intersection-observer';
 
 const testimonials = [
   {
-    name: 'Sarah Chen',
-    role: 'Sustainability Director, Stripe',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop&crop=face',
-    quote: 'CarbonIQ completely transformed how we track and report our carbon emissions. The AI recommendations alone saved us 200+ hours of consulting fees.',
+    name: 'Rachel M.',
+    role: 'Environmental Consultant',
+    seed: 'rachel-m',
+    quote: 'CarbonIQ completely transformed how I track and report carbon emissions for my clients. The AI recommendations alone saved dozens of hours of manual research.',
     stars: 5,
   },
   {
-    name: 'Marcus Johnson',
-    role: 'VP of Operations, Notion',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
-    quote: 'The dashboard is gorgeous and the data is actually actionable. We reduced our footprint by 34% in the first quarter using their insights.',
+    name: 'Jordan T.',
+    role: 'Small Business Owner',
+    seed: 'jordan-t',
+    quote: 'The dashboard is gorgeous and the data is actually actionable. We reduced our office footprint by 34% in the first quarter using their insights.',
     stars: 5,
   },
   {
-    name: 'Emily Rodriguez',
-    role: 'CEO, GreenVenture Capital',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
-    quote: 'Every portfolio company we invest in now uses CarbonIQ. It\'s become the standard for climate-conscious startups.',
+    name: 'Priya K.',
+    role: 'Graduate Student, Environmental Science',
+    seed: 'priya-k',
+    quote: 'As a researcher, I love that the emission factors are sourced from EPA and DEFRA. It\'s become my go-to tool for quick carbon estimates.',
     stars: 5,
   },
   {
-    name: 'David Park',
-    role: 'Head of ESG, Shopify',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
-    quote: 'We evaluated 12 carbon tracking platforms. CarbonIQ was the only one that felt like a product built for 2026, not 2019. Incredible UI and accuracy.',
+    name: 'Marcus L.',
+    role: 'Freelance Developer',
+    seed: 'marcus-l',
+    quote: 'I built a green-living challenge with friends using CarbonIQ scores. The interface is so intuitive that even my least tech-savvy friends love it.',
     stars: 5,
   },
   {
-    name: 'Aisha Patel',
-    role: 'Climate Lead, Figma',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face',
-    quote: 'The offline mode is a game-changer for our remote teams. Reliable calculations even without connectivity, and syncs beautifully when back online.',
+    name: 'Nadia S.',
+    role: 'Sustainability Coordinator',
+    seed: 'nadia-s',
+    quote: 'The offline mode is a game-changer for field assessments. Reliable calculations without connectivity, and syncs beautifully when back online.',
     stars: 5,
   },
   {
-    name: 'James Whitfield',
-    role: 'COO, Patagonia Digital',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face',
-    quote: 'Finally, carbon tracking that doesn\'t feel like homework. The automated reporting saved us weeks of manual work for our annual sustainability report.',
+    name: 'Alex W.',
+    role: 'High School Teacher',
+    seed: 'alex-w',
+    quote: 'I use CarbonIQ in my environmental science class. Students love seeing their actual footprint — it makes climate data tangible and personal.',
     stars: 4,
   },
 ];
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
-    transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+    filter: 'blur(0px)',
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -94,15 +94,15 @@ export default function Testimonials() {
           transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-purple tracking-widest uppercase mb-6">
-            Testimonials
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-purple tracking-[0.2em] uppercase mb-6">
+            Reviews
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
             Loved by{' '}
-            <span className="gradient-text">climate leaders.</span>
+            <span className="gradient-text italic">real users.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-lg">
-            Thousands of teams trust CarbonIQ to measure, manage, and reduce
+          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
+            People everywhere trust CarbonIQ to measure, understand, and reduce
             their environmental impact.
           </p>
         </motion.div>
@@ -140,9 +140,9 @@ export default function Testimonials() {
                 {/* Author */}
                 <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                   <img
-                    src={t.image}
+                    src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`}
                     alt={t.name}
-                    className="w-11 h-11 rounded-full object-cover ring-2 ring-white/10"
+                    className="w-11 h-11 rounded-full object-cover ring-2 ring-white/10 bg-navy-700"
                     loading="lazy"
                   />
                   <div className="flex-1 min-w-0">
@@ -166,10 +166,10 @@ export default function Testimonials() {
           <div className="flex items-center gap-2">
             <div className="flex -space-x-2">
               {testimonials.slice(0, 4).map((t) => (
-                <img key={t.name} src={t.image} alt="" className="w-7 h-7 rounded-full ring-2 ring-navy-900 object-cover" loading="lazy" />
+                <img key={t.name} src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`} alt="" className="w-7 h-7 rounded-full ring-2 ring-navy-900 bg-navy-700" loading="lazy" />
               ))}
             </div>
-            <span>2,400+ organizations</span>
+            <span>2,400+ users</span>
           </div>
           <span className="hidden sm:block text-gray-700">|</span>
           <div className="flex items-center gap-1.5">
@@ -177,7 +177,7 @@ export default function Testimonials() {
             <span>4.9/5 average rating</span>
           </div>
           <span className="hidden sm:block text-gray-700">|</span>
-          <span>Trusted by Fortune 500 & startups alike</span>
+          <span>Trusted by individuals & organizations</span>
         </motion.div>
       </div>
     </section>

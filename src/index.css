@@ -15,10 +15,19 @@ html {
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background-color: #000000;
-  color: #e2e8f0;
+  color: #d1d5db;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.015em;
+  line-height: 1.75;
+  font-size: 16px;
+}
+
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: -0.01em;
+  font-weight: 600;
 }
 
 ::-webkit-scrollbar {

@@ -30,8 +30,8 @@ const containerVariants = {
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
+  hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
 };
 
 export default function About() {
@@ -51,15 +51,15 @@ export default function About() {
           transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
           className="text-center mb-20"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-cyan tracking-widest uppercase mb-6">
+          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-cyan tracking-[0.2em] uppercase mb-6">
             About Us
           </span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
             Built for the planet,{' '}
             <br className="hidden md:block" />
-            <span className="gradient-text">by people who care.</span>
+            <span className="gradient-text italic">by people who care.</span>
           </h2>
-          <p className="max-w-2xl mx-auto text-gray-400 mt-6 text-lg leading-relaxed">
+          <p className="max-w-2xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
             CarbonIQ was founded on a simple belief: you can't fix what you don't
             measure. We're a team of climate scientists, engineers, and designers
             on a mission to make carbon tracking effortless and actionable.
@@ -106,8 +106,8 @@ export default function About() {
           transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
           className="mb-24"
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-12 tracking-tight">
-            Our <span className="gradient-text">Values</span>
+          <h3 className="text-2xl md:text-3xl font-serif font-semibold text-center mb-12 tracking-tight">
+            Our <span className="gradient-text italic">Values</span>
           </h3>
           <motion.div
             variants={containerVariants}
@@ -136,8 +136,8 @@ export default function About() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
-          <h3 className="text-2xl md:text-3xl font-bold text-center mb-12 tracking-tight">
-            The <span className="gradient-text">Creator</span>
+          <h3 className="text-2xl md:text-3xl font-serif font-semibold text-center mb-12 tracking-tight">
+            The <span className="gradient-text italic">Creator</span>
           </h3>
           <motion.div
             variants={containerVariants}

@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const staticLinks = [
-  { label: 'Features', href: '#features' },
-  { label: 'About', href: '#about' },
+  { label: 'Features', section: 'features' },
+  { label: 'About', section: 'about' },
 ];
 
-export default function Navbar({ onDashboard }) {
+export default function Navbar({ onDashboard, onNavigateSection }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -35,7 +35,7 @@ export default function Navbar({ onDashboard }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <span className="text-xl font-bold tracking-tight">
+          <span className="text-xl font-serif font-semibold tracking-tight">
             Carbon<span className="gradient-text">IQ</span>
           </span>
         </a>
@@ -50,20 +50,20 @@ export default function Navbar({ onDashboard }) {
             <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-green transition-all duration-300 group-hover:w-full" />
           </button>
           {staticLinks.map((link) => (
-            <a
+            <button
               key={link.label}
-              href={link.href}
+              onClick={() => onNavigateSection && onNavigateSection(link.section)}
               className="text-sm text-gray-400 hover:text-white transition-colors duration-300 relative group"
             >
               {link.label}
               <span className="absolute -bottom-1 left-0 w-0 h-px bg-accent-green transition-all duration-300 group-hover:w-full" />
-            </a>
+            </button>
           ))}
           <motion.button
             onClick={onDashboard}
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.97 }}
-            className="btn-glow px-5 py-2.5 rounded-xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 text-sm font-semibold transition-shadow duration-300 hover:shadow-glow"
+            className="btn-glow px-5 py-2.5 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 text-sm font-semibold transition-shadow duration-300 hover:shadow-glow"
           >
             Get Started
           </motion.button>
@@ -107,14 +107,13 @@ export default function Navbar({ onDashboard }) {
                 Dashboard
               </button>
               {staticLinks.map((link) => (
-                <a
+                <button
                   key={link.label}
-                  href={link.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-gray-300 hover:text-white transition-colors"
+                  onClick={() => { setMobileOpen(false); onNavigateSection && onNavigateSection(link.section); }}
+                  className="text-gray-300 hover:text-white transition-colors text-left"
                 >
                   {link.label}
-                </a>
+                </button>
               ))}
               <button
                 onClick={() => { setMobileOpen(false); onDashboard(); }}

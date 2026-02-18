@@ -39,13 +39,13 @@ export default function CTA({ onGetStarted }) {
               Get Started Today
             </span>
 
-            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6">
+            <h2 className="font-serif text-3xl md:text-5xl font-semibold tracking-tight leading-tight mb-6">
               Ready to measure your
               <br />
-              <span className="gradient-text">carbon footprint?</span>
+              <span className="gradient-text italic">carbon footprint?</span>
             </h2>
 
-            <p className="max-w-lg mx-auto text-gray-400 text-lg mb-10 leading-relaxed">
+            <p className="max-w-lg mx-auto text-gray-400 text-base mb-10 leading-relaxed">
               Join thousands of forward-thinking companies already using CarbonIQ
               to drive measurable climate action.
             </p>
@@ -53,9 +53,9 @@ export default function CTA({ onGetStarted }) {
             <div className="flex items-center justify-center">
               <motion.button
                 onClick={onGetStarted}
-                whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(0,232,143,0.25)' }}
+                whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(212,160,23,0.25)' }}
                 whileTap={{ scale: 0.97 }}
-                className="btn-glow px-10 py-4 rounded-2xl bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-base tracking-wide shadow-glow"
+                className="btn-glow px-10 py-4 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-sm tracking-wide shadow-glow"
               >
                 Start Tracking Now
               </motion.button>
