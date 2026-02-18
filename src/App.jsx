@@ -79,7 +79,7 @@ export default function App() {
         variants={pageVariants}
         initial="initial"
         animate="animate"
-        className="min-h-screen animated-gradient-bg"
+        className="min-h-screen animated-gradient-bg noise-overlay"
       >
         <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} />
 
