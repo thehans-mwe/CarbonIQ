@@ -6,7 +6,7 @@ const team = [
   {
     name: 'Thehan Sandaneth',
     role: 'Founder & Developer',
-    image: null,
+    image: 'https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a',
     bio: 'Full-stack developer and climate enthusiast. Built CarbonIQ to make carbon tracking accessible to everyone.',
   },
 ];
