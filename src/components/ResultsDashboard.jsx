@@ -83,10 +83,10 @@ function ComparisonBar({ label, value, maxValue, color, delay }) {
       className="space-y-1.5"
     >
       <div className="flex items-center justify-between">
-        <span className="text-sm text-gray-400">{label}</span>
-        <span className="text-sm font-semibold text-white">{value.toFixed(0)} kg</span>
+        <span className="text-base text-gray-200 font-medium">{label}</span>
+        <span className="text-base font-bold text-white">{value.toFixed(0)} <span className="text-sm font-normal text-gray-400">kg CO₂</span></span>
       </div>
-      <div className="h-3 rounded-full bg-white/[0.04] overflow-hidden">
+      <div className="h-3.5 rounded-full bg-white/[0.06] overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ background: color }}
@@ -341,9 +341,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 mb-8 space-y-5"
             >
-              <h3 className="text-lg font-semibold text-white font-serif mb-2">How You Compare</h3>
+              <h3 className="text-xl font-semibold text-white font-serif mb-3">How You Compare</h3>
               <ComparisonBar label="You" value={carbonData.totalKg} maxValue={barMax} color={emotion.ring} delay={0} />
-              <ComparisonBar label="US Average" value={US_AVG_WEEKLY} maxValue={barMax} color="rgba(255,255,255,0.2)" delay={0.15} />
+              <ComparisonBar label="US Average" value={US_AVG_WEEKLY} maxValue={barMax} color="rgba(255,255,255,0.25)" delay={0.15} />
               <ComparisonBar label="2050 Target" value={PARIS_TARGET} maxValue={barMax} color="#22c55e" delay={0.3} />
             </motion.div>
           )}
@@ -385,17 +385,17 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]"
+                      className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors duration-300"
                     >
-                      <span className="text-xl">{c.icon}</span>
-                      <div className="flex-1">
+                      <span className="text-2xl">{c.icon}</span>
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-gray-300">{c.label}</span>
-                          <span className="text-sm font-semibold text-white">
-                            <CountUp end={c.value} duration={1.5} decimals={1} /> kg
+                          <span className="text-base text-gray-200 font-medium">{c.label}</span>
+                          <span className="text-base font-bold text-white">
+                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-gray-400">kg</span>
                           </span>
                         </div>
-                        <div className="mt-1.5 h-1.5 rounded-full bg-white/[0.04] overflow-hidden">
+                        <div className="mt-2 h-2 rounded-full bg-white/[0.06] overflow-hidden">
                           <motion.div
                             className="h-full rounded-full"
                             style={{ background: c.color }}
@@ -485,8 +485,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         transition={{ delay: 0.2, duration: 0.6 }}
                         className="lg:col-span-3 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
                       >
-                        <h3 className="text-lg font-semibold text-white font-serif mb-1">Weekly Trend</h3>
-                        <p className="text-sm text-gray-500 mb-6">Your emissions over the past 5 weeks</p>
+                        <h3 className="text-xl font-semibold text-white font-serif mb-1">Weekly Trend</h3>
+                        <p className="text-sm text-gray-400 mb-6">Your emissions over the past 5 weeks</p>
                         <ResponsiveContainer width="100%" height={260}>
                           <AreaChart data={trendData}>
                             <defs>
@@ -496,8 +496,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                               </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                            <XAxis dataKey="week" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-                            <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                            <XAxis dataKey="week" tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                            <YAxis tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
                             <Tooltip content={<CustomTooltip />} />
                             <Area type="monotone" dataKey="total" stroke="#f5c842" strokeWidth={2.5} fill="url(#trendGrad)" name="CO₂" />
                           </AreaChart>
@@ -510,8 +510,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         transition={{ delay: 0.3, duration: 0.6 }}
                         className="lg:col-span-2 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 flex flex-col"
                       >
-                        <h3 className="text-lg font-semibold text-white font-serif mb-1">Breakdown</h3>
-                        <p className="text-sm text-gray-500 mb-4">By category</p>
+                        <h3 className="text-xl font-semibold text-white font-serif mb-1">Breakdown</h3>
+                        <p className="text-sm text-gray-400 mb-4">By category</p>
                         <div className="flex-1 flex items-center justify-center">
                           <ResponsiveContainer width="100%" height={200}>
                             <PieChart>
@@ -524,11 +524,12 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             </PieChart>
                           </ResponsiveContainer>
                         </div>
-                        <div className="grid grid-cols-2 gap-2 mt-4">
+                        <div className="grid grid-cols-2 gap-3 mt-5">
                           {pieData.map((d) => (
-                            <div key={d.name} className="flex items-center gap-2 text-sm">
-                              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
-                              <span className="text-gray-400 truncate">{d.name} <span className="text-white font-medium">{d.value.toFixed(1)}</span></span>
+                            <div key={d.name} className="flex items-center gap-2.5 text-sm">
+                              <span className="w-3 h-3 rounded-full flex-shrink-0 ring-2 ring-white/[0.06]" style={{ background: d.color }} />
+                              <span className="text-gray-300">{d.name}</span>
+                              <span className="text-white font-semibold ml-auto">{d.value.toFixed(1)}</span>
                             </div>
                           ))}
                         </div>
@@ -552,13 +553,13 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       transition={{ delay: 0.1, duration: 0.6 }}
                       className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
                     >
-                      <h3 className="text-lg font-semibold text-white font-serif mb-1">Daily Breakdown</h3>
-                      <p className="text-sm text-gray-500 mb-6">Estimated distribution by day</p>
+                      <h3 className="text-xl font-semibold text-white font-serif mb-1">Daily Breakdown</h3>
+                      <p className="text-sm text-gray-400 mb-6">Estimated distribution by day</p>
                       <ResponsiveContainer width="100%" height={320}>
                         <BarChart data={dailyData} barGap={2}>
                           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                          <XAxis dataKey="day" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-                          <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                          <XAxis dataKey="day" tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                          <YAxis tick={{ fill: '#94a3b8', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
                           <Bar dataKey="transport" stackId="a" fill="#f5c842" radius={[0, 0, 0, 0]} name="Transport" />
                           <Bar dataKey="energy" stackId="a" fill="#d4a017" name="Energy" />
@@ -590,8 +591,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           <div className="text-2xl font-bold text-white">
                             <CountUp end={c.value} duration={1.8} decimals={1} /> <span className="text-sm text-gray-500 font-normal">kg</span>
                           </div>
-                          <p className="text-xs text-gray-500 mt-1">{c.label}</p>
-                          <p className="text-xs text-gray-600 mt-2">{c.detail}</p>
+                          <p className="text-sm text-gray-400 mt-1 font-medium">{c.label}</p>
+                          <p className="text-xs text-gray-500 mt-2">{c.detail}</p>
                           <div className="mt-3 h-1.5 rounded-full bg-white/5 overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
