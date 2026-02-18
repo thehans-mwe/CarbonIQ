@@ -391,14 +391,14 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <div>
-                            <span className="text-lg text-white font-semibold block">{c.label}</span>
-                            <span className="text-xs text-amber-400/60">{carbonData.totalKg > 0 ? Math.round((c.value / carbonData.totalKg) * 100) : 0}% of total</span>
+                            <span className="text-xl text-white font-bold block">{c.label}</span>
+                            <span className="text-sm text-amber-400 font-medium">{carbonData.totalKg > 0 ? Math.round((c.value / carbonData.totalKg) * 100) : 0}% of total</span>
                           </div>
-                          <span className="text-lg font-bold text-white">
-                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-sm font-normal text-amber-400">kg</span>
+                          <span className="text-2xl font-bold text-white">
+                            <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-base font-semibold text-amber-400">kg</span>
                           </span>
                         </div>
-                        <div className="mt-2.5 h-2.5 rounded-full bg-white/[0.08] overflow-hidden">
+                        <div className="mt-3 h-3 rounded-full bg-white/[0.10] overflow-hidden">
                           <motion.div
                             className="h-full rounded-full"
                             style={{ background: c.color }}
