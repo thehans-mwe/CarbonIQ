@@ -11,16 +11,16 @@ export default {
       },
       colors: {
         navy: {
-          900: '#0a0e1a',
-          800: '#0f1629',
-          700: '#151d35',
-          600: '#1a2540',
+          900: '#000000',
+          800: '#0a0a0a',
+          700: '#141414',
+          600: '#1a1a1a',
         },
         accent: {
-          green: '#00e88f',
-          blue: '#3b82f6',
-          cyan: '#22d3ee',
-          purple: '#a855f7',
+          green: '#d4a017',
+          blue: '#f5c842',
+          cyan: '#e6b830',
+          purple: '#c49b12',
         },
       },
       borderRadius: {
@@ -28,9 +28,9 @@ export default {
         '3xl': '1.5rem',
       },
       boxShadow: {
-        glow: '0 0 40px rgba(0, 232, 143, 0.15)',
-        'glow-lg': '0 0 60px rgba(0, 232, 143, 0.2)',
-        glass: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        glow: '0 0 40px rgba(212, 160, 23, 0.2)',
+        'glow-lg': '0 0 60px rgba(212, 160, 23, 0.25)',
+        glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
       },
       backdropBlur: {
         xs: '2px',

@@ -18,10 +18,10 @@ const areaData = [
 ];
 
 const pieData = [
-  { name: 'Transport', value: 35, color: '#00e88f' },
-  { name: 'Energy', value: 28, color: '#3b82f6' },
-  { name: 'Supply Chain', value: 22, color: '#a855f7' },
-  { name: 'Operations', value: 15, color: '#22d3ee' },
+  { name: 'Transport', value: 35, color: '#f5c842' },
+  { name: 'Energy', value: 28, color: '#d4a017' },
+  { name: 'Supply Chain', value: 22, color: '#c49b12' },
+  { name: 'Operations', value: 15, color: '#e6b830' },
 ];
 
 const stats = [
@@ -145,20 +145,20 @@ export default function Dashboard() {
               <AreaChart data={areaData}>
                 <defs>
                   <linearGradient id="emGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#c49b12" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#c49b12" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="offGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00e88f" stopOpacity={0.35} />
-                    <stop offset="100%" stopColor="#00e88f" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#f5c842" stopOpacity={0.35} />
+                    <stop offset="100%" stopColor="#f5c842" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                 <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="emissions" stroke="#3b82f6" strokeWidth={2.5} fill="url(#emGrad)" />
-                <Area type="monotone" dataKey="offset" stroke="#00e88f" strokeWidth={2.5} fill="url(#offGrad)" />
+                <Area type="monotone" dataKey="emissions" stroke="#c49b12" strokeWidth={2.5} fill="url(#emGrad)" />
+                <Area type="monotone" dataKey="offset" stroke="#f5c842" strokeWidth={2.5} fill="url(#offGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </motion.div>

@@ -13,7 +13,7 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] } },
 };
 
-const COLORS = ['#00e88f', '#3b82f6', '#a855f7', '#22d3ee'];
+const COLORS = ['#f5c842', '#d4a017', '#c49b12', '#e6b830'];
 
 const impactMap = { high: 'text-red-400 bg-red-400/10', medium: 'text-yellow-400 bg-yellow-400/10', low: 'text-accent-green bg-accent-green/10' };
 
@@ -219,15 +219,15 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     <AreaChart data={trendData}>
                       <defs>
                         <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="0%" stopColor="#00e88f" stopOpacity={0.3} />
-                          <stop offset="100%" stopColor="#00e88f" stopOpacity={0} />
+                          <stop offset="0%" stopColor="#f5c842" stopOpacity={0.3} />
+                          <stop offset="100%" stopColor="#f5c842" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
                       <XAxis dataKey="week" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                       <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                       <Tooltip content={<CustomTooltip />} />
-                      <Area type="monotone" dataKey="total" stroke="#00e88f" strokeWidth={2.5} fill="url(#trendGrad)" name="CO₂" />
+                      <Area type="monotone" dataKey="total" stroke="#f5c842" strokeWidth={2.5} fill="url(#trendGrad)" name="CO₂" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </motion.div>
@@ -280,9 +280,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     <XAxis dataKey="day" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                     <YAxis tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                     <Tooltip content={<CustomTooltip />} />
-                    <Bar dataKey="transport" stackId="a" fill="#00e88f" radius={[0, 0, 0, 0]} name="Transport" />
-                    <Bar dataKey="energy" stackId="a" fill="#3b82f6" name="Energy" />
-                    <Bar dataKey="diet" stackId="a" fill="#a855f7" radius={[4, 4, 0, 0]} name="Diet" />
+                    <Bar dataKey="transport" stackId="a" fill="#f5c842" radius={[0, 0, 0, 0]} name="Transport" />
+                    <Bar dataKey="energy" stackId="a" fill="#d4a017" name="Energy" />
+                    <Bar dataKey="diet" stackId="a" fill="#c49b12" radius={[4, 4, 0, 0]} name="Diet" />
                   </BarChart>
                 </ResponsiveContainer>
               </motion.div>
@@ -290,10 +290,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               {/* Category detail cards */}
               <motion.div variants={containerVariants} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {[
-                  { label: 'Transport', value: carbonData.transportKg, icon: '🚗', color: '#00e88f', detail: `${inputs?.carMiles || 0} mi · ${inputs?.fuelType || 'gasoline'}` },
-                  { label: 'Energy', value: carbonData.energyKg, icon: '⚡', color: '#3b82f6', detail: `${inputs?.electricityKwh || 0} kWh · ${inputs?.gasUsage || 0} therms` },
-                  { label: 'Flights', value: carbonData.flightKg, icon: '✈️', color: '#a855f7', detail: `${inputs?.shortFlights || 0} short · ${inputs?.longFlights || 0} long` },
-                  { label: 'Diet', value: carbonData.dietKg, icon: '🥗', color: '#22d3ee', detail: (inputs?.dietType || 'medium_meat').replace('_', ' ') },
+                  { label: 'Transport', value: carbonData.transportKg, icon: '🚗', color: '#f5c842', detail: `${inputs?.carMiles || 0} mi · ${inputs?.fuelType || 'gasoline'}` },
+                  { label: 'Energy', value: carbonData.energyKg, icon: '⚡', color: '#d4a017', detail: `${inputs?.electricityKwh || 0} kWh · ${inputs?.gasUsage || 0} therms` },
+                  { label: 'Flights', value: carbonData.flightKg, icon: '✈️', color: '#c49b12', detail: `${inputs?.shortFlights || 0} short · ${inputs?.longFlights || 0} long` },
+                  { label: 'Diet', value: carbonData.dietKg, icon: '🥗', color: '#e6b830', detail: (inputs?.dietType || 'medium_meat').replace('_', ' ') },
                 ].map((c) => (
                   <motion.div key={c.label} variants={cardVariants} className="glass rounded-2xl p-5">
                     <div className="flex items-center justify-between mb-3">
