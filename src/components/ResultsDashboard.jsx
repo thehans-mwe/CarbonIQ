@@ -103,13 +103,26 @@ function ComparisonBar({ label, value, maxValue, color, delay }) {
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl px-4 py-3 text-sm shadow-glass bg-[#0a0a0a]/90 border border-white/[0.06] backdrop-blur-xl">
-      <p className="text-white/50 mb-1 font-medium">{label}</p>
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+      <p className="text-white/70 mb-1 font-medium text-sm">{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} style={{ color: p.color || p.fill }}>
-          {p.name || p.dataKey}: <span className="font-semibold text-white">{p.value.toFixed(1)} kg</span>
+        <p key={p.dataKey} className="text-base font-bold" style={{ color: p.color || p.fill }}>
+          {p.name || p.dataKey}: <span className="text-white">{p.value.toFixed(1)} kg</span>
         </p>
       ))}
+    </div>
+  );
+}
+
+function PieTooltip({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0];
+  return (
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+      <p className="text-lg font-bold text-white">{d.name}</p>
+      <p className="text-xl font-bold mt-1" style={{ color: d.payload?.color || '#f5c842' }}>
+        {d.value.toFixed(1)} <span className="text-base text-[#f5c842]">kg</span>
+      </p>
     </div>
   );
 }
@@ -368,7 +381,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           <Cell key={i} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip contentStyle={{ background: 'rgba(6,6,6,0.95)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#e2e8f0' }} />
+                      <Tooltip content={<PieTooltip />} />
                     </PieChart>
                   </ResponsiveContainer>
                 </div>
@@ -523,16 +536,16 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                                   <Cell key={i} fill={entry.color} />
                                 ))}
                               </Pie>
-                              <Tooltip contentStyle={{ background: 'rgba(6,6,6,0.95)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#e2e8f0' }} />
+                              <Tooltip content={<PieTooltip />} />
                             </PieChart>
                           </ResponsiveContainer>
                         </div>
-                        <div className="grid grid-cols-2 gap-3 mt-5">
+                        <div className="grid grid-cols-2 gap-4 mt-5">
                           {pieData.map((d) => (
-                            <div key={d.name} className="flex items-center gap-3 text-base">
-                              <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 ring-2 ring-white/[0.08]" style={{ background: d.color }} />
-                              <span className="text-white font-medium">{d.name}</span>
-                              <span className="text-[#f5c842] font-bold ml-auto">{d.value.toFixed(1)} <span className="text-sm font-semibold text-[#f5c842]">kg</span></span>
+                            <div key={d.name} className="flex items-center gap-3 text-lg">
+                              <span className="w-4 h-4 rounded-full flex-shrink-0 ring-2 ring-white/10" style={{ background: d.color }} />
+                              <span className="text-white font-bold">{d.name}</span>
+                              <span className="text-[#f5c842] font-bold ml-auto">{d.value.toFixed(1)} <span className="text-base font-bold text-[#f5c842]">kg</span></span>
                             </div>
                           ))}
                         </div>
