@@ -61,7 +61,7 @@ export default function Footer() {
                 loading="lazy"
               />
               <div>
-                <span className="text-sm font-medium text-white/90">Hans</span>
+                <span className="text-sm font-medium text-white/90">Thehan</span>
                 <span className="block text-xs text-gray-500">Creator</span>
               </div>
             </div>
