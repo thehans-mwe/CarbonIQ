@@ -50,13 +50,26 @@ const cardVariants = {
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass rounded-xl px-4 py-3 text-sm shadow-glass">
-      <p className="text-white/60 mb-1">{label}</p>
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+      <p className="text-white/70 mb-1 font-medium text-sm">{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} style={{ color: p.color }}>
-          {p.dataKey}: <span className="font-semibold text-white">{p.value} tCO₂</span>
+        <p key={p.dataKey} className="text-base font-bold" style={{ color: p.color }}>
+          {p.dataKey}: <span className="text-white">{p.value} tCO₂</span>
         </p>
       ))}
+    </div>
+  );
+}
+
+function PieTooltip({ active, payload }) {
+  if (!active || !payload?.length) return null;
+  const d = payload[0];
+  return (
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+      <p className="text-lg font-bold text-white">{d.name}</p>
+      <p className="text-xl font-bold mt-1" style={{ color: d.payload?.color || '#f5c842' }}>
+        {d.value}<span className="text-base text-[#f5c842] ml-1">%</span>
+      </p>
     </div>
   );
 }
@@ -190,23 +203,16 @@ export default function Dashboard() {
                       <Cell key={i} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      background: 'rgba(15,22,41,0.9)',
-                      border: '1px solid rgba(255,255,255,0.06)',
-                      borderRadius: '12px',
-                      color: '#e2e8f0',
-                    }}
-                  />
+                  <Tooltip content={<PieTooltip />} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
             {/* Legend */}
-            <div className="grid grid-cols-2 gap-3 mt-4">
+            <div className="grid grid-cols-2 gap-4 mt-4">
               {pieData.map((d) => (
-                <div key={d.name} className="flex items-center gap-2.5 text-base">
-                  <span className="w-3 h-3 rounded-full ring-2 ring-white/[0.08]" style={{ background: d.color }} />
-                  <span className="text-white font-semibold">
+                <div key={d.name} className="flex items-center gap-3 text-lg">
+                  <span className="w-4 h-4 rounded-full ring-2 ring-white/10" style={{ background: d.color }} />
+                  <span className="text-white font-bold">
                     {d.name} <span className="text-[#f5c842] font-bold">{d.value}%</span>
                   </span>
                 </div>
