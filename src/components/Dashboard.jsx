@@ -74,7 +74,7 @@ function StatCard({ label, value, suffix, icon, inView }) {
         {inView ? <CountUp end={value} duration={2.4} separator="," /> : 0}
         <span className="gradient-text">{suffix}</span>
       </span>
-      <span className="text-sm text-amber-400/70 mt-2">{label}</span>
+      <span className="text-base text-white/90 mt-2 font-medium">{label}</span>
     </motion.div>
   );
 }
@@ -136,7 +136,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h3 className="text-lg font-semibold text-white">Emissions vs Offset</h3>
-                <p className="text-sm text-amber-400/70 mt-1">Last 7 months trend</p>
+                <p className="text-base text-white/70 mt-1">Last 7 months trend</p>
               </div>
               <span className="text-xs px-3 py-1 rounded-full bg-accent-green/10 text-accent-green font-medium">
                 ↓ 42% YoY
@@ -155,8 +155,8 @@ export default function Dashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="month" tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#d4a017', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} />
+                <XAxis dataKey="month" tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
                 <Area type="monotone" dataKey="emissions" stroke="#c49b12" strokeWidth={2.5} fill="url(#emGrad)" />
                 <Area type="monotone" dataKey="offset" stroke="#f5c842" strokeWidth={2.5} fill="url(#offGrad)" />
@@ -171,7 +171,7 @@ export default function Dashboard() {
           >
             <div className="mb-4">
               <h3 className="text-lg font-semibold text-white">Footprint Breakdown</h3>
-              <p className="text-sm text-amber-400/70 mt-1">By category</p>
+              <p className="text-base text-white/70 mt-1">By category</p>
             </div>
             <div className="flex-1 flex items-center justify-center">
               <ResponsiveContainer width="100%" height={220}>
@@ -206,8 +206,8 @@ export default function Dashboard() {
               {pieData.map((d) => (
                 <div key={d.name} className="flex items-center gap-2.5 text-base">
                   <span className="w-3 h-3 rounded-full ring-2 ring-white/[0.08]" style={{ background: d.color }} />
-                  <span className="text-white font-medium">
-                    {d.name} <span className="text-amber-400 font-bold">{d.value}%</span>
+                  <span className="text-white font-semibold">
+                    {d.name} <span className="text-[#f5c842] font-bold">{d.value}%</span>
                   </span>
                 </div>
               ))}
