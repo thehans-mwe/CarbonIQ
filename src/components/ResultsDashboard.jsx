@@ -627,12 +627,12 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             </PieChart>
                           </ResponsiveContainer>
                         </div>
-                        <div className="grid grid-cols-2 gap-4 mt-5">
+                        <div className="grid grid-cols-2 gap-3 mt-5">
                           {pieData.map((d) => (
-                            <div key={d.name} className="flex items-center gap-3 text-lg">
-                              <span className="w-4 h-4 rounded-full flex-shrink-0 ring-2 ring-white/10" style={{ background: d.color }} />
-                              <span className="text-white font-bold">{d.name}</span>
-                              <span className="text-[#f5c842] font-bold ml-auto">{d.value.toFixed(1)} <span className="text-base font-bold text-[#f5c842]">kg</span></span>
+                            <div key={d.name} className="flex items-center gap-3">
+                              <span className="w-3.5 h-3.5 rounded-full flex-shrink-0 ring-2 ring-white/10" style={{ background: d.color }} />
+                              <span className="text-sm text-white/70 font-medium min-w-[70px]">{d.name}</span>
+                              <span className="text-sm font-bold text-[#f5c842] ml-auto tabular-nums">{d.value.toFixed(1)} kg</span>
                             </div>
                           ))}
                         </div>
