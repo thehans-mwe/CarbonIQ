@@ -218,6 +218,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
       day,
       transport: +(carbonData.transportKg / 7 * jitter).toFixed(1),
       energy: +(carbonData.energyKg / 7 * (1.1 - i * 0.03)).toFixed(1),
+      flights: +(carbonData.flightKg / 7).toFixed(1),
       diet: +(carbonData.dietKg / 7).toFixed(1),
       lifestyle: +((carbonData.lifestyleKg || 0) / 7).toFixed(1),
     };
@@ -667,20 +668,23 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           <XAxis dataKey="day" tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
                           <YAxis tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
                           <Tooltip content={<CustomTooltip />} />
-                          <Bar dataKey="transport" stackId="a" fill="#f5c842" radius={[0, 0, 0, 0]} name="Transport" />
-                          <Bar dataKey="energy" stackId="a" fill="#d4a017" name="Energy" />
-                          <Bar dataKey="diet" stackId="a" fill="#c49b12" radius={[4, 4, 0, 0]} name="Diet" />
+                          {carbonData.transportKg > 0 && <Bar dataKey="transport" stackId="a" fill="#f5c842" radius={[0, 0, 0, 0]} name="Transport" />}
+                          {carbonData.energyKg > 0 && <Bar dataKey="energy" stackId="a" fill="#d4a017" name="Energy" />}
+                          {carbonData.flightKg > 0 && <Bar dataKey="flights" stackId="a" fill="#c49b12" name="Flights" />}
+                          {carbonData.dietKg > 0 && <Bar dataKey="diet" stackId="a" fill="#e6b830" name="Diet" />}
+                          {(carbonData.lifestyleKg || 0) > 0 && <Bar dataKey="lifestyle" stackId="a" fill="#b8860b" radius={[4, 4, 0, 0]} name="Lifestyle" />}
                         </BarChart>
                       </ResponsiveContainer>
                     </motion.div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
                       {[
                         { label: 'Transport', value: carbonData.transportKg, icon: '🚗', color: '#f5c842', detail: `${inputs?.carMiles || 0} mi · ${inputs?.fuelType || 'gasoline'}` },
                         { label: 'Energy', value: carbonData.energyKg, icon: '⚡', color: '#d4a017', detail: `${inputs?.electricityKwh || 0} kWh · ${inputs?.gasUsage || 0} therms` },
                         { label: 'Flights', value: carbonData.flightKg, icon: '✈️', color: '#c49b12', detail: `${inputs?.shortFlights || 0} short · ${inputs?.longFlights || 0} long` },
                         { label: 'Diet', value: carbonData.dietKg, icon: '🥗', color: '#e6b830', detail: (inputs?.dietType || 'medium_meat').replace('_', ' ') },
-                      ].map((c, i) => (
+                        { label: 'Lifestyle', value: carbonData.lifestyleKg || 0, icon: '🛍️', color: '#b8860b', detail: `${(inputs?.shoppingHabit || 'average').replace('_', ' ')} · ${inputs?.streamingHours || 0}h streaming` },
+                      ].filter(c => c.value > 0).map((c, i) => (
                         <motion.div
                           key={c.label}
                           initial={{ opacity: 0, y: 15 }}
