@@ -677,14 +677,18 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       </ResponsiveContainer>
                     </motion.div>
 
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                      {[
+                    {(() => {
+                      const breakdownCards = [
                         { label: 'Transport', value: carbonData.transportKg, icon: '🚗', color: '#f5c842', detail: `${inputs?.carMiles || 0} mi · ${inputs?.fuelType || 'gasoline'}` },
                         { label: 'Energy', value: carbonData.energyKg, icon: '⚡', color: '#d4a017', detail: `${inputs?.electricityKwh || 0} kWh · ${inputs?.gasUsage || 0} therms` },
                         { label: 'Flights', value: carbonData.flightKg, icon: '✈️', color: '#c49b12', detail: `${inputs?.shortFlights || 0} short · ${inputs?.longFlights || 0} long` },
                         { label: 'Diet', value: carbonData.dietKg, icon: '🥗', color: '#e6b830', detail: (inputs?.dietType || 'medium_meat').replace('_', ' ') },
                         { label: 'Lifestyle', value: carbonData.lifestyleKg || 0, icon: '🛍️', color: '#b8860b', detail: `${(inputs?.shoppingHabit || 'average').replace('_', ' ')} · ${inputs?.streamingHours || 0}h streaming` },
-                      ].filter(c => c.value > 0).map((c, i) => (
+                      ].filter(c => c.value > 0);
+                      const colClass = breakdownCards.length >= 5 ? 'lg:grid-cols-5' : breakdownCards.length >= 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2';
+                      return (
+                    <div className={`grid sm:grid-cols-2 ${colClass} gap-4`}>
+                      {breakdownCards.map((c, i) => (
                         <motion.div
                           key={c.label}
                           initial={{ opacity: 0, y: 15 }}
@@ -715,6 +719,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         </motion.div>
                       ))}
                     </div>
+                      );
+                    })()}
                   </motion.div>
                 )}
 
