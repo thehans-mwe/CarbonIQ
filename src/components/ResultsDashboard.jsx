@@ -5,12 +5,40 @@ import {
   AreaChart, Area, PieChart, Pie, Cell, BarChart, Bar,
   ResponsiveContainer, Tooltip, CartesianGrid, XAxis, YAxis,
 } from 'recharts';
+import WhatIfSimulator from './WhatIfSimulator';
 
 /* ── constants ────────────────────────────────────────── */
 const COLORS = ['#f5c842', '#d4a017', '#c49b12', '#e6b830'];
 const US_AVG_WEEKLY = 182;   // kg CO₂ – US per-capita weekly average
+const GLOBAL_AVG_WEEKLY = 130; // kg CO₂ – global per-capita weekly average
 const PARIS_TARGET  = 58;    // kg CO₂ – 2050 Paris-aligned weekly target
 const impactMap = { high: 'text-red-400 bg-red-400/10', medium: 'text-yellow-400 bg-yellow-400/10', low: 'text-accent-green bg-accent-green/10' };
+
+/* ── score tier system ────────────────────────────────── */
+function getScoreTier(score) {
+  if (score >= 85) return { tier: 'Eco Master', emoji: '🌿', color: '#22c55e', bg: 'bg-emerald-500/10', text: 'text-emerald-400' };
+  if (score >= 60) return { tier: 'Conscious Citizen', emoji: '🌍', color: '#d4a017', bg: 'bg-amber-500/10', text: 'text-amber-400' };
+  if (score >= 30) return { tier: 'Room to Grow', emoji: '⚠️', color: '#f59e0b', bg: 'bg-orange-500/10', text: 'text-orange-400' };
+  return { tier: 'Just Getting Started', emoji: '🔥', color: '#ef4444', bg: 'bg-red-500/10', text: 'text-red-400' };
+}
+
+/* ── percentile calculator ────────────────────────────── */
+function getPercentile(totalKg) {
+  // Based on distribution around US_AVG_WEEKLY = 182 kg, std dev ~60
+  const z = (US_AVG_WEEKLY - totalKg) / 60;
+  const pct = Math.round(50 + 50 * Math.tanh(z * 0.8)); // smooth S-curve
+  return Math.max(1, Math.min(99, pct));
+}
+
+/* ── CO₂ equivalents ─────────────────────────────────── */
+function getEquivalents(totalKg) {
+  return {
+    trees: Math.round(totalKg / 0.42),           // trees needed per week to offset
+    drivingKm: Math.round(totalKg / 0.404 * 1.609), // km driven equivalent
+    phones: Math.round(totalKg / 0.008),          // smartphone charges
+    showers: Math.round(totalKg / 0.6),           // 8-min hot showers
+  };
+}
 
 /* ── helpers ──────────────────────────────────────────── */
 function emotionColor(total) {
@@ -18,6 +46,38 @@ function emotionColor(total) {
   if (total <= US_AVG_WEEKLY * 0.7) return { ring: '#d4a017', glow: 'rgba(212,160,23,0.10)', label: 'Good' };
   if (total <= US_AVG_WEEKLY) return { ring: '#f59e0b', glow: 'rgba(245,158,11,0.10)', label: 'Average' };
   return { ring: '#ef4444', glow: 'rgba(239,68,68,0.12)', label: 'High' };
+}
+
+/* ── CO₂ equivalents card ─────────────────────────────── */
+function EquivalentsCard({ equivalents, delay }) {
+  const items = [
+    { icon: '🌳', value: equivalents.trees, label: 'trees needed to offset', unit: '' },
+    { icon: '🚗', value: equivalents.drivingKm.toLocaleString(), label: 'km of driving', unit: '' },
+    { icon: '📱', value: equivalents.phones.toLocaleString(), label: 'phone charges', unit: '' },
+    { icon: '🚿', value: equivalents.showers.toLocaleString(), label: 'hot showers', unit: '' },
+  ];
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+      className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6"
+    >
+      {items.map((item, i) => (
+        <motion.div
+          key={item.label}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: delay + i * 0.08, duration: 0.4 }}
+          className="rounded-xl bg-white/[0.03] border border-white/[0.05] p-4 text-center hover:bg-white/[0.05] transition-colors cursor-default"
+        >
+          <span className="text-2xl block mb-1">{item.icon}</span>
+          <span className="text-lg font-bold text-white block">{item.value}</span>
+          <span className="text-[11px] text-white/40 leading-tight block">{item.label}</span>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
 }
 
 /* ── particle burst (reduced to 8 for performance) ──── */
@@ -53,17 +113,21 @@ function ParticleBurst({ color }) {
 }
 
 /* ── comparison bar ───────────────────────────────────── */
-function ComparisonBar({ label, value, maxValue, color, delay }) {
+function ComparisonBar({ label, value, maxValue, color, delay, isYou, icon }) {
   const pct = Math.min((value / maxValue) * 100, 100);
   return (
     <motion.div
       initial={{ opacity: 0, x: -30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
-      className="space-y-1.5"
+      className={`space-y-1.5 ${isYou ? 'p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]' : ''}`}
     >
       <div className="flex items-center justify-between">
-        <span className="text-lg text-white font-semibold">{label}</span>
+        <span className="text-lg text-white font-semibold flex items-center gap-2">
+          {icon && <span className="text-base">{icon}</span>}
+          {label}
+          {isYou && <span className="text-xs text-accent-green bg-accent-green/10 px-2 py-0.5 rounded-full ml-1">You</span>}
+        </span>
         <span className="text-lg font-bold text-white">{value.toFixed(0)} <span className="text-base font-medium text-[#f5c842]">kg CO₂</span></span>
       </div>
       <div className="h-3.5 rounded-full bg-white/[0.06] overflow-hidden">
@@ -134,6 +198,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
 
   const emotion = emotionColor(carbonData.totalKg);
   const revealed = (stage) => revealStage >= REVEAL_STAGES.indexOf(stage);
+  const scoreTier = getScoreTier(recs?.score || 0);
+  const percentile = getPercentile(carbonData.totalKg);
+  const equivalents = getEquivalents(carbonData.totalKg);
 
   // Build pie data
   const pieData = [
@@ -164,12 +231,13 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
   ];
 
   const tabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'breakdown', label: 'Breakdown' },
-    { id: 'recommendations', label: 'AI Tips' },
+    { id: 'overview', label: 'Overview', icon: '📊' },
+    { id: 'breakdown', label: 'Breakdown', icon: '🔍' },
+    { id: 'whatif', label: 'What If', icon: '🔮' },
+    { id: 'recommendations', label: 'AI Tips', icon: '🤖' },
   ];
 
-  const barMax = Math.max(carbonData.totalKg, US_AVG_WEEKLY, PARIS_TARGET) * 1.1;
+  const barMax = Math.max(carbonData.totalKg, US_AVG_WEEKLY, GLOBAL_AVG_WEEKLY, PARIS_TARGET) * 1.1;
 
   return (
     <motion.section
@@ -252,7 +320,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       initial={{ scale: 0, rotate: -90 }}
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                      className="inline-flex items-center justify-center w-36 h-36 rounded-full mb-6 relative"
+                      className="inline-flex items-center justify-center w-36 h-36 rounded-full mb-4 relative"
                     >
                       {/* Ring SVG */}
                       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 144 144">
@@ -274,14 +342,25 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         <span className="text-4xl font-serif font-semibold gradient-text">
                           <CountUp end={recs?.score || 0} duration={2.5} delay={0.3} />
                         </span>
-                        <span className="block text-sm text-white/80 mt-1 font-medium">Green Score</span>
+                        <span className="block text-[11px] text-white/60 mt-0.5 font-medium">CarbonIQ</span>
                       </div>
+                    </motion.div>
+
+                    {/* Gamified tier badge */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      transition={{ delay: 1.8, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                      className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${scoreTier.bg} mb-6`}
+                    >
+                      <span className="text-lg">{scoreTier.emoji}</span>
+                      <span className={`text-sm font-bold ${scoreTier.text}`}>{scoreTier.tier}</span>
                     </motion.div>
                   </div>
                 )}
               </AnimatePresence>
 
-              {/* Big CO₂ number */}
+              {/* Big CO₂ number with glow pulse */}
               <AnimatePresence>
                 {revealed('number') && (
                   <motion.div
@@ -290,18 +369,38 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <h2 className="font-serif text-5xl md:text-6xl font-semibold tracking-tight mb-2">
-                      <CountUp end={carbonData.totalKg} duration={2.5} delay={0.5} decimals={1} separator="," />
-                      <span className="text-xl text-[#f5c842] font-medium ml-2">kg CO₂</span>
+                      <CountUp end={carbonData.totalKg} duration={2.5} delay={0.5} decimals={1} separator=","
+                        onEnd={() => {
+                          // Trigger glow pulse effect via CSS class
+                          const el = document.getElementById('co2-number');
+                          if (el) { el.classList.add('glow-pulse'); setTimeout(() => el.classList.remove('glow-pulse'), 1000); }
+                        }}
+                      />
+                      <span id="co2-number" className="text-xl text-[#f5c842] font-medium ml-2 transition-all duration-500">kg CO₂</span>
                     </h2>
-                    <motion.span
+
+                    {/* Percentile comparison */}
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 1.2, duration: 0.5 }}
-                      className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mt-2"
-                      style={{ background: `${emotion.ring}15`, color: emotion.ring }}
+                      transition={{ delay: 1.4, duration: 0.5 }}
+                      className="space-y-2"
                     >
+                      <span
+                        className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
+                        style={{ background: `${emotion.ring}15`, color: emotion.ring }}
+                      >
                         {emotion.label} — {recs?.comparedToAverage || 'This week\u2019s emissions'}
-                    </motion.span>
+                      </span>
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 2.0, duration: 0.5 }}
+                        className="text-white/50 text-sm"
+                      >
+                        That's better than <span className="text-white font-semibold">{percentile}%</span> of people in the US.
+                      </motion.p>
+                    </motion.div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -319,6 +418,13 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                   </motion.p>
                 )}
               </AnimatePresence>
+
+              {/* CO₂ Equivalents */}
+              <AnimatePresence>
+                {revealed('number') && (
+                  <EquivalentsCard equivalents={equivalents} delay={2.2} />
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>
@@ -333,9 +439,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 mb-8 space-y-5"
             >
               <h3 className="text-xl font-semibold text-white font-serif mb-3">How You Compare</h3>
-              <ComparisonBar label="You" value={carbonData.totalKg} maxValue={barMax} color={emotion.ring} delay={0} />
-              <ComparisonBar label="US Average" value={US_AVG_WEEKLY} maxValue={barMax} color="rgba(255,255,255,0.25)" delay={0.15} />
-              <ComparisonBar label="2050 Target" value={PARIS_TARGET} maxValue={barMax} color="#22c55e" delay={0.3} />
+              <ComparisonBar label="Your Emissions" value={carbonData.totalKg} maxValue={barMax} color={emotion.ring} delay={0} isYou icon="📍" />
+              <ComparisonBar label="US Average" value={US_AVG_WEEKLY} maxValue={barMax} color="rgba(255,255,255,0.25)" delay={0.12} icon="🇺🇸" />
+              <ComparisonBar label="Global Average" value={GLOBAL_AVG_WEEKLY} maxValue={barMax} color="rgba(255,255,255,0.15)" delay={0.24} icon="🌐" />
+              <ComparisonBar label="2050 Paris Target" value={PARIS_TARGET} maxValue={barMax} color="#22c55e" delay={0.36} icon="🎯" />
             </motion.div>
           )}
         </AnimatePresence>
@@ -423,13 +530,15 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap flex items-center gap-2 ${
                       activeTab === tab.id
                         ? 'bg-accent-green/15 text-accent-green border border-accent-green/20'
                         : 'bg-white/[0.03] border border-white/[0.06] text-gray-300 hover:text-white'
                     }`}
                   >
+                    <span className="text-base">{tab.icon}</span>
                     {tab.label}
+                    {tab.id === 'whatif' && <span className="text-[9px] bg-accent-green/20 text-accent-green px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">New</span>}
                   </motion.button>
                 ))}
               </div>
@@ -449,9 +558,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                       {[
                         { label: 'Total CO₂', value: carbonData.totalKg, suffix: ' kg', icon: '🌍', color: 'text-white' },
-                        { label: 'Trees Needed', value: carbonData.treesEquivalent, suffix: '', icon: '🌱', color: 'text-accent-green' },
-                        { label: 'Weekly Target', value: recs?.weeklyTarget || 0, suffix: ' kg', icon: '🎯', color: 'text-accent-blue' },
-                        { label: 'Green Score', value: recs?.score || 0, suffix: '/100', icon: '⚡', color: 'text-accent-cyan' },
+                        { label: 'Trees Needed', value: carbonData.treesEquivalent, suffix: '', icon: '�', color: 'text-accent-green' },
+                        { label: 'Driving Equiv.', value: equivalents.drivingKm, suffix: ' km', icon: '🚗', color: 'text-white' },
+                        { label: scoreTier.tier, value: recs?.score || 0, suffix: '/100', icon: scoreTier.emoji, color: scoreTier.text },
                       ].map((s, i) => (
                         <motion.div
                           key={s.label}
@@ -602,6 +711,18 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                   </motion.div>
                 )}
 
+                {activeTab === 'whatif' && (
+                  <motion.div
+                    key="whatif"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <WhatIfSimulator carbonData={carbonData} inputs={inputs} />
+                  </motion.div>
+                )}
+
                 {activeTab === 'recommendations' && (
                   <motion.div
                     key="recs"
@@ -621,7 +742,27 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         <p className="text-white/70 font-medium">Generating AI-powered recommendations…</p>
                       </div>
                     ) : recs?.recommendations?.length ? (
-                      recs.recommendations.map((rec, i) => (
+                      <>
+                        {/* AI Summary Header */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="rounded-2xl bg-gradient-to-r from-accent-green/[0.08] to-accent-blue/[0.04] border border-accent-green/20 p-5 mb-2 flex items-start gap-4"
+                        >
+                          <span className="text-3xl flex-shrink-0">🤖</span>
+                          <div>
+                            <p className="text-sm font-semibold text-accent-green mb-1">AI Analysis</p>
+                            <p className="text-sm text-white/70 leading-relaxed">
+                              Based on your lifestyle, here are {recs.recommendations.length} changes that would reduce{' '}
+                              <span className="text-white font-bold">
+                                {recs.recommendations.reduce((sum, r) => sum + (r.savingsKg || 0), 0)} kg CO₂/week
+                              </span>{' '}
+                              ({carbonData.totalKg > 0 ? Math.round((recs.recommendations.reduce((sum, r) => sum + (r.savingsKg || 0), 0) / carbonData.totalKg) * 100) : 0}% of your emissions).
+                            </p>
+                          </div>
+                        </motion.div>
+
+                        {recs.recommendations.map((rec, i) => (
                         <motion.div
                           key={i}
                           initial={{ opacity: 0, x: -20 }}
@@ -648,7 +789,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             )}
                           </div>
                         </motion.div>
-                      ))
+                      ))}
+                      </>
                     ) : (
                       <div className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-12 text-center">
                         <p className="text-white/70 font-medium">No recommendations available yet.</p>

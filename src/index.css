@@ -183,6 +183,52 @@ input[type="number"] {
   background: conic-gradient(from var(--border-angle), transparent 40%, rgba(212,160,23,0.3), rgba(245,200,66,0.2), transparent 60%);
 }
 
+/* ── Glow pulse on CO₂ number landing ── */
+@keyframes glow-pulse-anim {
+  0% { text-shadow: 0 0 10px rgba(245,200,66,0.8), 0 0 30px rgba(245,200,66,0.4); }
+  100% { text-shadow: none; }
+}
+
+.glow-pulse {
+  animation: glow-pulse-anim 1s ease-out forwards;
+}
+
+/* ── Range slider thumb styling ── */
+input[type="range"],
+.sim-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 8px;
+}
+
+input[type="range"]::-webkit-slider-thumb,
+.sim-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f5c842;
+  box-shadow: 0 0 10px rgba(245,200,66,0.3);
+  border: 2px solid #0a0a0a;
+}
+
+input[type="range"]::-moz-range-thumb,
+.sim-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f5c842;
+  box-shadow: 0 0 10px rgba(245,200,66,0.3);
+  border: 2px solid #0a0a0a;
+}
+
+.sim-slider::-moz-range-track {
+  background: transparent;
+  border: none;
+}
+
 /* ── Reduce motion for users who prefer it ── */
 @media (prefers-reduced-motion: reduce) {
   .animate-float-slow,

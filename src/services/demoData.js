@@ -26,7 +26,7 @@ export const DEMO_CARBON = {
 export const DEMO_RECOMMENDATIONS = {
   score: 68,
   summary:
-    'Your weekly footprint of 115.94 kg CO₂ is below the US average of ~182 kg — great work!',
+    'Your weekly footprint of 115.94 kg CO₂ is below the US average of ~182 kg — that puts you ahead of the curve!',
   recommendations: [
     {
       title: 'Switch to hybrid',
