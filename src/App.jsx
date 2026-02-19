@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -8,10 +8,12 @@ import CTA from './components/CTA';
 import Testimonials from './components/Testimonials';
 import About from './components/About';
 import Footer from './components/Footer';
-import Calculator from './components/Calculator';
-import ResultsDashboard from './components/ResultsDashboard';
 import { fetchCarbonEstimate, fetchRecommendations } from './services/api';
 import { DEMO_INPUTS, DEMO_CARBON, DEMO_RECOMMENDATIONS } from './services/demoData';
+
+// Lazy-load heavy components (Calculator + ResultsDashboard include Recharts, CountUp, etc.)
+const Calculator = lazy(() => import('./components/Calculator'));
+const ResultsDashboard = lazy(() => import('./components/ResultsDashboard'));
 
 // views: 'landing' | 'calculator' | 'results'
 
@@ -96,21 +98,25 @@ export default function App() {
         )}
 
         {view === 'calculator' && (
-          <Calculator
-            onCalculate={handleCalculate}
-            onBack={goLanding}
-            onDemo={handleDemo}
-          />
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-accent-green/20 border-t-accent-green rounded-full animate-spin" /></div>}>
+            <Calculator
+              onCalculate={handleCalculate}
+              onBack={goLanding}
+              onDemo={handleDemo}
+            />
+          </Suspense>
         )}
 
         {view === 'results' && carbonData && (
-          <ResultsDashboard
-            carbonData={carbonData}
-            recommendations={recommendations}
-            inputs={inputs}
-            onBack={goLanding}
-            onRecalculate={goCalculator}
-          />
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-accent-green/20 border-t-accent-green rounded-full animate-spin" /></div>}>
+            <ResultsDashboard
+              carbonData={carbonData}
+              recommendations={recommendations}
+              inputs={inputs}
+              onBack={goLanding}
+              onRecalculate={goCalculator}
+            />
+          </Suspense>
         )}
       </motion.div>
     </AnimatePresence>

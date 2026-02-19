@@ -144,3 +144,52 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* ── Performance-friendly CSS animations ── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.03); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+}
+
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-float-medium {
+  animation: float-medium 16s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Animated border gradient (replaces JS setInterval) ── */
+@property --border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes border-rotate {
+  to { --border-angle: 360deg; }
+}
+
+.animated-border-gradient {
+  --border-angle: 0deg;
+  animation: border-rotate 6s linear infinite;
+  background: conic-gradient(from var(--border-angle), transparent 40%, rgba(212,160,23,0.3), rgba(245,200,66,0.2), transparent 60%);
+}
+
+/* ── Reduce motion for users who prefer it ── */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-float-medium,
+  .animated-border-gradient,
+  .animated-gradient-bg,
+  .animated-divider {
+    animation: none !important;
+  }
+}

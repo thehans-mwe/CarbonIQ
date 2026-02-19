@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { useState, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── step config ─────────────────────────────────────── */
 const STEPS = [
@@ -23,59 +23,13 @@ const dietOptions = [
   { value: 'vegan',       label: 'Vegan',               emoji: '🌱' },
 ];
 
-/* ─── floating shapes ─────────────────────────────────── */
+/* ─── lightweight CSS-only ambient shapes ─────────────── */
 function FloatingShapes() {
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden z-0">
-      {[
-        { w: 300, h: 300, top: '10%', left: '-5%', dur: 22, delay: 0 },
-        { w: 200, h: 200, top: '60%', right: '-3%', dur: 18, delay: 2 },
-        { w: 160, h: 160, bottom: '5%', left: '30%', dur: 25, delay: 5 },
-        { w: 120, h: 120, top: '25%', right: '15%', dur: 20, delay: 3 },
-      ].map((s, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{
-            width: s.w, height: s.h,
-            top: s.top, left: s.left, right: s.right, bottom: s.bottom,
-            background: `radial-gradient(circle, rgba(212,160,23,${0.04 + i * 0.01}) 0%, transparent 70%)`,
-          }}
-          animate={{
-            y: [0, -30, 0, 20, 0],
-            x: [0, 15, -10, 5, 0],
-            scale: [1, 1.05, 0.97, 1.02, 1],
-          }}
-          transition={{ duration: s.dur, repeat: Infinity, delay: s.delay, ease: 'easeInOut' }}
-        />
-      ))}
+      <div className="absolute w-[300px] h-[300px] rounded-full top-[10%] -left-[5%] animate-float-slow" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.04) 0%, transparent 70%)' }} />
+      <div className="absolute w-[200px] h-[200px] rounded-full top-[60%] -right-[3%] animate-float-medium" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.05) 0%, transparent 70%)' }} />
     </div>
-  );
-}
-
-/* ─── cursor spotlight ────────────────────────────────── */
-function CursorSpotlight() {
-  const x = useMotionValue(-200);
-  const y = useMotionValue(-200);
-  const springX = useSpring(x, { damping: 25, stiffness: 200 });
-  const springY = useSpring(y, { damping: 25, stiffness: 200 });
-
-  useEffect(() => {
-    const move = (e) => { x.set(e.clientX); y.set(e.clientY); };
-    window.addEventListener('mousemove', move);
-    return () => window.removeEventListener('mousemove', move);
-  }, [x, y]);
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed z-[1] rounded-full"
-      style={{
-        x: springX, y: springY,
-        width: 400, height: 400,
-        translateX: '-50%', translateY: '-50%',
-        background: 'radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%)',
-      }}
-    />
   );
 }
 
@@ -324,13 +278,6 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
 
   const isLast = step === STEPS.length - 1;
 
-  /* ─── animated border gradient ─── */
-  const [borderAngle, setBorderAngle] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setBorderAngle((a) => (a + 1) % 360), 20);
-    return () => clearInterval(id);
-  }, []);
-
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -340,7 +287,6 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
       className="min-h-screen pt-28 pb-20 px-6 relative"
     >
       <FloatingShapes />
-      <CursorSpotlight />
 
       <div className="relative z-10 max-w-2xl mx-auto">
         {/* Back button */}
@@ -392,10 +338,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
           initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="relative rounded-3xl p-[1px] overflow-hidden"
-          style={{
-            background: `conic-gradient(from ${borderAngle}deg, transparent 40%, rgba(212,160,23,0.3), rgba(245,200,66,0.2), transparent 60%)`,
-          }}
+          className="relative rounded-3xl p-[1px] overflow-hidden animated-border-gradient"
         >
           <div className="rounded-3xl bg-[#060606] backdrop-blur-xl p-8 md:p-10 relative overflow-hidden">
             {/* Subtle inner glow */}

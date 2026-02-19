@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import CountUp from 'react-countup';
 import {
   AreaChart, Area, PieChart, Pie, Cell, BarChart, Bar,
@@ -20,35 +20,15 @@ function emotionColor(total) {
   return { ring: '#ef4444', glow: 'rgba(239,68,68,0.12)', label: 'High' };
 }
 
-/* ── cursor spotlight ─────────────────────────────────── */
-function CursorSpotlight() {
-  const x = useMotionValue(-200);
-  const y = useMotionValue(-200);
-  const sx = useSpring(x, { damping: 25, stiffness: 200 });
-  const sy = useSpring(y, { damping: 25, stiffness: 200 });
-  useEffect(() => {
-    const move = (e) => { x.set(e.clientX); y.set(e.clientY); };
-    window.addEventListener('mousemove', move);
-    return () => window.removeEventListener('mousemove', move);
-  }, [x, y]);
-  return (
-    <motion.div
-      className="pointer-events-none fixed z-[1] rounded-full"
-      style={{ x: sx, y: sy, width: 400, height: 400, translateX: '-50%', translateY: '-50%',
-        background: 'radial-gradient(circle, rgba(212,160,23,0.05) 0%, transparent 70%)' }}
-    />
-  );
-}
-
-/* ── particle burst ───────────────────────────────────── */
+/* ── particle burst (reduced to 8 for performance) ──── */
 function ParticleBurst({ color }) {
   const particles = useMemo(() =>
-    Array.from({ length: 24 }, (_, i) => ({
-      angle: (i / 24) * 360,
-      dist: 60 + Math.random() * 80,
-      size: 3 + Math.random() * 4,
-      delay: Math.random() * 0.3,
-      dur: 0.8 + Math.random() * 0.5,
+    Array.from({ length: 8 }, (_, i) => ({
+      angle: (i / 8) * 360,
+      dist: 60 + Math.random() * 60,
+      size: 3 + Math.random() * 3,
+      delay: Math.random() * 0.2,
+      dur: 0.7 + Math.random() * 0.3,
     })), []);
 
   return (
@@ -199,8 +179,6 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
       transition={{ duration: 0.6 }}
       className="min-h-screen pt-28 pb-20 px-6 relative"
     >
-      <CursorSpotlight />
-
       {/* Emotional ambient glow */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-0"

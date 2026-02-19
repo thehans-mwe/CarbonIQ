@@ -1,22 +1,8 @@
 import { motion } from 'framer-motion';
 
-/* Floating abstract shapes — slower, subtler */
-function FloatingShape({ className, delay = 0, duration = 12 }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full blur-3xl ${className}`}
-      animate={{
-        y: [0, -20, 0],
-        scale: [1, 1.05, 1],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        ease: 'easeInOut',
-      }}
-    />
-  );
+/* Floating abstract shapes — pure CSS for performance */
+function FloatingShape({ className }) {
+  return <div className={`absolute rounded-full blur-3xl will-change-transform ${className}`} />;
 }
 
 /* Smooth staggered text reveal */
@@ -49,10 +35,10 @@ const fadeScale = {
 export default function Hero({ onGetStarted, onDemo }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background shapes — muted, elegant */}
-      <FloatingShape className="w-[600px] h-[600px] bg-accent-green/10 -top-40 -left-40 opacity-40" delay={0} duration={14} />
-      <FloatingShape className="w-[400px] h-[400px] bg-accent-blue/10 top-1/3 -right-32 opacity-30" delay={3} duration={16} />
-      <FloatingShape className="w-[300px] h-[300px] bg-accent-purple/8 bottom-20 left-1/4 opacity-25" delay={5} duration={12} />
+      {/* Background shapes — muted, elegant, CSS-animated */}
+      <FloatingShape className="w-[600px] h-[600px] bg-accent-green/10 -top-40 -left-40 opacity-40 animate-float-slow" />
+      <FloatingShape className="w-[400px] h-[400px] bg-accent-blue/10 top-1/3 -right-32 opacity-30 animate-float-medium" />
+      <FloatingShape className="w-[300px] h-[300px] bg-accent-purple/8 bottom-20 left-1/4 opacity-25 animate-float-slow" />
 
       {/* Radial gradient overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#000000_70%)]" />
