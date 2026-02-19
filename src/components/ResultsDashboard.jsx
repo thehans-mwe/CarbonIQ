@@ -558,7 +558,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                       {[
                         { label: 'Total CO₂', value: carbonData.totalKg, suffix: ' kg', icon: '🌍', color: 'text-white' },
-                        { label: 'Trees Needed', value: carbonData.treesEquivalent, suffix: '', icon: '�', color: 'text-accent-green' },
+                        { label: 'Trees Needed', value: carbonData.treesEquivalent, suffix: '', icon: '🌲', color: 'text-accent-green' },
                         { label: 'Driving Equiv.', value: equivalents.drivingKm, suffix: ' km', icon: '🚗', color: 'text-white' },
                         { label: scoreTier.tier, value: recs?.score || 0, suffix: '/100', icon: scoreTier.emoji, color: scoreTier.text },
                       ].map((s, i) => (
