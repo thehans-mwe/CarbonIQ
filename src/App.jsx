@@ -8,6 +8,7 @@ import CTA from './components/CTA';
 import Testimonials from './components/Testimonials';
 import About from './components/About';
 import Footer from './components/Footer';
+import SplashScreen from './components/SplashScreen';
 import { fetchCarbonEstimate, fetchRecommendations } from './services/api';
 import { DEMO_INPUTS, DEMO_CARBON, DEMO_RECOMMENDATIONS } from './services/demoData';
 
@@ -18,15 +19,18 @@ const ResultsDashboard = lazy(() => import('./components/ResultsDashboard'));
 // views: 'landing' | 'calculator' | 'results'
 
 const pageVariants = {
-  initial: { opacity: 0 },
+  initial: { opacity: 0, y: 20, filter: 'blur(6px)' },
   animate: {
     opacity: 1,
-    transition: { duration: 0.6, ease: [0.4, 0, 0.2, 1] },
+    y: 0,
+    filter: 'blur(0px)',
+    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
 export default function App() {
   const [view, setView] = useState('landing');
+  const [showSplash, setShowSplash] = useState(true);
   const [carbonData, setCarbonData] = useState(null);
   const [recommendations, setRecommendations] = useState(null);
   const [inputs, setInputs] = useState(null);
@@ -75,14 +79,16 @@ export default function App() {
   }, []);
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={view}
-        variants={pageVariants}
-        initial="initial"
-        animate="animate"
-        className="min-h-screen animated-gradient-bg noise-overlay"
-      >
+    <>
+      {showSplash && <SplashScreen onFinished={() => setShowSplash(false)} />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={view}
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+          className="min-h-screen animated-gradient-bg noise-overlay"
+        >
         <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} />
 
         {view === 'landing' && (
@@ -118,7 +124,8 @@ export default function App() {
             />
           </Suspense>
         )}
-      </motion.div>
-    </AnimatePresence>
+        </motion.div>
+      </AnimatePresence>
+    </>
   );
 }

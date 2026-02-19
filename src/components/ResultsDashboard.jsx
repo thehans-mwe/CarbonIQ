@@ -303,7 +303,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
             background: `conic-gradient(from 180deg, transparent 30%, ${emotion.ring}44, ${emotion.ring}22, transparent 70%)`,
           }}
         >
-          <div className="rounded-3xl bg-[#060606]/95 backdrop-blur-xl p-8 md:p-14 text-center relative overflow-hidden">
+          <div className="rounded-3xl card-surface p-10 md:p-16 text-center relative overflow-hidden">
             {/* Subtle gradient overlay */}
             <div className="absolute inset-0 pointer-events-none" style={{
               background: `radial-gradient(ellipse 80% 50% at 50% 0%, ${emotion.glow}, transparent)`,
@@ -320,29 +320,29 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       initial={{ scale: 0, rotate: -90 }}
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                      className="inline-flex items-center justify-center w-36 h-36 rounded-full mb-4 relative"
+                      className="inline-flex items-center justify-center w-44 h-44 rounded-full mb-6 relative score-glow"
                     >
                       {/* Ring SVG */}
-                      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 144 144">
-                        <circle cx="72" cy="72" r="66" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="4" />
+                      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 176 176">
+                        <circle cx="88" cy="88" r="80" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="5" />
                         <motion.circle
-                          cx="72" cy="72" r="66"
+                          cx="88" cy="88" r="80"
                           fill="none"
                           stroke={emotion.ring}
-                          strokeWidth="4"
+                          strokeWidth="5"
                           strokeLinecap="round"
-                          strokeDasharray={2 * Math.PI * 66}
-                          initial={{ strokeDashoffset: 2 * Math.PI * 66 }}
-                          animate={{ strokeDashoffset: 2 * Math.PI * 66 * (1 - (recs?.score || 0) / 100) }}
+                          strokeDasharray={2 * Math.PI * 80}
+                          initial={{ strokeDashoffset: 2 * Math.PI * 80 }}
+                          animate={{ strokeDashoffset: 2 * Math.PI * 80 * (1 - (recs?.score || 0) / 100) }}
                           transition={{ duration: 2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                          transform="rotate(-90 72 72)"
+                          transform="rotate(-90 88 88)"
                         />
                       </svg>
                       <div className="text-center">
-                        <span className="text-4xl font-serif font-semibold gradient-text">
+                        <span className="text-5xl font-serif font-semibold gradient-text">
                           <CountUp end={recs?.score || 0} duration={2.5} delay={0.3} />
                         </span>
-                        <span className="block text-[11px] text-white/60 mt-0.5 font-medium">CarbonIQ</span>
+                        <span className="block text-xs text-white/60 mt-1 font-semibold tracking-wider uppercase">CarbonIQ</span>
                       </div>
                     </motion.div>
 
@@ -368,7 +368,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                     transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <h2 className="font-serif text-5xl md:text-6xl font-semibold tracking-tight mb-2">
+                    <h2 className="font-serif text-6xl md:text-7xl font-semibold tracking-tight mb-3">
                       <CountUp end={carbonData.totalKg} duration={2.5} delay={0.5} decimals={1} separator=","
                         onEnd={() => {
                           // Trigger glow pulse effect via CSS class
@@ -436,7 +436,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 mb-8 space-y-5"
+              className="rounded-3xl card-surface p-8 md:p-10 mb-10 space-y-6"
             >
               <h3 className="text-xl font-semibold text-white font-serif mb-3">How You Compare</h3>
               <ComparisonBar label="Your Emissions" value={carbonData.totalKg} maxValue={barMax} color={emotion.ring} delay={0} isYou icon="📍" />
@@ -454,7 +454,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 mb-8"
+              className="rounded-3xl card-surface p-8 md:p-10 mb-10"
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 {/* Pie */}
@@ -483,9 +483,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                      className="flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] transition-colors duration-300"
+                      className="flex items-center gap-5 p-5 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.05] hover:border-white/[0.10] transition-all duration-300 card-hover"
                     >
-                      <span className="text-3xl">{c.icon}</span>
+                      <span className="text-4xl">{c.icon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between">
                           <div>
@@ -496,7 +496,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                             <CountUp end={c.value} duration={1.5} decimals={1} /> <span className="text-lg font-bold text-[#f5c842]">kg</span>
                           </span>
                         </div>
-                        <div className="mt-3 h-3 rounded-full bg-white/[0.10] overflow-hidden">
+                        <div className="mt-3 h-3.5 rounded-full bg-white/[0.10] overflow-hidden">
                           <motion.div
                             className="h-full rounded-full"
                             style={{ background: c.color }}
@@ -523,22 +523,22 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               {/* Tabs */}
-              <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+              <div className="flex gap-3 mb-10 overflow-x-auto pb-2">
                 {tabs.map((tab) => (
                   <motion.button
                     key={tab.id}
-                    whileHover={{ scale: 1.04 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 whitespace-nowrap flex items-center gap-2 ${
+                    className={`px-6 py-3 rounded-2xl text-sm font-semibold transition-all duration-300 whitespace-nowrap flex items-center gap-2.5 ${
                       activeTab === tab.id
-                        ? 'bg-accent-green/15 text-accent-green border border-accent-green/20'
-                        : 'bg-white/[0.03] border border-white/[0.06] text-gray-300 hover:text-white'
+                        ? 'bg-accent-green/15 text-accent-green border border-accent-green/25 shadow-[0_0_20px_rgba(212,160,23,0.08)]'
+                        : 'bg-white/[0.03] border border-white/[0.06] text-gray-300 hover:text-white hover:bg-white/[0.05]'
                     }`}
                   >
-                    <span className="text-base">{tab.icon}</span>
+                    <span className="text-lg">{tab.icon}</span>
                     {tab.label}
-                    {tab.id === 'whatif' && <span className="text-[9px] bg-accent-green/20 text-accent-green px-1.5 py-0.5 rounded-full font-bold uppercase tracking-wider">New</span>}
+                    {tab.id === 'whatif' && <span className="text-[9px] bg-accent-green/20 text-accent-green px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">New</span>}
                   </motion.button>
                 ))}
               </div>
@@ -567,15 +567,15 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
                           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                           transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                          whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(212,160,23,0.08)' }}
-                          className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-5 text-center cursor-default backdrop-blur-sm"
+                          whileHover={{ y: -6, boxShadow: '0 20px 50px rgba(212,160,23,0.1)' }}
+                          className="rounded-2xl bg-white/[0.02] border border-white/[0.07] p-6 text-center cursor-default backdrop-blur-sm card-hover"
                         >
-                          <span className="text-2xl">{s.icon}</span>
-                          <div className={`text-2xl md:text-3xl font-bold mt-2 ${s.color}`}>
+                          <span className="text-3xl">{s.icon}</span>
+                          <div className={`text-3xl md:text-4xl font-bold mt-3 ${s.color}`}>
                             <CountUp end={s.value} duration={2} separator="," />
                             <span className="text-sm text-[#f5c842] font-medium">{s.suffix}</span>
                           </div>
-                          <span className="text-sm text-white/80 mt-1 font-medium">{s.label}</span>
+                          <span className="text-sm text-white/80 mt-2 font-medium block">{s.label}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -586,7 +586,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.6 }}
-                        className="lg:col-span-3 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
+                        className="lg:col-span-3 rounded-3xl card-surface p-8 md:p-10"
                       >
                         <h3 className="text-xl font-semibold text-white font-serif mb-1">Weekly Trend</h3>
                         <p className="text-base text-white/70 mb-6">Your emissions over the past 5 weeks</p>
@@ -611,7 +611,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.6 }}
-                        className="lg:col-span-2 rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8 flex flex-col"
+                        className="lg:col-span-2 rounded-3xl card-surface p-8 md:p-10 flex flex-col"
                       >
                         <h3 className="text-xl font-semibold text-white font-serif mb-1">Breakdown</h3>
                         <p className="text-base text-white/70 mb-4">By category</p>
@@ -654,7 +654,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1, duration: 0.6 }}
-                      className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
+                      className="rounded-3xl card-surface p-8 md:p-10"
                     >
                       <h3 className="text-xl font-semibold text-white font-serif mb-1">Daily Breakdown</h3>
                       <p className="text-base text-white/70 mb-6">Estimated distribution by day</p>
@@ -733,7 +733,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     className="space-y-4"
                   >
                     {aiLoading ? (
-                      <div className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-12 text-center">
+                      <div className="rounded-3xl card-surface p-14 text-center">
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
@@ -747,12 +747,12 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="rounded-2xl bg-gradient-to-r from-accent-green/[0.08] to-accent-blue/[0.04] border border-accent-green/20 p-5 mb-2 flex items-start gap-4"
+                          className="rounded-2xl bg-gradient-to-r from-accent-green/[0.08] to-accent-blue/[0.04] border border-accent-green/20 p-6 mb-3 flex items-start gap-5"
                         >
-                          <span className="text-3xl flex-shrink-0">🤖</span>
+                          <span className="text-4xl flex-shrink-0">🤖</span>
                           <div>
-                            <p className="text-sm font-semibold text-accent-green mb-1">AI Analysis</p>
-                            <p className="text-sm text-white/70 leading-relaxed">
+                            <p className="text-base font-semibold text-accent-green mb-1">AI Analysis</p>
+                            <p className="text-base text-white/70 leading-relaxed">
                               Based on your lifestyle, here are {recs.recommendations.length} changes that would reduce{' '}
                               <span className="text-white font-bold">
                                 {recs.recommendations.reduce((sum, r) => sum + (r.savingsKg || 0), 0)} kg CO₂/week
@@ -768,15 +768,15 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                          whileHover={{ y: -3, boxShadow: '0 8px 30px rgba(0,0,0,0.2)' }}
-                          className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-6 flex gap-5 items-start cursor-default backdrop-blur-sm"
+                          whileHover={{ y: -4, boxShadow: '0 16px 40px rgba(0,0,0,0.3)' }}
+                          className="rounded-2xl bg-white/[0.03] border border-white/[0.07] p-7 flex gap-6 items-start cursor-default backdrop-blur-sm card-hover"
                         >
-                          <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-accent-green/20 to-accent-blue/10 flex items-center justify-center text-lg font-bold text-accent-green">
+                          <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-green/20 to-accent-blue/10 flex items-center justify-center text-xl font-bold text-accent-green">
                             {i + 1}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-3 mb-1 flex-wrap">
-                              <h4 className="text-base font-semibold text-white">{rec.title}</h4>
+                            <div className="flex items-center gap-3 mb-2 flex-wrap">
+                              <h4 className="text-lg font-semibold text-white">{rec.title}</h4>
                               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider ${impactMap[rec.impact] || impactMap.low}`}>
                                 {rec.impact} impact
                               </span>
@@ -792,8 +792,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       ))}
                       </>
                     ) : (
-                      <div className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-12 text-center">
-                        <p className="text-white/70 font-medium">No recommendations available yet.</p>
+                      <div className="rounded-3xl card-surface p-14 text-center">
+                        <p className="text-white/70 font-medium text-lg">No recommendations available yet.</p>
                       </div>
                     )}
 

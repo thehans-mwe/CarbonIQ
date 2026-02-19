@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── step config ─────────────────────────────────────── */
 const STEPS = [
-  { id: 'transport', label: 'Transport', icon: '🚗', emoji: '🛣️' },
-  { id: 'energy',    label: 'Energy',    icon: '⚡', emoji: '💡' },
-  { id: 'flights',   label: 'Flights',   icon: '✈️', emoji: '🌍' },
-  { id: 'diet',      label: 'Diet',      icon: '🥗', emoji: '🍽️' },
+  { id: 'transport', label: 'Transport', icon: '🚗', emoji: '🛣️', desc: 'How do you get around?' },
+  { id: 'energy',    label: 'Energy',    icon: '⚡', emoji: '💡', desc: 'Your home energy usage' },
+  { id: 'flights',   label: 'Flights',   icon: '✈️', emoji: '🌍', desc: 'Air travel this week' },
+  { id: 'diet',      label: 'Diet',      icon: '🥗', emoji: '🍽️', desc: 'What fuels you?' },
 ];
 
 const fuelOptions = [
@@ -125,24 +125,24 @@ function GlowInput({ label, unit, icon, ...props }) {
   const [focused, setFocused] = useState(false);
   return (
     <div className="relative group">
-      <label className="block text-sm font-medium text-gray-400 mb-2.5 tracking-wide">{label}</label>
+      <label className="block text-sm font-semibold text-gray-300 mb-3 tracking-wide">{label}</label>
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg transition-transform duration-300 group-hover:scale-110">{icon}</span>
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl transition-transform duration-300 group-hover:scale-110">{icon}</span>
         <input
           {...props}
           onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
           onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className="w-full pr-4 py-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-white placeholder-gray-600 outline-none transition-all duration-500 text-base backdrop-blur-sm focus:border-accent-green/40 focus:bg-white/[0.05] focus:shadow-[inset_0_0_20px_rgba(212,160,23,0.06),0_0_30px_rgba(212,160,23,0.08)]"
-          style={{ paddingLeft: '3.25rem' }}
+          className="w-full pr-5 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg placeholder-gray-600 outline-none transition-all duration-500 backdrop-blur-sm input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
+          style={{ paddingLeft: '3.5rem' }}
         />
         {unit && (
-          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-500 font-medium tracking-wider uppercase">
+          <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-gray-500 font-semibold tracking-wider uppercase">
             {unit}
           </span>
         )}
         {/* glow bar at bottom */}
         <motion.div
-          className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full"
+          className="absolute bottom-0 left-5 right-5 h-[2px] rounded-full"
           style={{ background: 'linear-gradient(90deg, transparent, #d4a017, #f5c842, #d4a017, transparent)' }}
           initial={{ scaleX: 0, opacity: 0 }}
           animate={{ scaleX: focused ? 1 : 0, opacity: focused ? 1 : 0 }}
@@ -158,15 +158,15 @@ function GlowSelect({ label, icon, options, ...props }) {
   const [focused, setFocused] = useState(false);
   return (
     <div className="relative group">
-      <label className="block text-sm font-medium text-gray-400 mb-2.5 tracking-wide">{label}</label>
+      <label className="block text-sm font-semibold text-gray-300 mb-3 tracking-wide">{label}</label>
       <div className="relative">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg transition-transform duration-300 group-hover:scale-110">{icon}</span>
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl transition-transform duration-300 group-hover:scale-110">{icon}</span>
         <select
           {...props}
           onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
           onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className="w-full pr-10 py-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] text-white outline-none transition-all duration-500 text-base appearance-none cursor-pointer backdrop-blur-sm bg-transparent focus:border-accent-green/40 focus:bg-white/[0.05] focus:shadow-[inset_0_0_20px_rgba(212,160,23,0.06),0_0_30px_rgba(212,160,23,0.08)]"
-          style={{ paddingLeft: '3.25rem' }}
+          className="w-full pr-12 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg outline-none transition-all duration-500 appearance-none cursor-pointer backdrop-blur-sm bg-transparent input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
+          style={{ paddingLeft: '3.5rem' }}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value} className="bg-[#0a0a0a] text-white">
@@ -192,7 +192,7 @@ function GlowSelect({ label, icon, options, ...props }) {
 /* ─── diet card selector ──────────────────────────────── */
 function DietCards({ value, onChange }) {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-2 gap-5">
       {dietOptions.map((d) => {
         const selected = value === d.value;
         return (
@@ -200,24 +200,24 @@ function DietCards({ value, onChange }) {
             key={d.value}
             type="button"
             onClick={() => onChange(d.value)}
-            whileHover={{ scale: 1.03, y: -2 }}
+            whileHover={{ scale: 1.04, y: -4 }}
             whileTap={{ scale: 0.97 }}
-            className={`relative p-5 rounded-2xl text-left transition-all duration-500 overflow-hidden ${
+            className={`relative p-6 rounded-2xl text-left transition-all duration-500 overflow-hidden ${
               selected
-                ? 'bg-accent-green/10 border-2 border-accent-green/40 shadow-[0_0_30px_rgba(212,160,23,0.1)]'
-                : 'bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12]'
+                ? 'bg-accent-green/10 border-2 border-accent-green/40 shadow-[0_0_40px_rgba(212,160,23,0.12)]'
+                : 'bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.15] hover:bg-white/[0.04]'
             }`}
           >
             {selected && (
               <motion.div
-                className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.06] to-transparent"
+                className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.08] to-transparent"
                 layoutId="dietHighlight"
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
               />
             )}
             <span className="relative z-10">
-              <span className="text-2xl block mb-2">{d.emoji}</span>
-              <span className={`text-sm font-medium block ${selected ? 'text-accent-green' : 'text-gray-300'}`}>
+              <span className="text-3xl block mb-3">{d.emoji}</span>
+              <span className={`text-base font-semibold block ${selected ? 'text-accent-green' : 'text-gray-300'}`}>
                 {d.label}
               </span>
             </span>
@@ -225,9 +225,9 @@ function DietCards({ value, onChange }) {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute top-3 right-3 w-5 h-5 rounded-full bg-accent-green/20 flex items-center justify-center"
+                className="absolute top-3 right-3 w-6 h-6 rounded-full bg-accent-green/20 flex items-center justify-center"
               >
-                <svg className="w-3 h-3 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <svg className="w-3.5 h-3.5 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </svg>
               </motion.div>
@@ -307,9 +307,9 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
           initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center mb-10"
+          className="text-center mb-12"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs font-medium text-accent-green tracking-widest uppercase mb-6">
+          <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-xs font-medium text-accent-green tracking-widest uppercase mb-8">
             <motion.span
               className="w-2 h-2 rounded-full bg-accent-green"
               animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
@@ -317,10 +317,10 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
             />
             Carbon Calculator
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+          <h1 className="font-serif text-4xl md:text-6xl font-semibold tracking-tight mb-5">
             Your past <span className="gradient-text italic">7 days</span>
           </h1>
-          <p className="text-gray-400 text-base max-w-md mx-auto leading-relaxed">
+          <p className="text-gray-400 text-lg max-w-lg mx-auto leading-relaxed">
             Walk through each category — pre-filled with typical values.
             Adjust what's different, then see your impact.
           </p>
@@ -340,9 +340,9 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
           transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="relative rounded-3xl p-[1px] overflow-hidden animated-border-gradient"
         >
-          <div className="rounded-3xl bg-[#060606] backdrop-blur-xl p-8 md:p-10 relative overflow-hidden">
+          <div className="rounded-3xl card-surface p-10 md:p-12 relative overflow-hidden">
             {/* Subtle inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.02] via-transparent to-accent-blue/[0.02] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.03] via-transparent to-accent-blue/[0.03] pointer-events-none" />
 
             {/* Step title */}
             <AnimatePresence mode="wait" custom={dir}>
@@ -353,13 +353,16 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
-                className="relative z-10 mb-8"
+                className="relative z-10 mb-10"
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">{STEPS[step].icon}</span>
-                  <h3 className="text-xl font-semibold text-white font-serif">{STEPS[step].label}</h3>
-                  <span className="text-xs text-gray-500 ml-auto font-medium">
-                    Step {step + 1} of {STEPS.length}
+                <div className="flex items-center gap-4 mb-3">
+                  <span className="text-3xl">{STEPS[step].icon}</span>
+                  <div>
+                    <h3 className="text-2xl font-semibold text-white font-serif">{STEPS[step].label}</h3>
+                    <p className="text-sm text-gray-500 mt-0.5">{STEPS[step].desc}</p>
+                  </div>
+                  <span className="text-xs text-gray-500 ml-auto font-semibold bg-white/[0.04] px-3 py-1.5 rounded-full">
+                    {step + 1} / {STEPS.length}
                   </span>
                 </div>
                 <div className="h-[1px] bg-gradient-to-r from-accent-green/20 via-accent-blue/10 to-transparent" />
@@ -487,7 +490,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
             </div>
 
             {/* Navigation */}
-            <div className="relative z-10 flex items-center justify-between mt-10 pt-6 border-t border-white/[0.04]">
+            <div className="relative z-10 flex items-center justify-between mt-12 pt-8 border-t border-white/[0.06]">
               <motion.button
                 type="button"
                 onClick={prevStep}
@@ -512,7 +515,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                   disabled={loading}
                   whileHover={{ scale: 1.03, boxShadow: '0 0 50px rgba(212,160,23,0.25)' }}
                   whileTap={{ scale: 0.97 }}
-                  className="relative btn-glow px-8 py-3.5 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-semibold text-sm tracking-wide shadow-glow disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 overflow-hidden"
+                  className="relative btn-glow btn-lift px-10 py-4 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-bold text-base tracking-wide shadow-glow disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-3 overflow-hidden"
                 >
                   {loading ? (
                     <>
@@ -543,7 +546,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                   onClick={nextStep}
                   whileHover={{ scale: 1.03, boxShadow: '0 0 30px rgba(212,160,23,0.15)' }}
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-accent-green/80 to-accent-blue/80 text-navy-900 font-semibold text-sm shadow-glow/50"
+                  className="btn-lift flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-accent-green to-accent-blue text-navy-900 font-bold text-sm shadow-glow"
                 >
                   Continue
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

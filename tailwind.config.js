@@ -27,11 +27,16 @@ export default {
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',
+        '4xl': '2rem',
       },
       boxShadow: {
         glow: '0 0 40px rgba(212, 160, 23, 0.2)',
         'glow-lg': '0 0 60px rgba(212, 160, 23, 0.25)',
+        'glow-xl': '0 0 80px rgba(212, 160, 23, 0.3)',
         glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
+        'glass-lg': '0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.03)',
+        'lift': '0 20px 60px -12px rgba(0,0,0,0.6)',
+        'inner-glow': 'inset 0 1px 0 rgba(255,255,255,0.06)',
       },
       backdropBlur: {
         xs: '2px',
@@ -42,6 +47,7 @@ export default {
         'float-slower': 'float 10s ease-in-out infinite',
         'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
         'gradient': 'gradient 8s ease infinite',
+        'shimmer': 'shimmer 2s ease-in-out infinite',
       },
       keyframes: {
         float: {
@@ -55,6 +61,10 @@ export default {
         gradient: {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
         },
       },
     },
