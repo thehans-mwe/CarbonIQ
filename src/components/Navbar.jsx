@@ -6,7 +6,7 @@ const staticLinks = [
   { label: 'About', section: 'about' },
 ];
 
-export default function Navbar({ onDashboard, onNavigateSection }) {
+export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -29,7 +29,7 @@ export default function Navbar({ onDashboard, onNavigateSection }) {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 group">
+        <button onClick={onHome} className="flex items-center gap-2 group">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-accent-green to-accent-blue flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
             <svg className="w-5 h-5 text-navy-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -38,7 +38,7 @@ export default function Navbar({ onDashboard, onNavigateSection }) {
           <span className="text-xl font-serif font-semibold tracking-tight">
             Carbon<span className="gradient-text">IQ</span>
           </span>
-        </a>
+        </button>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">

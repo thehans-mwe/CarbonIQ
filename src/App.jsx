@@ -37,6 +37,13 @@ export default function App() {
   const goLanding = useCallback(() => { setView('landing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
   const goCalculator = useCallback(() => { setView('calculator'); window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
+  // Logo click: show splash then go to landing
+  const goHome = useCallback(() => {
+    setShowSplash(true);
+    setView('landing');
+    window.scrollTo({ top: 0 });
+  }, []);
+
   // Navigate to a section on the landing page (used by Navbar)
   const goToSection = useCallback((sectionId) => {
     if (view !== 'landing') {
@@ -88,7 +95,7 @@ export default function App() {
           animate="animate"
           className="min-h-screen bg-black"
         >
-        <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} />
+        <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} onHome={goHome} />
 
         {view === 'landing' && (
           <>
