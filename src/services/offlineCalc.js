@@ -26,6 +26,13 @@ const FACTORS = {
     vegetarian: 3.81,
     vegan: 2.89,
   },
+  shopping: {
+    minimal: 2.0,      // kg CO₂e per week — minimal consumer
+    average: 8.5,      // kg CO₂e per week — avg consumer (clothes, goods, deliveries)
+    frequent: 18.0,    // kg CO₂e per week — frequent online/retail shopper
+    heavy: 32.0,       // kg CO₂e per week — heavy consumer
+  },
+  streaming: 0.036,    // kg CO₂e per hour — IEA 2023 data-center energy per stream-hour
 };
 
 // US per-capita weekly benchmarks (used for green-score grading)
@@ -34,6 +41,7 @@ const BENCHMARKS = {
   energy: 55,          // ~100 kWh + ~2.5 therms
   flight: 10,          // annualised per-capita
   diet: 39.4,          // medium-meat × 7
+  lifestyle: 12,       // avg shopping + streaming
 };
 
 const WEEKLY_AVG = BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet; // ~182
@@ -48,6 +56,8 @@ export function calculateOffline(inputs) {
     shortFlights = 0,
     longFlights = 0,
     dietType = 'medium_meat',
+    shoppingHabit = 'average',
+    streamingHours = 0,
   } = inputs;
 
   const transportKg = Number(carMiles) * (FACTORS.car[fuelType] || FACTORS.car.gasoline);
@@ -58,8 +68,11 @@ export function calculateOffline(inputs) {
     Number(shortFlights) * FACTORS.flight.shortHaul +
     Number(longFlights) * FACTORS.flight.longHaul;
   const dietKg = (FACTORS.diet[dietType] || FACTORS.diet.medium_meat) * 7; // 7 days
+  const lifestyleKg =
+    (FACTORS.shopping[shoppingHabit] || FACTORS.shopping.average) +
+    Number(streamingHours) * FACTORS.streaming;
 
-  const totalKg = Math.round((transportKg + energyKg + flightKg + dietKg) * 100) / 100;
+  const totalKg = Math.round((transportKg + energyKg + flightKg + dietKg + lifestyleKg) * 100) / 100;
 
   // A mature tree absorbs ~22 kg CO₂/year → ~0.42 kg/week
   const treesEquivalent = Math.round(totalKg / 0.42);
@@ -70,6 +83,7 @@ export function calculateOffline(inputs) {
     energyKg: Math.round(energyKg * 100) / 100,
     flightKg: Math.round(flightKg * 100) / 100,
     dietKg: Math.round(dietKg * 100) / 100,
+    lifestyleKg: Math.round(lifestyleKg * 100) / 100,
     treesEquivalent,
     source: 'offline',
   };
@@ -124,6 +138,15 @@ export function offlineRecommendations(carbonData) {
     });
   }
 
+  if ((carbonData.lifestyleKg || 0) > 15) {
+    recs.push({
+      title: 'Shop more consciously',
+      description: 'Buy second-hand, reduce impulse purchases, and consolidate online orders to cut shipping emissions.',
+      impact: 'medium',
+      savingsKg: Math.round((carbonData.lifestyleKg || 0) * 0.3),
+    });
+  }
+
   recs.push({
     title: 'Track consistently',
     description: 'Logging your activity weekly helps identify patterns and keeps you accountable for reduction goals.',
@@ -138,13 +161,15 @@ export function offlineRecommendations(carbonData) {
     energy:    Math.max(0, Math.min(100, Math.round((1 - carbonData.energyKg    / (BENCHMARKS.energy * 2))    * 100))),
     flight:    Math.max(0, Math.min(100, Math.round((1 - carbonData.flightKg    / (BENCHMARKS.flight * 6))    * 100))),
     diet:      Math.max(0, Math.min(100, Math.round((1 - carbonData.dietKg      / (BENCHMARKS.diet * 2))      * 100))),
+    lifestyle: Math.max(0, Math.min(100, Math.round((1 - (carbonData.lifestyleKg || 0) / (BENCHMARKS.lifestyle * 2)) * 100))),
   };
-  const weights = { transport: 0.3, energy: 0.3, flight: 0.2, diet: 0.2 };
+  const weights = { transport: 0.25, energy: 0.25, flight: 0.15, diet: 0.2, lifestyle: 0.15 };
   const score = Math.max(0, Math.min(100, Math.round(
     catScores.transport * weights.transport +
     catScores.energy    * weights.energy +
     catScores.flight    * weights.flight +
-    catScores.diet      * weights.diet
+    catScores.diet      * weights.diet +
+    catScores.lifestyle * weights.lifestyle
   )));
 
   return {

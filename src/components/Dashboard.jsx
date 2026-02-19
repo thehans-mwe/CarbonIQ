@@ -50,7 +50,7 @@ const cardVariants = {
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
       <p className="text-white/70 mb-1 font-medium text-sm">{label}</p>
       {payload.map((p) => (
         <p key={p.dataKey} className="text-base font-bold" style={{ color: p.color }}>
@@ -65,7 +65,7 @@ function PieTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const d = payload[0];
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
       <p className="text-lg font-bold text-white">{d.name}</p>
       <p className="text-xl font-bold mt-1" style={{ color: d.payload?.color || '#f5c842' }}>
         {d.value}<span className="text-base text-[#f5c842] ml-1">%</span>

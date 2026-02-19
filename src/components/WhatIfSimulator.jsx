@@ -112,7 +112,7 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-3xl bg-[#060606]/80 border border-white/[0.06] backdrop-blur-xl p-6 md:p-8"
+      className="rounded-3xl bg-[#060606] border border-white/[0.06] p-6 md:p-8"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">

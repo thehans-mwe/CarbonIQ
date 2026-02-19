@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── step config ─────────────────────────────────────── */
 const STEPS = [
-  { id: 'transport', label: 'Transport', icon: '🚗', emoji: '🛣️', desc: 'How do you get around?' },
-  { id: 'energy',    label: 'Energy',    icon: '⚡', emoji: '💡', desc: 'Your home energy usage' },
-  { id: 'flights',   label: 'Flights',   icon: '✈️', emoji: '🌍', desc: 'Air travel this week' },
-  { id: 'diet',      label: 'Diet',      icon: '🥗', emoji: '🍽️', desc: 'What fuels you?' },
+  { id: 'transport',  label: 'Transport',  icon: '🚗', emoji: '🛣️', desc: 'How do you get around?' },
+  { id: 'energy',     label: 'Energy',     icon: '⚡', emoji: '💡', desc: 'Your home energy usage' },
+  { id: 'flights',    label: 'Flights',    icon: '✈️', emoji: '🌍', desc: 'Air travel this week' },
+  { id: 'diet',       label: 'Food',       icon: '🥗', emoji: '🍽️', desc: 'What fuels you?' },
+  { id: 'lifestyle',  label: 'Lifestyle',  icon: '🛍️', emoji: '♻️', desc: 'Shopping, streaming & habits' },
 ];
 
 const fuelOptions = [
@@ -21,6 +22,13 @@ const dietOptions = [
   { value: 'medium_meat', label: 'Average (some meat)', emoji: '🍗' },
   { value: 'vegetarian',  label: 'Vegetarian',          emoji: '🥬' },
   { value: 'vegan',       label: 'Vegan',               emoji: '🌱' },
+];
+
+const shoppingOptions = [
+  { value: 'minimal',  label: 'Minimal buyer',    emoji: '🧘' },
+  { value: 'average',  label: 'Average shopper',  emoji: '🛒' },
+  { value: 'frequent', label: 'Frequent shopper',  emoji: '🛍️' },
+  { value: 'heavy',    label: 'Heavy consumer',    emoji: '📦' },
 ];
 
 /* ─── lightweight CSS-only ambient shapes ─────────────── */
@@ -122,17 +130,14 @@ function StepIndicators({ currentStep, onGoToStep }) {
 
 /* ─── glowing input ───────────────────────────────────── */
 function GlowInput({ label, unit, icon, ...props }) {
-  const [focused, setFocused] = useState(false);
   return (
     <div className="relative group">
       <label className="block text-sm font-semibold text-gray-300 mb-3 tracking-wide">{label}</label>
       <div className="relative">
-        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl transition-transform duration-300 group-hover:scale-110">{icon}</span>
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl">{icon}</span>
         <input
           {...props}
-          onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
-          onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className="w-full pr-5 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg placeholder-gray-600 outline-none transition-all duration-500 backdrop-blur-sm input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
+          className="w-full pr-5 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg placeholder-gray-600 outline-none transition-colors duration-300 input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
           style={{ paddingLeft: '3.5rem' }}
         />
         {unit && (
@@ -140,14 +145,6 @@ function GlowInput({ label, unit, icon, ...props }) {
             {unit}
           </span>
         )}
-        {/* glow bar at bottom */}
-        <motion.div
-          className="absolute bottom-0 left-5 right-5 h-[2px] rounded-full"
-          style={{ background: 'linear-gradient(90deg, transparent, #d4a017, #f5c842, #d4a017, transparent)' }}
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: focused ? 1 : 0, opacity: focused ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        />
       </div>
     </div>
   );
@@ -155,17 +152,14 @@ function GlowInput({ label, unit, icon, ...props }) {
 
 /* ─── glowing select ──────────────────────────────────── */
 function GlowSelect({ label, icon, options, ...props }) {
-  const [focused, setFocused] = useState(false);
   return (
     <div className="relative group">
       <label className="block text-sm font-semibold text-gray-300 mb-3 tracking-wide">{label}</label>
       <div className="relative">
-        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl transition-transform duration-300 group-hover:scale-110">{icon}</span>
+        <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl">{icon}</span>
         <select
           {...props}
-          onFocus={(e) => { setFocused(true); props.onFocus?.(e); }}
-          onBlur={(e) => { setFocused(false); props.onBlur?.(e); }}
-          className="w-full pr-12 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg outline-none transition-all duration-500 appearance-none cursor-pointer backdrop-blur-sm bg-transparent input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
+          className="w-full pr-12 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg outline-none transition-colors duration-300 appearance-none cursor-pointer bg-transparent input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
           style={{ paddingLeft: '3.5rem' }}
         >
           {options.map((o) => (
@@ -177,13 +171,6 @@ function GlowSelect({ label, icon, options, ...props }) {
         <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
-        <motion.div
-          className="absolute bottom-0 left-4 right-4 h-[2px] rounded-full"
-          style={{ background: 'linear-gradient(90deg, transparent, #d4a017, #f5c842, #d4a017, transparent)' }}
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: focused ? 1 : 0, opacity: focused ? 1 : 0 }}
-          transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-        />
       </div>
     </div>
   );
@@ -239,11 +226,61 @@ function DietCards({ value, onChange }) {
   );
 }
 
+/* ─── lifestyle/shopping card selector ─────────────────── */
+function ShoppingCards({ value, onChange }) {
+  return (
+    <div className="grid grid-cols-2 gap-5">
+      {shoppingOptions.map((d) => {
+        const selected = value === d.value;
+        return (
+          <motion.button
+            key={d.value}
+            type="button"
+            onClick={() => onChange(d.value)}
+            whileHover={{ scale: 1.04, y: -4 }}
+            whileTap={{ scale: 0.97 }}
+            className={`relative p-6 rounded-2xl text-left transition-all duration-500 overflow-hidden ${
+              selected
+                ? 'bg-accent-green/10 border-2 border-accent-green/40 shadow-[0_0_40px_rgba(212,160,23,0.12)]'
+                : 'bg-white/[0.02] border border-white/[0.07] hover:border-white/[0.15] hover:bg-white/[0.04]'
+            }`}
+          >
+            {selected && (
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.08] to-transparent"
+                layoutId="shopHighlight"
+                transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              />
+            )}
+            <span className="relative z-10">
+              <span className="text-3xl block mb-3">{d.emoji}</span>
+              <span className={`text-base font-semibold block ${selected ? 'text-accent-green' : 'text-gray-300'}`}>
+                {d.label}
+              </span>
+            </span>
+            {selected && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute top-3 right-3 w-6 h-6 rounded-full bg-accent-green/20 flex items-center justify-center"
+              >
+                <svg className="w-3.5 h-3.5 text-accent-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+              </motion.div>
+            )}
+          </motion.button>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ─── slide variants ──────────────────────────────────── */
 const slideVariants = {
-  enter: (dir) => ({ x: dir > 0 ? 280 : -280, opacity: 0, filter: 'blur(6px)' }),
-  center: { x: 0, opacity: 1, filter: 'blur(0px)' },
-  exit: (dir) => ({ x: dir < 0 ? 280 : -280, opacity: 0, filter: 'blur(6px)' }),
+  enter: (dir) => ({ x: dir > 0 ? 200 : -200, opacity: 0 }),
+  center: { x: 0, opacity: 1 },
+  exit: (dir) => ({ x: dir < 0 ? 200 : -200, opacity: 0 }),
 };
 
 /* ━━━ MAIN COMPONENT ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
@@ -261,10 +298,13 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
     shortFlights: '0',
     longFlights: '0',
     dietType: 'medium_meat',
+    shoppingHabit: 'average',
+    streamingHours: '10',
   });
 
   const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
   const updateDiet = useCallback((val) => setForm((f) => ({ ...f, dietType: val })), []);
+  const updateShopping = useCallback((val) => setForm((f) => ({ ...f, shoppingHabit: val })), []);
 
   const nextStep = () => { setDir(1); setStep((s) => Math.min(s + 1, STEPS.length - 1)); };
   const prevStep = () => { setDir(-1); setStep((s) => Math.max(s - 1, 0)); };
@@ -304,9 +344,9 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
 
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-12"
         >
           <span className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full glass text-xs font-medium text-accent-green tracking-widest uppercase mb-8">
@@ -335,9 +375,9 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
         {/* ── Main floating card with animated gradient border ── */}
         <motion.div
           ref={cardRef}
-          initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="relative rounded-3xl p-[1px] overflow-hidden animated-border-gradient"
         >
           <div className="rounded-3xl card-surface p-10 md:p-12 relative overflow-hidden">
@@ -484,6 +524,34 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                   >
                     <p className="text-sm text-gray-400 mb-5">What best describes your diet this week?</p>
                     <DietCards value={form.dietType} onChange={updateDiet} />
+                  </motion.div>
+                )}
+
+                {step === 4 && (
+                  <motion.div
+                    key="lifestyle"
+                    custom={dir}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    className="space-y-6"
+                  >
+                    <div>
+                      <p className="text-sm text-gray-400 mb-5">How would you describe your shopping habits?</p>
+                      <ShoppingCards value={form.shoppingHabit} onChange={updateShopping} />
+                    </div>
+                    <GlowInput
+                      label="Hours of streaming per week"
+                      icon="📺"
+                      unit="hrs"
+                      type="number"
+                      min="0"
+                      placeholder="0"
+                      value={form.streamingHours}
+                      onChange={update('streamingHours')}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>

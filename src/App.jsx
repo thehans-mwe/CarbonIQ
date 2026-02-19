@@ -19,12 +19,11 @@ const ResultsDashboard = lazy(() => import('./components/ResultsDashboard'));
 // views: 'landing' | 'calculator' | 'results'
 
 const pageVariants = {
-  initial: { opacity: 0, y: 20, filter: 'blur(6px)' },
+  initial: { opacity: 0, y: 16 },
   animate: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -87,7 +86,7 @@ export default function App() {
           variants={pageVariants}
           initial="initial"
           animate="animate"
-          className="min-h-screen animated-gradient-bg noise-overlay"
+          className="min-h-screen bg-black"
         >
         <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} />
 

@@ -11,15 +11,18 @@ export const DEMO_INPUTS = {
   shortFlights: 0,
   longFlights: 0,
   dietType: 'medium_meat',
+  shoppingHabit: 'average',
+  streamingHours: 10,
 };
 
 export const DEMO_CARBON = {
-  totalKg: 115.94,   // 40.4 + 50.67 + 0 + 39.41 (recalculated with EPA 2024)
+  totalKg: 124.8,    // 40.4 + 50.67 + 0 + 39.41 + 8.86 (with lifestyle)
   transportKg: 40.4,
   energyKg: 50.67,
   flightKg: 0,
   dietKg: 39.41,
-  treesEquivalent: 276, // 115.94 / 0.42
+  lifestyleKg: 8.86, // avg shopping (8.5) + streaming 10hrs (0.36)
+  treesEquivalent: 297, // 124.8 / 0.42
   source: 'demo',
 };
 

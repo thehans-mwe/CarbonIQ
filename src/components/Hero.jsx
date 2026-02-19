@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 
-/* Floating abstract shapes — pure CSS for performance */
+/* Floating abstract shapes — simple gradients, no blur filter */
 function FloatingShape({ className }) {
-  return <div className={`absolute rounded-full blur-3xl will-change-transform ${className}`} />;
+  return <div className={`absolute rounded-full opacity-40 ${className}`} />;
 }
 
 /* Smooth staggered text reveal */
@@ -14,12 +14,11 @@ const containerVariants = {
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 70, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 1.1, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -36,9 +35,9 @@ export default function Hero({ onGetStarted, onDemo }) {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background shapes — muted, elegant, CSS-animated */}
-      <FloatingShape className="w-[700px] h-[700px] bg-accent-green/[0.07] -top-48 -left-48 opacity-50 animate-float-slow" />
-      <FloatingShape className="w-[500px] h-[500px] bg-accent-blue/[0.06] top-1/3 -right-40 opacity-35 animate-float-medium" />
-      <FloatingShape className="w-[350px] h-[350px] bg-accent-purple/[0.05] bottom-16 left-1/4 opacity-30 animate-float-slow" />
+      <FloatingShape className="w-[400px] h-[400px] bg-accent-green/[0.05] -top-48 -left-48 animate-float-slow" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%)' }} />
+      <FloatingShape className="w-[300px] h-[300px] bg-accent-blue/[0.04] top-1/3 -right-40 animate-float-medium" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.04) 0%, transparent 70%)' }} />
+      <FloatingShape className="w-[200px] h-[200px] bg-accent-purple/[0.03] bottom-16 left-1/4 animate-float-slow" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.03) 0%, transparent 70%)' }} />
 
       {/* Radial gradient overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_#000000_70%)]" />
@@ -52,8 +51,8 @@ export default function Hero({ onGetStarted, onDemo }) {
         }}
       />
 
-      {/* Ambient glow behind hero */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-accent-green/[0.04] blur-[120px] rounded-full pointer-events-none" />
+      {/* Ambient glow behind hero — simple radial gradient, no blur */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[350px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.04) 0%, transparent 70%)' }} />
 
       <motion.div
         variants={containerVariants}

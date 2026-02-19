@@ -32,8 +32,8 @@ export default function SplashScreen({ onFinished }) {
         <motion.div
           key="splash"
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0, scale: 1.04, filter: 'blur(12px)' }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center"
         >
           {/* Ambient glow behind logo */}
@@ -53,15 +53,7 @@ export default function SplashScreen({ onFinished }) {
             {/* Pulsing ring */}
             <motion.div
               className="absolute inset-0 rounded-2xl"
-              style={{ boxShadow: '0 0 40px rgba(212,160,23,0.3), 0 0 80px rgba(212,160,23,0.1)' }}
-              animate={{
-                boxShadow: [
-                  '0 0 30px rgba(212,160,23,0.2), 0 0 60px rgba(212,160,23,0.05)',
-                  '0 0 50px rgba(212,160,23,0.4), 0 0 100px rgba(212,160,23,0.15)',
-                  '0 0 30px rgba(212,160,23,0.2), 0 0 60px rgba(212,160,23,0.05)',
-                ],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ boxShadow: '0 0 30px rgba(212,160,23,0.25)' }}
             />
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#d4a017] to-[#f5c842] flex items-center justify-center relative">
               <svg className="w-8 h-8 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -120,16 +112,6 @@ export default function SplashScreen({ onFinished }) {
               }}
             />
             {/* Glow on the leading edge */}
-            <motion.div
-              className="absolute inset-y-0 left-0 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg, transparent 80%, rgba(245,200,66,0.6))',
-                filter: 'blur(3px)',
-              }}
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
-              transition={{ duration: 1.8, delay: 0.7, ease: [0.4, 0, 0.2, 1] }}
-            />
           </motion.div>
 
           {/* Rotating status text */}

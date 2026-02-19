@@ -8,7 +8,7 @@ import {
 import WhatIfSimulator from './WhatIfSimulator';
 
 /* ── constants ────────────────────────────────────────── */
-const COLORS = ['#f5c842', '#d4a017', '#c49b12', '#e6b830'];
+const COLORS = ['#f5c842', '#d4a017', '#c49b12', '#e6b830', '#b8860b'];
 const US_AVG_WEEKLY = 182;   // kg CO₂ – US per-capita weekly average
 const GLOBAL_AVG_WEEKLY = 130; // kg CO₂ – global per-capita weekly average
 const PARIS_TARGET  = 58;    // kg CO₂ – 2050 Paris-aligned weekly target
@@ -80,15 +80,15 @@ function EquivalentsCard({ equivalents, delay }) {
   );
 }
 
-/* ── particle burst (reduced to 8 for performance) ──── */
+/* ── particle burst (reduced to 4 for performance) ──── */
 function ParticleBurst({ color }) {
   const particles = useMemo(() =>
-    Array.from({ length: 8 }, (_, i) => ({
-      angle: (i / 8) * 360,
-      dist: 60 + Math.random() * 60,
-      size: 3 + Math.random() * 3,
-      delay: Math.random() * 0.2,
-      dur: 0.7 + Math.random() * 0.3,
+    Array.from({ length: 4 }, (_, i) => ({
+      angle: (i / 4) * 360,
+      dist: 50 + Math.random() * 40,
+      size: 3 + Math.random() * 2,
+      delay: Math.random() * 0.15,
+      dur: 0.6 + Math.random() * 0.2,
     })), []);
 
   return (
@@ -147,7 +147,7 @@ function ComparisonBar({ label, value, maxValue, color, delay, isYou, icon }) {
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
       <p className="text-white/70 mb-1 font-medium text-sm">{label}</p>
       {payload.map((p) => (
         <p key={p.dataKey} className="text-base font-bold" style={{ color: p.color || p.fill }}>
@@ -162,7 +162,7 @@ function PieTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const d = payload[0];
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20 backdrop-blur-xl">
+    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
       <p className="text-lg font-bold text-white">{d.name}</p>
       <p className="text-xl font-bold mt-1" style={{ color: d.payload?.color || '#f5c842' }}>
         {d.value.toFixed(1)} <span className="text-base text-[#f5c842]">kg</span>
@@ -207,7 +207,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
     { name: 'Transport', value: carbonData.transportKg, color: COLORS[0] },
     { name: 'Energy', value: carbonData.energyKg, color: COLORS[1] },
     { name: 'Flights', value: carbonData.flightKg, color: COLORS[2] },
-    { name: 'Diet', value: carbonData.dietKg, color: COLORS[3] },
+    { name: 'Food', value: carbonData.dietKg, color: COLORS[3] },
+    { name: 'Lifestyle', value: carbonData.lifestyleKg || 0, color: COLORS[4] },
   ].filter((d) => d.value > 0);
 
   // Build daily breakdown
@@ -218,6 +219,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
       transport: +(carbonData.transportKg / 7 * jitter).toFixed(1),
       energy: +(carbonData.energyKg / 7 * (1.1 - i * 0.03)).toFixed(1),
       diet: +(carbonData.dietKg / 7).toFixed(1),
+      lifestyle: +((carbonData.lifestyleKg || 0) / 7).toFixed(1),
     };
   });
 
@@ -295,9 +297,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
 
         {/* ─── DRAMATIC SCORE HERO ─── */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.95, filter: 'blur(12px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative rounded-3xl p-[1px] overflow-hidden mb-10"
           style={{
             background: `conic-gradient(from 180deg, transparent 30%, ${emotion.ring}44, ${emotion.ring}22, transparent 70%)`,
@@ -364,9 +366,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               <AnimatePresence>
                 {revealed('number') && (
                   <motion.div
-                    initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                   >
                     <h2 className="font-serif text-6xl md:text-7xl font-semibold tracking-tight mb-3">
                       <CountUp end={carbonData.totalKg} duration={2.5} delay={0.5} decimals={1} separator=","
@@ -433,9 +435,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
         <AnimatePresence>
           {revealed('comparison') && (
             <motion.div
-              initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-3xl card-surface p-8 md:p-10 mb-10 space-y-6"
             >
               <h3 className="text-xl font-semibold text-white font-serif mb-3">How You Compare</h3>
@@ -451,9 +453,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
         <AnimatePresence>
           {revealed('breakdown') && (
             <motion.div
-              initial={{ opacity: 0, y: 30, filter: 'blur(6px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="rounded-3xl card-surface p-8 md:p-10 mb-10"
             >
               <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -476,8 +478,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     { label: 'Transport', value: carbonData.transportKg, icon: '🚗', color: COLORS[0] },
                     { label: 'Energy', value: carbonData.energyKg, icon: '⚡', color: COLORS[1] },
                     { label: 'Flights', value: carbonData.flightKg, icon: '✈️', color: COLORS[2] },
-                    { label: 'Diet', value: carbonData.dietKg, icon: '🥗', color: COLORS[3] },
-                  ].map((c, i) => (
+                    { label: 'Food', value: carbonData.dietKg, icon: '🥗', color: COLORS[3] },
+                    { label: 'Lifestyle', value: carbonData.lifestyleKg || 0, icon: '🛍️', color: COLORS[4] },
+                  ].filter(c => c.value > 0).map((c, i) => (
                     <motion.div
                       key={c.label}
                       initial={{ opacity: 0, x: 20 }}
@@ -564,11 +567,11 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       ].map((s, i) => (
                         <motion.div
                           key={s.label}
-                          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                          transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                          whileHover={{ y: -6, boxShadow: '0 20px 50px rgba(212,160,23,0.1)' }}
-                          className="rounded-2xl bg-white/[0.02] border border-white/[0.07] p-6 text-center cursor-default backdrop-blur-sm card-hover"
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                          whileHover={{ y: -4 }}
+                          className="rounded-2xl bg-white/[0.02] border border-white/[0.07] p-6 text-center cursor-default card-hover"
                         >
                           <span className="text-3xl">{s.icon}</span>
                           <div className={`text-3xl md:text-4xl font-bold mt-3 ${s.color}`}>
@@ -680,10 +683,10 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                       ].map((c, i) => (
                         <motion.div
                           key={c.label}
-                          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-                          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                          transition={{ delay: i * 0.08, duration: 0.6 }}
-                          className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-5 backdrop-blur-sm"
+                          initial={{ opacity: 0, y: 15 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.06, duration: 0.4 }}
+                          className="rounded-2xl bg-white/[0.02] border border-white/[0.06] p-5"
                         >
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-2xl">{c.icon}</span>
@@ -769,7 +772,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                           whileHover={{ y: -4, boxShadow: '0 16px 40px rgba(0,0,0,0.3)' }}
-                          className="rounded-2xl bg-white/[0.03] border border-white/[0.07] p-7 flex gap-6 items-start cursor-default backdrop-blur-sm card-hover"
+                          className="rounded-2xl bg-white/[0.03] border border-white/[0.07] p-7 flex gap-6 items-start cursor-default card-hover"
                         >
                           <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-green/20 to-accent-blue/10 flex items-center justify-center text-xl font-bold text-accent-green">
                             {i + 1}
