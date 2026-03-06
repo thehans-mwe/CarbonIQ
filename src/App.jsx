@@ -110,7 +110,7 @@ export default function App() {
         )}
 
         {view === 'calculator' && (
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-accent-green/20 border-t-accent-green rounded-full animate-spin" /></div>}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-7 h-7 border-2 border-[#d4a017]/20 border-t-[#d4a017] rounded-full animate-spin" /></div>}>
             <Calculator
               onCalculate={handleCalculate}
               onBack={goLanding}
@@ -120,7 +120,7 @@ export default function App() {
         )}
 
         {view === 'results' && carbonData && (
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-accent-green/20 border-t-accent-green rounded-full animate-spin" /></div>}>
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-7 h-7 border-2 border-[#d4a017]/20 border-t-[#d4a017] rounded-full animate-spin" /></div>}>
             <ResultsDashboard
               carbonData={carbonData}
               recommendations={recommendations}

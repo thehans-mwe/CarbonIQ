@@ -2,15 +2,6 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import CountUp from 'react-countup';
 
-const team = [
-  {
-    name: 'Thehan Sandaneth',
-    role: 'Founder & Developer',
-    image: 'https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a',
-    bio: 'Full-stack developer and climate enthusiast. Built CarbonIQ to make carbon tracking accessible to everyone.',
-  },
-];
-
 const milestones = [
   { value: 2024, label: 'Founded', suffix: '' },
   { value: 2400, label: 'Organizations', suffix: '+' },
@@ -24,66 +15,61 @@ const values = [
   { icon: '⚡', title: 'Simplicity', description: 'Complex climate data, delivered in the simplest possible interface.' },
 ];
 
-const containerVariants = {
+const ease = [0.22, 1, 0.36, 1];
+
+const stagger = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(4px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } },
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease } },
 };
 
 export default function About() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 });
 
   return (
-    <section id="about" className="relative py-32 overflow-hidden" ref={ref}>
-      {/* Background glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-cyan/[0.03] blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent-green/[0.03] blur-[100px] rounded-full pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6">
+    <section id="about" className="relative py-32" ref={ref}>
+      <div className="max-w-6xl mx-auto px-6">
         {/* Section heading */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6, ease }}
+          className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-cyan tracking-[0.2em] uppercase mb-6">
+          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
             About Us
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
+          <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Built for the planet,{' '}
-            <br className="hidden md:block" />
-            <span className="gradient-text italic">by people who care.</span>
+            <span className="gradient-text">by people who care.</span>
           </h2>
-          <p className="max-w-2xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
-            CarbonIQ was founded on a simple belief: you can't fix what you don't
-            measure. We're a team of climate scientists, engineers, and designers
-            on a mission to make carbon tracking effortless and actionable.
-            <span className="block mt-3 text-accent-green/80 font-medium text-base">
-              Your privacy matters — we don't store, save, or keep any of your personal data. Ever.
-            </span>
+          <p className="max-w-xl mx-auto text-gray-500 text-[15px] leading-relaxed">
+            CarbonIQ was founded on a simple belief: you can't fix what you don't measure.
+            We're making carbon tracking effortless and actionable.
+          </p>
+          <p className="text-emerald-400/70 text-sm font-medium mt-3">
+            Your privacy matters — we don't store, save, or keep any of your personal data. Ever.
           </p>
         </motion.div>
 
-        {/* Stats bar */}
+        {/* Stats / milestones */}
         <motion.div
-          variants={containerVariants}
+          variants={stagger}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-3 gap-5 mb-24"
+          className="grid grid-cols-3 gap-4 mb-20"
         >
           {milestones.map((m) => (
             <motion.div
               key={m.label}
-              variants={itemVariants}
-              whileHover={{ y: -4 }}
-              className="glass rounded-2xl p-6 text-center cursor-default"
+              variants={fadeUp}
+              className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] py-6 px-4 text-center"
             >
-              <div className="text-3xl md:text-4xl font-extrabold text-white">
+              <div className="text-2xl md:text-3xl font-bold text-white">
                 {inView ? (
                   <CountUp
                     end={m.value}
@@ -94,85 +80,65 @@ export default function About() {
                 ) : 0}
                 <span className="gradient-text">{m.suffix}</span>
               </div>
-              <p className="text-sm text-gray-400 mt-2">{m.label}</p>
+              <p className="text-xs text-gray-500 mt-1.5">{m.label}</p>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Our Values */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.4, 0, 0.2, 1] }}
-          className="mb-24"
+          transition={{ duration: 0.6, delay: 0.15, ease }}
+          className="mb-20"
         >
-          <h3 className="text-2xl md:text-3xl font-serif font-semibold text-center mb-12 tracking-tight">
-            Our <span className="gradient-text italic">Values</span>
+          <h3 className="text-xl md:text-2xl font-serif font-semibold text-center mb-10 tracking-tight">
+            Our <span className="gradient-text">Values</span>
           </h3>
           <motion.div
-            variants={containerVariants}
+            variants={stagger}
             initial="hidden"
             animate={inView ? 'visible' : 'hidden'}
-            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4"
           >
             {values.map((v) => (
               <motion.div
                 key={v.title}
-                variants={itemVariants}
-                whileHover={{ y: -6, boxShadow: '0 12px 40px rgba(0,0,0,0.2)' }}
-                className="glass rounded-2xl p-6 text-center cursor-default group"
+                variants={fadeUp}
+                whileHover={{ y: -4 }}
+                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default hover:border-white/[0.1] transition-all duration-300"
               >
-                <span className="text-3xl block mb-4 group-hover:scale-110 transition-transform duration-300">{v.icon}</span>
-                <h4 className="text-base font-semibold text-white mb-2">{v.title}</h4>
-                <p className="text-sm text-gray-400 leading-relaxed">{v.description}</p>
+                <span className="text-2xl block mb-3">{v.icon}</span>
+                <h4 className="text-sm font-semibold text-white mb-1.5">{v.title}</h4>
+                <p className="text-xs text-gray-500 leading-relaxed">{v.description}</p>
               </motion.div>
             ))}
           </motion.div>
         </motion.div>
 
-        {/* Team */}
+        {/* Creator */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.6, delay: 0.25, ease }}
+          className="text-center"
         >
-          <h3 className="text-2xl md:text-3xl font-serif font-semibold text-center mb-12 tracking-tight">
-            The <span className="gradient-text italic">Creator</span>
+          <h3 className="text-xl md:text-2xl font-serif font-semibold mb-10 tracking-tight">
+            The <span className="gradient-text">Creator</span>
           </h3>
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={inView ? 'visible' : 'hidden'}
-            className="flex justify-center"
-          >
-            {team.map((member) => (
-              <motion.div
-                key={member.name}
-                variants={itemVariants}
-                whileHover={{ y: -8, boxShadow: '0 16px 48px rgba(0,0,0,0.25)' }}
-                className="glass rounded-3xl p-6 text-center cursor-default group relative overflow-hidden"
-              >
-                <div className="absolute -top-12 -right-12 w-24 h-24 bg-gradient-to-br from-accent-green/10 to-accent-blue/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                <div className="relative z-10">
-                  {member.image ? (
-                    <img
-                      src={member.image}
-                      alt={member.name}
-                      className="w-20 h-20 rounded-2xl object-cover mx-auto mb-4 ring-2 ring-white/10 group-hover:ring-accent-green/30 transition-all duration-300"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="w-20 h-20 rounded-2xl mx-auto mb-4 ring-2 ring-white/10 group-hover:ring-accent-green/30 transition-all duration-300 bg-gradient-to-br from-accent-green/20 to-accent-blue/20 flex items-center justify-center">
-                      <span className="text-2xl font-bold gradient-text">{member.name.split(' ').map(n => n[0]).join('')}</span>
-                    </div>
-                  )}
-                  <h4 className="text-base font-semibold text-white">{member.name}</h4>
-                  <p className="text-xs text-accent-green font-medium mt-1 mb-3">{member.role}</p>
-                  <p className="text-sm text-gray-400 leading-relaxed">{member.bio}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          <div className="inline-flex flex-col items-center rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-8 max-w-xs mx-auto hover:border-white/[0.1] transition-colors duration-300">
+            <img
+              src="https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a"
+              alt="Thehan Sandaneth"
+              className="w-16 h-16 rounded-2xl ring-1 ring-white/[0.08] mb-4"
+              loading="lazy"
+            />
+            <h4 className="text-sm font-semibold text-white">Thehan Sandaneth</h4>
+            <p className="text-[11px] text-[#d4a017] font-medium mt-1 mb-3">Founder & Developer</p>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Full-stack developer and climate enthusiast. Built CarbonIQ to make carbon tracking accessible to everyone.
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

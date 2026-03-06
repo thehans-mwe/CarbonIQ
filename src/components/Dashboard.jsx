@@ -31,30 +31,28 @@ const stats = [
   { label: 'Active Trackers', value: 2340, suffix: '+', icon: '📊' },
 ];
 
-const containerVariants = {
+/* ── animations ───────────────────────────────────── */
+const ease = [0.22, 1, 0.36, 1];
+
+const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-  },
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease } },
 };
 
 /* ── custom tooltip ───────────────────────────────── */
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
-      <p className="text-white/70 mb-1 font-medium text-sm">{label}</p>
+    <div className="rounded-lg px-4 py-2.5 bg-[#0a0a0a] border border-white/[0.08] shadow-xl">
+      <p className="text-white/50 mb-1 font-medium text-xs">{label}</p>
       {payload.map((p) => (
-        <p key={p.dataKey} className="text-base font-bold" style={{ color: p.color }}>
-          {p.dataKey}: <span className="text-white">{p.value} tCO₂</span>
+        <p key={p.dataKey} className="text-sm font-semibold" style={{ color: p.color }}>
+          {p.dataKey}: <span className="text-white">{p.value.toLocaleString()} tCO₂</span>
         </p>
       ))}
     </div>
@@ -65,10 +63,10 @@ function PieTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const d = payload[0];
   return (
-    <div className="rounded-xl px-5 py-3 shadow-glass bg-[#0a0a0a] border border-[#f5c842]/20">
-      <p className="text-lg font-bold text-white">{d.name}</p>
-      <p className="text-xl font-bold mt-1" style={{ color: d.payload?.color || '#f5c842' }}>
-        {d.value}<span className="text-base text-[#f5c842] ml-1">%</span>
+    <div className="rounded-lg px-4 py-2.5 bg-[#0a0a0a] border border-white/[0.08] shadow-xl">
+      <p className="text-sm font-semibold text-white">{d.name}</p>
+      <p className="text-lg font-bold mt-0.5" style={{ color: d.payload?.color || '#f5c842' }}>
+        {d.value}<span className="text-xs text-gray-400 ml-1">%</span>
       </p>
     </div>
   );
@@ -78,56 +76,52 @@ function PieTooltip({ active, payload }) {
 function StatCard({ label, value, suffix, icon, inView }) {
   return (
     <motion.div
-      variants={cardVariants}
-      whileHover={{ y: -10, boxShadow: '0 20px 60px rgba(212,160,23,0.14)' }}
-      className="glass rounded-[2rem] p-8 flex flex-col items-center text-center transition-all duration-400 cursor-default shadow-[0_8px_40px_rgba(212,160,23,0.10)] border border-white/[0.04]"
+      variants={fadeUp}
+      whileHover={{ y: -4 }}
+      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center transition-all duration-300 hover:border-white/[0.1] cursor-default"
     >
-      <span className="text-3xl mb-4">{icon}</span>
-      <span className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-        {inView ? <CountUp end={value} duration={2.4} separator="," /> : 0}
+      <span className="text-2xl block mb-3">{icon}</span>
+      <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+        {inView ? <CountUp end={value} duration={2.2} separator="," /> : 0}
         <span className="gradient-text">{suffix}</span>
       </span>
-      <span className="text-lg text-white/90 mt-3 font-medium">{label}</span>
+      <span className="block text-sm text-gray-500 mt-2 font-medium">{label}</span>
     </motion.div>
   );
 }
 
 /* ── main dashboard ───────────────────────────────── */
 export default function Dashboard() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   return (
     <section id="dashboard" className="relative py-32 overflow-hidden">
-      {/* subtle radial glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-accent-green/[0.04] blur-[120px] rounded-full pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
+      <div className="max-w-6xl mx-auto px-6" ref={ref}>
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6, ease }}
+          className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-green tracking-[0.2em] uppercase mb-6">
+          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
             Live Dashboard
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
+          <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Your impact,{' '}
-            <span className="gradient-text italic">visualized.</span>
+            <span className="gradient-text">visualized.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-300 mt-6 text-base leading-relaxed">
-            Real-time analytics that transform raw emissions data into clear,
-            actionable insights.
+          <p className="max-w-lg mx-auto text-gray-500 text-[15px] leading-relaxed">
+            Real-time analytics that transform raw emissions data into clear, actionable insights.
           </p>
         </motion.div>
 
         {/* Stat cards */}
         <motion.div
-          variants={containerVariants}
+          variants={stagger}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-16"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
         >
           {stats.map((s) => (
             <StatCard key={s.label} {...s} inView={inView} />
@@ -136,66 +130,66 @@ export default function Dashboard() {
 
         {/* Charts row */}
         <motion.div
-          variants={containerVariants}
+          variants={stagger}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid lg:grid-cols-5 gap-6"
+          className="grid lg:grid-cols-5 gap-5"
         >
-          {/* Area chart – takes 3 cols */}
+          {/* Area chart — 3 cols */}
           <motion.div
-            variants={cardVariants}
-            className="lg:col-span-3 glass rounded-3xl p-6 md:p-8"
+            variants={fadeUp}
+            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6"
           >
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-5">
               <div>
-                <h3 className="text-lg font-semibold text-white">Emissions vs Offset</h3>
-                <p className="text-base text-white/70 mt-1">Last 7 months trend</p>
+                <h3 className="text-sm font-semibold text-white">Emissions vs Offset</h3>
+                <p className="text-xs text-gray-500 mt-0.5">Last 7 months trend</p>
               </div>
-              <span className="text-xs px-3 py-1 rounded-full bg-accent-green/10 text-accent-green font-medium">
+              <span className="text-[11px] px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-medium">
                 ↓ 42% YoY
               </span>
             </div>
-            <ResponsiveContainer width="100%" height={280}>
+            <ResponsiveContainer width="100%" height={260}>
               <AreaChart data={areaData}>
                 <defs>
                   <linearGradient id="emGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#c49b12" stopOpacity={0.35} />
+                    <stop offset="0%" stopColor="#c49b12" stopOpacity={0.25} />
                     <stop offset="100%" stopColor="#c49b12" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="offGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#f5c842" stopOpacity={0.35} />
+                    <stop offset="0%" stopColor="#f5c842" stopOpacity={0.25} />
                     <stop offset="100%" stopColor="#f5c842" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-                <XAxis dataKey="month" tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fill: '#ffffff', fontSize: 14, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" />
+                <XAxis dataKey="month" tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: '#6b7280', fontSize: 11 }} axisLine={false} tickLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="emissions" stroke="#c49b12" strokeWidth={2.5} fill="url(#emGrad)" />
-                <Area type="monotone" dataKey="offset" stroke="#f5c842" strokeWidth={2.5} fill="url(#offGrad)" />
+                <Area type="monotone" dataKey="emissions" stroke="#c49b12" strokeWidth={2} fill="url(#emGrad)" />
+                <Area type="monotone" dataKey="offset" stroke="#f5c842" strokeWidth={2} fill="url(#offGrad)" />
               </AreaChart>
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Pie chart – takes 2 cols */}
+          {/* Pie chart — 2 cols */}
           <motion.div
-            variants={cardVariants}
-            className="lg:col-span-2 glass rounded-3xl p-6 md:p-8 flex flex-col"
+            variants={fadeUp}
+            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col"
           >
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-white">Footprint Breakdown</h3>
-              <p className="text-base text-white/70 mt-1">By category</p>
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-white">Footprint Breakdown</h3>
+              <p className="text-xs text-gray-500 mt-0.5">By category</p>
             </div>
             <div className="flex-1 flex items-center justify-center">
-              <ResponsiveContainer width="100%" height={220}>
+              <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
                   <Pie
                     data={pieData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={90}
-                    paddingAngle={4}
+                    innerRadius={55}
+                    outerRadius={80}
+                    paddingAngle={3}
                     dataKey="value"
                     stroke="none"
                   >
@@ -208,12 +202,12 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
             {/* Legend */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-2 gap-2.5 mt-3">
               {pieData.map((d) => (
-                <div key={d.name} className="flex items-center gap-3 text-lg">
-                  <span className="w-4 h-4 rounded-full ring-2 ring-white/10" style={{ background: d.color }} />
-                  <span className="text-white font-bold">
-                    {d.name} <span className="text-[#f5c842] font-bold">{d.value}%</span>
+                <div key={d.name} className="flex items-center gap-2 text-xs">
+                  <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: d.color }} />
+                  <span className="text-gray-400">
+                    {d.name} <span className="text-white font-semibold">{d.value}%</span>
                   </span>
                 </div>
               ))}

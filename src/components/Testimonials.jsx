@@ -46,19 +46,16 @@ const testimonials = [
   },
 ];
 
-const containerVariants = {
+const ease = [0.22, 1, 0.36, 1];
+
+const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-  },
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease } },
 };
 
 function Stars({ count }) {
@@ -67,7 +64,7 @@ function Stars({ count }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <svg
           key={i}
-          className={`w-4 h-4 ${i < count ? 'text-yellow-400' : 'text-gray-700'}`}
+          className={`w-3.5 h-3.5 ${i < count ? 'text-[#f5c842]' : 'text-gray-800'}`}
           fill="currentColor"
           viewBox="0 0 20 20"
         >
@@ -82,75 +79,62 @@ export default function Testimonials() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 });
 
   return (
-    <section className="relative py-32 overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-accent-purple/[0.04] blur-[120px] rounded-full pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
+    <section className="relative py-32">
+      <div className="max-w-6xl mx-auto px-6" ref={ref}>
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6, ease }}
+          className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-purple tracking-[0.2em] uppercase mb-6">
+          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
             Reviews
           </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
+          <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Loved by{' '}
-            <span className="gradient-text italic">real users.</span>
+            <span className="gradient-text">real users.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
-            People everywhere trust CarbonIQ to measure, understand, and reduce
-            their environmental impact.
+          <p className="max-w-lg mx-auto text-gray-500 text-[15px] leading-relaxed">
+            People everywhere trust CarbonIQ to measure, understand, and reduce their environmental impact.
           </p>
         </motion.div>
 
         {/* Testimonial grid */}
         <motion.div
-          variants={containerVariants}
+          variants={stagger}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {testimonials.map((t, i) => (
+          {testimonials.map((t) => (
             <motion.div
               key={t.name}
-              variants={cardVariants}
-              whileHover={{
-                y: -6,
-                boxShadow: '0 16px 48px rgba(0,0,0,0.25)',
-                transition: { duration: 0.3 },
-              }}
-              className="glass rounded-3xl p-7 flex flex-col cursor-default group relative overflow-hidden"
+              variants={fadeUp}
+              whileHover={{ y: -4 }}
+              className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default hover:border-white/[0.1] transition-all duration-300"
             >
-              {/* Subtle gradient on hover */}
-              <div className="absolute -top-16 -right-16 w-32 h-32 bg-gradient-to-br from-accent-green/10 to-accent-purple/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              {/* Quote mark */}
+              <svg className="w-6 h-6 text-[#d4a017]/20 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1">
+                &ldquo;{t.quote}&rdquo;
+              </p>
 
-              <div className="relative z-10 flex-1 flex flex-col">
-                {/* Quote */}
-                <svg className="w-8 h-8 text-accent-green/20 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <p className="text-gray-300 text-[15px] leading-relaxed mb-6 flex-1">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-
-                {/* Author */}
-                <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                  <img
-                    src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`}
-                    alt={t.name}
-                    className="w-11 h-11 rounded-full object-cover ring-2 ring-white/10 bg-navy-700"
-                    loading="lazy"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{t.name}</p>
-                    <p className="text-xs text-gray-500 truncate">{t.role}</p>
-                  </div>
-                  <Stars count={t.stars} />
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-4 border-t border-white/[0.04]">
+                <img
+                  src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`}
+                  alt={t.name}
+                  className="w-9 h-9 rounded-full ring-1 ring-white/[0.08] bg-[#0a0a0a]"
+                  loading="lazy"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{t.name}</p>
+                  <p className="text-[11px] text-gray-600 truncate">{t.role}</p>
                 </div>
+                <Stars count={t.stars} />
               </div>
             </motion.div>
           ))}
@@ -158,26 +142,24 @@ export default function Testimonials() {
 
         {/* Social proof bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
-          className="mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500"
+          transition={{ duration: 0.6, delay: 0.5, ease }}
+          className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-xs text-gray-600"
         >
           <div className="flex items-center gap-2">
-            <div className="flex -space-x-2">
+            <div className="flex -space-x-1.5">
               {testimonials.slice(0, 4).map((t) => (
-                <img key={t.name} src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`} alt="" className="w-7 h-7 rounded-full ring-2 ring-navy-900 bg-navy-700" loading="lazy" />
+                <img key={t.name} src={`https://api.dicebear.com/8.x/notionists/svg?seed=${t.seed}&backgroundColor=0a0a0a`} alt="" className="w-6 h-6 rounded-full ring-2 ring-black bg-[#0a0a0a]" loading="lazy" />
               ))}
             </div>
             <span>2,400+ users</span>
           </div>
-          <span className="hidden sm:block text-gray-700">|</span>
+          <span className="hidden sm:block text-gray-800">·</span>
           <div className="flex items-center gap-1.5">
             <Stars count={5} />
             <span>4.9/5 average rating</span>
           </div>
-          <span className="hidden sm:block text-gray-700">|</span>
-          <span>Trusted by individuals & organizations</span>
         </motion.div>
       </div>
     </section>
