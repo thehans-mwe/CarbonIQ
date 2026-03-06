@@ -114,29 +114,29 @@ export default function Features() {
               className="glass rounded-3xl p-8 md:p-10 group cursor-default relative overflow-hidden"
             >
               {/* Gradient corner glow on hover */}
-              <div
-                className={`absolute -top-20 -right-20 w-48 h-48 bg-gradient-to-br ${f.gradient} rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
-              />
-
-              <div className="relative z-10">
-                {/* Icon */}
-                <div
-                  className={`w-14 h-14 rounded-2xl glass flex items-center justify-center mb-6 ${f.iconColor} group-hover:scale-110 transition-transform duration-300`}
-                >
-                  {f.icon}
-                </div>
-
-                <h3 className="text-xl md:text-2xl font-serif font-semibold text-white mb-3 tracking-tight">
-                  {f.title}
-                </h3>
-                <p className="text-gray-400 leading-relaxed text-[15px]">
-                  {f.description}
-                </p>
-
-                {/* Learn more pseudo link */}
-                <div className="mt-6 flex items-center gap-2 text-sm font-medium text-white/50 group-hover:text-accent-green transition-colors duration-300">
-                  Learn more
-                  <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
+              >
+                {features.map((f, i) => (
+                  <motion.div
+                    key={f.title}
+                    variants={cardVariants}
+                    whileHover={{ y: -10, boxShadow: '0 20px 60px rgba(212,160,23,0.14)' }}
+                    className={`rounded-[2rem] card-surface p-10 flex flex-col items-start shadow-[0_8px_40px_rgba(212,160,23,0.10)] border border-white/[0.04] transition-all duration-400 ${f.gradient}`}
+                  >
+                    <div className={`mb-7 p-4 rounded-2xl bg-white/5 ${f.iconColor}`}>{f.icon}</div>
+                    <h3 className="font-serif text-2xl font-semibold mb-4 text-white tracking-tight leading-tight">
+                      {f.title}
+                    </h3>
+                    <p className="text-gray-400 text-base leading-relaxed flex-1">
+                      {f.description}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
                 </div>

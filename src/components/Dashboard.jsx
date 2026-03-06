@@ -79,15 +79,15 @@ function StatCard({ label, value, suffix, icon, inView }) {
   return (
     <motion.div
       variants={cardVariants}
-      whileHover={{ y: -6, boxShadow: '0 12px 40px rgba(212,160,23,0.12)' }}
-      className="glass rounded-2xl p-6 flex flex-col items-center text-center transition-all duration-300 cursor-default"
+      whileHover={{ y: -10, boxShadow: '0 20px 60px rgba(212,160,23,0.14)' }}
+      className="glass rounded-[2rem] p-8 flex flex-col items-center text-center transition-all duration-400 cursor-default shadow-[0_8px_40px_rgba(212,160,23,0.10)] border border-white/[0.04]"
     >
-      <span className="text-2xl mb-3">{icon}</span>
-      <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+      <span className="text-3xl mb-4">{icon}</span>
+      <span className="text-4xl md:text-5xl font-bold text-white tracking-tight">
         {inView ? <CountUp end={value} duration={2.4} separator="," /> : 0}
         <span className="gradient-text">{suffix}</span>
       </span>
-      <span className="text-base text-white/90 mt-2 font-medium">{label}</span>
+      <span className="text-lg text-white/90 mt-3 font-medium">{label}</span>
     </motion.div>
   );
 }

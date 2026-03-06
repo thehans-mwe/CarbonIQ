@@ -75,7 +75,7 @@ function ProgressBar({ step, total }) {
 /* ─── step indicators ─────────────────────────────────── */
 function StepIndicators({ currentStep, onGoToStep }) {
   return (
-    <div className="flex items-center justify-between mb-10 px-2">
+    <div className="flex items-center justify-between mb-12 px-2">
       {STEPS.map((s, i) => {
         const done = i < currentStep;
         const active = i === currentStep;
@@ -84,18 +84,19 @@ function StepIndicators({ currentStep, onGoToStep }) {
             <motion.button
               type="button"
               onClick={() => i <= currentStep && onGoToStep(i)}
-              whileHover={i <= currentStep ? { scale: 1.1 } : {}}
-              whileTap={i <= currentStep ? { scale: 0.95 } : {}}
-              className={`relative flex items-center justify-center w-11 h-11 rounded-full text-lg transition-all duration-500 ${
+              whileHover={i <= currentStep ? { scale: 1.08 } : {}}
+              whileTap={i <= currentStep ? { scale: 0.96 } : {}}
+              className={`relative flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full text-base md:text-lg transition-all duration-500 shadow-none border-2 ${
                 active
-                  ? 'bg-gradient-to-br from-accent-green to-accent-blue shadow-glow text-navy-900 ring-4 ring-accent-green/20'
+                  ? 'bg-gradient-to-br from-accent-green to-accent-blue text-navy-900 border-accent-green/60 shadow-[0_2px_16px_rgba(212,160,23,0.10)]'
                   : done
-                  ? 'bg-accent-green/20 text-accent-green cursor-pointer'
-                  : 'bg-white/[0.04] text-gray-600 cursor-default'
+                  ? 'bg-accent-green/10 text-accent-green border-accent-green/30 cursor-pointer'
+                  : 'bg-white/[0.02] text-gray-600 border-white/[0.07] cursor-default'
               }`}
+              style={{ boxShadow: active ? '0 2px 16px rgba(212,160,23,0.10)' : undefined }}
             >
               {done ? (
-                <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                 </motion.svg>
               ) : (
@@ -104,20 +105,20 @@ function StepIndicators({ currentStep, onGoToStep }) {
               {/* active ring pulse */}
               {active && (
                 <motion.span
-                  className="absolute inset-0 rounded-full border-2 border-accent-green/40"
-                  animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  className="absolute inset-0 rounded-full border-2 border-accent-green/30"
+                  animate={{ scale: [1, 1.18, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2.2, repeat: Infinity }}
                 />
               )}
             </motion.button>
             {/* connector */}
             {i < STEPS.length - 1 && (
-              <div className="flex-1 h-[2px] mx-3 bg-white/[0.04] rounded-full overflow-hidden">
+              <div className="flex-1 h-[1.5px] mx-2 md:mx-3 bg-white/[0.03] rounded-full overflow-hidden">
                 <motion.div
                   className="h-full rounded-full bg-gradient-to-r from-accent-green to-accent-blue"
                   initial={{ width: 0 }}
                   animate={{ width: done ? '100%' : '0%' }}
-                  transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+                  transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
                 />
               </div>
             )}
@@ -137,8 +138,8 @@ function GlowInput({ label, unit, icon, ...props }) {
         <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl">{icon}</span>
         <input
           {...props}
-          className="w-full pr-5 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg placeholder-gray-600 outline-none transition-colors duration-300 input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
-          style={{ paddingLeft: '3.5rem' }}
+          className="w-full pr-5 py-5 rounded-[1.3rem] bg-white/[0.025] border border-white/[0.06] text-white text-lg placeholder-gray-500 outline-none transition-all duration-300 input-glow focus:border-accent-green/50 focus:bg-white/[0.06] focus:shadow-[0_0_0_4px_rgba(212,160,23,0.10)]"
+          style={{ paddingLeft: '3.5rem', letterSpacing: '0.01em' }}
         />
         {unit && (
           <span className="absolute right-5 top-1/2 -translate-y-1/2 text-xs text-gray-500 font-semibold tracking-wider uppercase">
@@ -159,8 +160,8 @@ function GlowSelect({ label, icon, options, ...props }) {
         <span className="absolute left-5 top-1/2 -translate-y-1/2 text-xl">{icon}</span>
         <select
           {...props}
-          className="w-full pr-12 py-5 rounded-2xl bg-white/[0.03] border border-white/[0.07] text-white text-lg outline-none transition-colors duration-300 appearance-none cursor-pointer bg-transparent input-glow focus:border-accent-green/40 focus:bg-white/[0.05]"
-          style={{ paddingLeft: '3.5rem' }}
+          className="w-full pr-12 py-5 rounded-[1.3rem] bg-white/[0.025] border border-white/[0.06] text-white text-lg outline-none transition-all duration-300 appearance-none cursor-pointer bg-transparent input-glow focus:border-accent-green/50 focus:bg-white/[0.06] focus:shadow-[0_0_0_4px_rgba(212,160,23,0.10)]"
+          style={{ paddingLeft: '3.5rem', letterSpacing: '0.01em' }}
         >
           {options.map((o) => (
             <option key={o.value} value={o.value} className="bg-[#0a0a0a] text-white">
@@ -377,12 +378,12 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
           ref={cardRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="relative rounded-3xl p-[1px] overflow-hidden animated-border-gradient"
+          transition={{ duration: 0.7, delay: 0.18, ease: [0.22, 1, 0.36, 1] }}
+          className="relative rounded-[2.2rem] p-[2px] overflow-visible animated-border-gradient shadow-[0_8px_40px_rgba(212,160,23,0.10)]"
         >
-          <div className="rounded-3xl card-surface p-10 md:p-12 relative overflow-hidden">
+          <div className="rounded-[2.1rem] card-surface p-8 md:p-14 relative overflow-visible border border-white/[0.04] shadow-[0_2px_32px_rgba(212,160,23,0.10)]">
             {/* Subtle inner glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.03] via-transparent to-accent-blue/[0.03] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-accent-green/[0.04] via-transparent to-accent-blue/[0.04] pointer-events-none rounded-[2.1rem]" />
 
             {/* Step title */}
             <AnimatePresence mode="wait" custom={dir}>
