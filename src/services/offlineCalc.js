@@ -1,50 +1,49 @@
 /**
  * Offline fallback carbon calculations.
- * Uses EPA / DEFRA / IPCC emission factors so the app works
- * even when the Carbon Interface API is unreachable.
- *
+ * Uses EPA 2024, DEFRA 2024, IPCC AR6, & DOE emission factors.
  * All results in kg CO₂e (carbon-dioxide equivalent).
  */
 
-// ── Emission factors (EPA 2024 / DEFRA 2024 / IPCC AR6) ──
+// ── Emission factors ──────────────────────────────────────
 const FACTORS = {
   car: {
-    gasoline: 0.404,   // kg CO₂e per mile — EPA avg passenger vehicle
-    diesel: 0.367,     // slightly lower CO₂ but higher NOx
-    hybrid: 0.213,     // ~47% less than gasoline (EPA)
-    electric: 0.092,   // US grid avg 0.386 kg/kWh × 0.3 kWh/mi (DOE)
+    gasoline: 0.404,   // kg CO₂e/mi — EPA avg passenger vehicle 2024
+    diesel:  0.367,    // kg CO₂e/mi — diesel sedan (EPA)
+    hybrid:  0.213,    // kg CO₂e/mi — ~47% less than gasoline (EPA)
+    electric: 0.092,   // 0.386 kg/kWh × 0.238 kWh/mi — DOE avg EV efficiency
   },
-  electricity: 0.386,  // kg CO₂e per kWh — EPA eGRID US national avg 2024
-  naturalGas: 5.31,    // kg CO₂e per therm — EPA GHG factors hub
+  electricity: 0.386,  // kg CO₂e/kWh — EPA eGRID US national avg 2024
+  naturalGas: 5.31,    // kg CO₂e/therm — EPA GHG Emission Factors Hub
   flight: {
-    shortHaul: 244,    // kg CO₂e per pax short-haul (~500 mi) — DEFRA 2024 economy
-    longHaul: 1020,    // kg CO₂e per pax long-haul (~3 500 mi) — DEFRA 2024 economy
+    shortHaul: 255,    // kg CO₂e/pax — DEFRA 2024 economy ≤ 3 hrs incl. radiative forcing ×1.9
+    longHaul:  1102,   // kg CO₂e/pax — DEFRA 2024 economy > 3 hrs incl. radiative forcing ×1.9
   },
-  diet: {
-    heavy_meat: 7.19,  // kg CO₂e per day — Scarborough et al. 2023
+  diet: {              // kg CO₂e/day — Scarborough et al. 2023 (Nature Food)
+    heavy_meat: 7.19,
     medium_meat: 5.63,
     vegetarian: 3.81,
     vegan: 2.89,
   },
-  shopping: {
-    minimal: 2.0,      // kg CO₂e per week — minimal consumer
-    average: 8.5,      // kg CO₂e per week — avg consumer (clothes, goods, deliveries)
-    frequent: 18.0,    // kg CO₂e per week — frequent online/retail shopper
-    heavy: 32.0,       // kg CO₂e per week — heavy consumer
+  shopping: {          // kg CO₂e/week — composite of EPA + WRAP 2023
+    minimal:  2.5,
+    average:  9.0,
+    frequent: 19.5,
+    heavy:    34.0,
   },
-  streaming: 0.036,    // kg CO₂e per hour — IEA 2023 data-center energy per stream-hour
+  streaming: 0.036,    // kg CO₂e/hr — IEA 2023 data-centre energy per stream-hour
 };
 
-// US per-capita weekly benchmarks (used for green-score grading)
+// US per-capita weekly benchmarks (for green-score grading)
 const BENCHMARKS = {
-  transport: 78,       // 193 mi/wk × 0.404 (avg American)
-  energy: 55,          // ~100 kWh + ~2.5 therms
-  flight: 10,          // annualised per-capita
-  diet: 39.4,          // medium-meat × 7
-  lifestyle: 12,       // avg shopping + streaming
+  transport: 78,       // 193 mi/wk × 0.404
+  energy:    55,       // ~100 kWh + ~2.5 therms
+  flight:    10,       // annualised per-capita
+  diet:      39.4,     // medium_meat × 7
+  lifestyle: 13,       // avg shopping + ~10 hrs streaming
 };
 
-const WEEKLY_AVG = BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet; // ~182
+const WEEKLY_AVG =
+  BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet + BENCHMARKS.lifestyle; // ~195.4
 
 // ── Calculator ────────────────────────────────────────────
 export function calculateOffline(inputs) {

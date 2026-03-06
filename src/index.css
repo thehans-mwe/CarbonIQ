@@ -19,61 +19,49 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  letter-spacing: 0.015em;
-  line-height: 1.75;
+  letter-spacing: 0.01em;
+  line-height: 1.7;
   font-size: 16px;
 }
 
 h1, h2, h3 {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
   font-weight: 600;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: #000000;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(212, 160, 23, 0.35);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 160, 23, 0.55);
-}
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: rgba(212,160,23,0.25); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(212,160,23,0.45); }
 
 ::selection {
-  background: rgba(212, 160, 23, 0.25);
+  background: rgba(212,160,23,0.2);
   color: #fff;
 }
 
-/* Glass utility — lightweight glassmorphism */
+/* ── Glass ── */
 .glass {
-  background: rgba(10, 10, 10, 0.75);
+  background: rgba(10,10,10,0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255,255,255,0.06);
 }
 
 .glass-light {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* Premium card surface — no backdrop-filter needed (opaque bg) */
+/* ── Card surface ── */
 .card-surface {
-  background: linear-gradient(135deg, rgba(15,15,15,0.95) 0%, rgba(8,8,8,0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+  background: linear-gradient(135deg, rgba(12,12,12,0.97) 0%, rgba(6,6,6,0.99) 100%);
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
 }
 
-/* Gradient text */
+/* ── Gradient text ── */
 .gradient-text {
   background: linear-gradient(135deg, #f5c842 0%, #d4a017 50%, #c49b12 100%);
   -webkit-background-clip: text;
@@ -81,18 +69,15 @@ h1, h2, h3 {
   background-clip: text;
 }
 
-/* Static dark background (animated version removed for performance) */
-.animated-gradient-bg {
-  background: #000000;
-}
+/* ── Static bg ── */
+.animated-gradient-bg { background: #000; }
 
-/* Glow button */
+/* ── Glow button ── */
 .btn-glow {
   position: relative;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
 }
-
 .btn-glow::before {
   content: '';
   position: absolute;
@@ -101,171 +86,101 @@ h1, h2, h3 {
   border-radius: inherit;
   z-index: -1;
   opacity: 0;
-  transition: opacity 0.4s ease;
-  filter: blur(12px);
+  transition: opacity 0.3s ease;
+  filter: blur(10px);
 }
+.btn-glow:hover::before { opacity: 0.5; }
 
-.btn-glow:hover::before {
-  opacity: 0.6;
-}
-
-/* Divider */
+/* ── Divider ── */
 .animated-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(212, 160, 23, 0.5), rgba(245, 200, 66, 0.3), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 3s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,0.4), transparent);
 }
 
-@keyframes shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* Noise overlay removed for performance */
-
-/* ── Number input spinner hide ── */
+/* ── Number input spinners ── */
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type="number"] {
-  -moz-appearance: textfield;
-}
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
 
-/* ── Performance-friendly CSS animations ── */
-@keyframes float-slow {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-15px) scale(1.03); }
-}
-
-@keyframes float-medium {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-10px) scale(1.02); }
-}
-
-.animate-float-slow {
-  animation: float-slow 20s ease-in-out infinite;
-}
-
-.animate-float-medium {
-  animation: float-medium 16s ease-in-out infinite;
-}
-
-/* ── Animated border gradient (replaces JS setInterval) ── */
+/* ── Animated border (still used by ResultsDashboard) ── */
 @property --border-angle {
   syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
-
-@keyframes border-rotate {
-  to { --border-angle: 360deg; }
-}
-
+@keyframes border-rotate { to { --border-angle: 360deg; } }
 .animated-border-gradient {
   --border-angle: 0deg;
   animation: border-rotate 6s linear infinite;
-  background: conic-gradient(from var(--border-angle), transparent 40%, rgba(212,160,23,0.3), rgba(245,200,66,0.2), transparent 60%);
+  background: conic-gradient(from var(--border-angle), transparent 40%, rgba(212,160,23,0.25), rgba(245,200,66,0.15), transparent 60%);
 }
 
-/* ── Glow pulse on CO₂ number landing ── */
+/* ── Glow pulse on score reveal ── */
 @keyframes glow-pulse-anim {
-  0% { text-shadow: 0 0 10px rgba(245,200,66,0.8), 0 0 30px rgba(245,200,66,0.4); }
+  0% { text-shadow: 0 0 8px rgba(245,200,66,0.7), 0 0 24px rgba(245,200,66,0.3); }
   100% { text-shadow: none; }
 }
+.glow-pulse { animation: glow-pulse-anim 0.8s ease-out forwards; }
 
-.glow-pulse {
-  animation: glow-pulse-anim 1s ease-out forwards;
-}
-
-/* ── Range slider thumb styling ── */
-input[type="range"],
-.sim-slider {
+/* ── Range slider thumb ── */
+input[type="range"], .sim-slider {
   -webkit-appearance: none;
   appearance: none;
   background: transparent;
   cursor: pointer;
-  height: 8px;
+  height: 6px;
 }
-
-input[type="range"]::-webkit-slider-thumb,
-.sim-slider::-webkit-slider-thumb {
+input[type="range"]::-webkit-slider-thumb, .sim-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #f5c842;
-  box-shadow: 0 0 10px rgba(245,200,66,0.3);
+  box-shadow: 0 0 8px rgba(245,200,66,0.25);
   border: 2px solid #0a0a0a;
 }
-
-input[type="range"]::-moz-range-thumb,
-.sim-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
+input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: #f5c842;
-  box-shadow: 0 0 10px rgba(245,200,66,0.3);
+  box-shadow: 0 0 8px rgba(245,200,66,0.25);
   border: 2px solid #0a0a0a;
 }
+.sim-slider::-moz-range-track { background: transparent; border: none; }
 
-.sim-slider::-moz-range-track {
-  background: transparent;
-  border: none;
-}
-
-/* ── Reduce motion for users who prefer it ── */
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .animate-float-slow,
-  .animate-float-medium,
   .animated-border-gradient,
   .animated-gradient-bg,
-  .animated-divider {
-    animation: none !important;
-  }
+  .animated-divider { animation: none !important; }
 }
 
-/* ── Premium button lift effect ── */
-.btn-lift {
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.btn-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(212, 160, 23, 0.2);
-}
-.btn-lift:active {
-  transform: translateY(0px);
-}
+/* ── Button lift ── */
+.btn-lift { transition: all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.btn-lift:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212,160,23,0.15); }
+.btn-lift:active { transform: translateY(0); }
 
-/* ── Card hover lift ── */
-.card-hover {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
-}
+/* ── Card hover ── */
+.card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
 
-/* ── Gradient border wrapper ── */
+/* ── Gradient border ── */
 .gradient-border {
   position: relative;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   padding: 1px;
-  background: linear-gradient(135deg, rgba(212,160,23,0.2) 0%, transparent 50%, rgba(245,200,66,0.15) 100%);
+  background: linear-gradient(135deg, rgba(212,160,23,0.15) 0%, transparent 50%, rgba(245,200,66,0.1) 100%);
 }
-.gradient-border > * {
-  border-radius: calc(1.5rem - 1px);
-}
+.gradient-border > * { border-radius: calc(1rem - 1px); }
 
-/* ── Soft inner glow for inputs ── */
+/* ── Input focus glow ── */
 .input-glow:focus {
-  border-color: rgba(212,160,23,0.4);
-  box-shadow: 0 0 0 3px rgba(212,160,23,0.08);
+  border-color: rgba(212,160,23,0.35);
+  box-shadow: 0 0 0 3px rgba(212,160,23,0.06);
 }
 
-/* ── Radial score glow ── */
+/* ── Score glow ── */
 .score-glow {
-  background: radial-gradient(circle, rgba(212,160,23,0.08) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%);
 }

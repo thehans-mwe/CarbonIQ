@@ -4,146 +4,90 @@ import { useInView } from 'react-intersection-observer';
 const features = [
   {
     title: 'Real-Time Analytics',
-    description:
-      'Monitor emissions across your entire value chain with live dashboards that update every second.',
+    description: 'Live dashboards that break down your emissions by transport, energy, diet, and lifestyle.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
       </svg>
     ),
-    gradient: 'from-accent-green/20 to-accent-cyan/10',
-    iconColor: 'text-accent-green',
   },
   {
     title: 'AI-Powered Insights',
-    description:
-      'Machine learning models detect patterns, predict trends, and recommend the highest-impact reduction strategies.',
+    description: 'GPT-4o detects patterns and recommends the highest-impact reduction strategies for you.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
       </svg>
     ),
-    gradient: 'from-accent-blue/20 to-accent-purple/10',
-    iconColor: 'text-accent-blue',
   },
   {
-    title: 'Automated Reporting',
-    description:
-      'Generate audit-ready ESG reports in one click, aligned with GHG Protocol, CDP, and TCFD frameworks.',
+    title: 'EPA-Grade Accuracy',
+    description: 'Emission factors sourced from EPA 2024, DEFRA 2024, and IPCC AR6 for scientific precision.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
       </svg>
     ),
-    gradient: 'from-accent-purple/20 to-accent-green/10',
-    iconColor: 'text-accent-purple',
   },
   {
-    title: 'Team Collaboration',
-    description:
-      'Invite stakeholders, assign reduction goals, and track progress with shared workspaces and real-time sync.',
+    title: 'What-If Simulator',
+    description: 'Slide controls to see how switching to an EV or going vegetarian changes your footprint instantly.',
     icon: (
-      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+      <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
       </svg>
     ),
-    gradient: 'from-accent-cyan/20 to-accent-blue/10',
-    iconColor: 'text-accent-cyan',
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.15 } },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(6px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-  },
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  visible: (i) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
 };
 
 export default function Features() {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.15 });
 
   return (
-    <section id="features" className="relative py-32">
-      {/* Background radial blob */}
-      <div className="absolute bottom-0 right-0 w-[600px] h-[400px] bg-accent-blue/[0.03] blur-[100px] rounded-full pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-6" ref={ref}>
-        {/* Section heading */}
+    <section id="features" className="relative py-28">
+      <div className="max-w-5xl mx-auto px-6" ref={ref}>
+        {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, ease: [0.4, 0, 0.2, 1] }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full glass text-xs font-medium text-accent-blue tracking-[0.2em] uppercase mb-6">
-            Features
-          </span>
-          <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tight leading-tight">
-            Everything you need to{' '}
-            <span className="gradient-text italic">decarbonize.</span>
+          <h2 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight mb-4">
+            Everything you need to <span className="gradient-text">decarbonize.</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 mt-6 text-base leading-relaxed">
+          <p className="text-gray-500 text-sm max-w-md mx-auto">
             Powerful tools, beautiful interface, zero learning curve.
           </p>
         </motion.div>
 
-        {/* Feature cards grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-2 gap-6"
-        >
-          {features.map((f) => (
+        {/* Cards */}
+        <div className="grid sm:grid-cols-2 gap-4">
+          {features.map((f, i) => (
             <motion.div
               key={f.title}
-              variants={cardVariants}
-              whileHover={{
-                y: -8,
-                boxShadow: '0 16px 48px rgba(0,0,0,0.25)',
-                transition: { duration: 0.3 },
-              }}
-              className="glass rounded-3xl p-8 md:p-10 group cursor-default relative overflow-hidden"
+              custom={i}
+              variants={fadeUp}
+              initial="hidden"
+              animate={inView ? 'visible' : 'hidden'}
+              className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-7 group hover:border-white/[0.1] transition-colors duration-300"
             >
-              {/* Gradient corner glow on hover */}
-              <motion.div
-                variants={containerVariants}
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
-              >
-                {features.map((f, i) => (
-                  <motion.div
-                    key={f.title}
-                    variants={cardVariants}
-                    whileHover={{ y: -10, boxShadow: '0 20px 60px rgba(212,160,23,0.14)' }}
-                    className={`rounded-[2rem] card-surface p-10 flex flex-col items-start shadow-[0_8px_40px_rgba(212,160,23,0.10)] border border-white/[0.04] transition-all duration-400 ${f.gradient}`}
-                  >
-                    <div className={`mb-7 p-4 rounded-2xl bg-white/5 ${f.iconColor}`}>{f.icon}</div>
-                    <h3 className="font-serif text-2xl font-semibold mb-4 text-white tracking-tight leading-tight">
-                      {f.title}
-                    </h3>
-                    <p className="text-gray-400 text-base leading-relaxed flex-1">
-                      {f.description}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </div>
+              <div className="w-10 h-10 rounded-lg bg-white/[0.04] flex items-center justify-center text-[#d4a017] mb-5 group-hover:bg-[#d4a017]/10 transition-colors duration-300">
+                {f.icon}
               </div>
+              <h3 className="text-base font-semibold text-white mb-2">{f.title}</h3>
+              <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
