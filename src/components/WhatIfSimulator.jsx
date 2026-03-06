@@ -112,14 +112,14 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="rounded-3xl bg-[#060606] border border-white/[0.06] p-6 md:p-8"
+      className="rounded-2xl bg-[#0a0a0a] border border-white/[0.06] p-6 md:p-8"
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
-        <span className="text-2xl">🔮</span>
-        <h3 className="text-xl font-semibold text-white font-serif">What If Simulator</h3>
+        <span className="text-xl">🔮</span>
+        <p className="text-[10px] text-white/30 uppercase tracking-[0.25em]">What If Simulator</p>
       </div>
-      <p className="text-sm text-white/50 mb-6">Drag the sliders to see how small changes reduce your footprint in real time.</p>
+      <p className="text-xs text-white/20 mb-6">Drag the sliders to see how small changes reduce your footprint in real time.</p>
 
       <div className="grid lg:grid-cols-5 gap-8">
         {/* Sliders */}
@@ -179,12 +179,12 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
                     onClick={() => setDietSwitch(d.value)}
                     className={`p-3 rounded-xl text-center transition-all duration-300 ${
                       isActive
-                        ? 'bg-accent-green/15 border-2 border-accent-green/40 shadow-[0_0_20px_rgba(34,197,94,0.1)]'
+                        ? 'bg-[#d4a017]/10 border-2 border-[#d4a017]/30'
                         : 'bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12]'
                     }`}
                   >
                     <span className="text-xl block">{d.emoji}</span>
-                    <span className={`text-[11px] font-medium block mt-1 ${isActive ? 'text-accent-green' : 'text-gray-400'}`}>
+                    <span className={`text-[11px] font-medium block mt-1 ${isActive ? 'text-[#d4a017]' : 'text-gray-400'}`}>
                       {d.label}
                     </span>
                     {isCurrent && (
