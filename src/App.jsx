@@ -9,6 +9,8 @@ import Testimonials from './components/Testimonials';
 import About from './components/About';
 import Footer from './components/Footer';
 import SplashScreen from './components/SplashScreen';
+import BackgroundEffects from './components/BackgroundEffects';
+import BackToTop from './components/BackToTop';
 import { fetchCarbonEstimate, fetchRecommendations } from './services/api';
 import { DEMO_INPUTS, DEMO_CARBON, DEMO_RECOMMENDATIONS } from './services/demoData';
 
@@ -87,23 +89,30 @@ export default function App() {
   return (
     <>
       {showSplash && <SplashScreen onFinished={() => setShowSplash(false)} />}
+      <BackgroundEffects />
+      <BackToTop />
       <AnimatePresence mode="wait">
         <motion.div
           key={view}
           variants={pageVariants}
           initial="initial"
           animate="animate"
-          className="min-h-screen bg-black"
+          className="min-h-screen bg-black relative z-[1]"
         >
         <Navbar onDashboard={goCalculator} onNavigateSection={goToSection} onHome={goHome} />
 
         {view === 'landing' && (
           <>
             <Hero onGetStarted={goCalculator} onDemo={handleDemo} />
+            <div className="section-gold-divider" />
             <Dashboard />
+            <div className="section-gold-divider" />
             <Features />
+            <div className="section-gold-divider" />
             <Testimonials />
+            <div className="section-gold-divider" />
             <About />
+            <div className="section-gold-divider" />
             <CTA onGetStarted={goCalculator} />
             <Footer />
           </>

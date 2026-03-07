@@ -25,7 +25,7 @@ const features = [
   },
   {
     title: 'EPA-Grade Accuracy',
-    description: 'Emission factors sourced from EPA 2024, DEFRA 2024, and IPCC AR6 — the same data governments rely on.',
+    description: 'Emission factors sourced from EPA 2025, DEFRA 2025, and IPCC AR5 — the same data governments rely on.',
     icon: (
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -69,6 +69,14 @@ const cardVariants = [
 export default function Features() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty('--mouse-x', x + '%');
+    e.currentTarget.style.setProperty('--mouse-y', y + '%');
+  };
+
   return (
     <section id="features" className="relative py-32">
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
@@ -79,12 +87,15 @@ export default function Features() {
           transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-20"
         >
-          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#d4a017]/20 bg-[#d4a017]/[0.06] text-[10px] font-bold text-[#d4a017] tracking-[0.2em] uppercase mb-5 badge-pulse">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
             Why CarbonIQ
           </span>
           <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Everything you need to{' '}
-            <span className="gradient-text">decarbonize.</span>
+            <span className="gradient-text-shift">decarbonize.</span>
           </h2>
           <p className="text-gray-500 text-[15px] max-w-lg mx-auto leading-relaxed">
             Powerful tools packed into a beautiful interface — zero learning curve, maximum impact.
@@ -103,8 +114,12 @@ export default function Features() {
               key={f.title}
               variants={cardVariants[i]}
               whileHover={{ y: -8, scale: 1.03, transition: { type: 'spring', stiffness: 400, damping: 18 } }}
-              className="group relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] overflow-hidden card-corner-draw card-gold-glow transition-colors duration-200 hover-gold-top"
+              onMouseMove={handleMouseMove}
+              className="group relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] overflow-hidden card-corner-draw card-gold-glow card-mouse-glow transition-colors duration-200 hover-gold-top"
             >
+              {/* Feature number */}
+              <span className="feature-number">{String(i + 1).padStart(2, '0')}</span>
+
               {/* Hover gold sweep line */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a017]/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600" />
@@ -126,7 +141,7 @@ export default function Features() {
               </div>
 
               {/* Copy */}
-              <div className="p-6 pt-4">
+              <div className="p-6 pt-4 relative z-[1]">
                 <h3 className="text-[15px] font-semibold text-white mb-2">{f.title}</h3>
                 <p className="text-sm text-gray-500 leading-relaxed">{f.description}</p>
               </div>

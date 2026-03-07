@@ -132,12 +132,15 @@ export default function Dashboard() {
           transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#d4a017]/20 bg-[#d4a017]/[0.06] text-[10px] font-bold text-[#d4a017] tracking-[0.2em] uppercase mb-5 badge-pulse">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
             Live Dashboard
           </span>
           <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Your impact,{' '}
-            <span className="gradient-text">visualized.</span>
+            <span className="gradient-text-shift">visualized.</span>
           </h2>
           <p className="max-w-lg mx-auto text-gray-500 text-[15px] leading-relaxed">
             Real-time analytics that transform raw emissions data into clear, actionable insights.

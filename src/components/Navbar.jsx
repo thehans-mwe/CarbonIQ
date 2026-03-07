@@ -9,11 +9,23 @@ const links = [
 export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [offline, setOffline] = useState(!navigator.onLine);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  useEffect(() => {
+    const goOffline = () => setOffline(true);
+    const goOnline  = () => setOffline(false);
+    window.addEventListener('offline', goOffline);
+    window.addEventListener('online',  goOnline);
+    return () => {
+      window.removeEventListener('offline', goOffline);
+      window.removeEventListener('online',  goOnline);
+    };
   }, []);
 
   return (
@@ -65,6 +77,22 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
           >
             Get Started
           </motion.button>
+
+          {/* Offline indicator */}
+          <AnimatePresence>
+            {offline && (
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8, x: 10 }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.8, x: 10 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/20"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
+                <span className="text-[10px] text-yellow-400 font-semibold uppercase tracking-wider">Offline</span>
+              </motion.span>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Mobile toggle */}
@@ -119,6 +147,12 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
               >
                 Get Started
               </button>
+              {offline && (
+                <span className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 animate-pulse" />
+                  <span className="text-[10px] text-yellow-400 font-semibold uppercase tracking-wider">Offline Mode Active</span>
+                </span>
+              )}
             </div>
           </motion.div>
         )}

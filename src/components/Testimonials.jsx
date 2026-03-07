@@ -93,6 +93,14 @@ function Stars({ count }) {
 export default function Testimonials() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.08 });
 
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    e.currentTarget.style.setProperty('--mouse-x', x + '%');
+    e.currentTarget.style.setProperty('--mouse-y', y + '%');
+  };
+
   return (
     <section className="relative py-32">
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
@@ -103,12 +111,15 @@ export default function Testimonials() {
           transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#d4a017]/20 bg-[#d4a017]/[0.06] text-[10px] font-bold text-[#d4a017] tracking-[0.2em] uppercase mb-5 badge-pulse">
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+            </svg>
             Reviews
           </span>
           <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Loved by{' '}
-            <span className="gradient-text">real users.</span>
+            <span className="gradient-text-shift">real users.</span>
           </h2>
           <p className="max-w-lg mx-auto text-gray-500 text-[15px] leading-relaxed">
             People everywhere trust CarbonIQ to measure, understand, and reduce their environmental impact.
@@ -128,7 +139,8 @@ export default function Testimonials() {
               variants={cardPop(i)}
               whileHover={{ y: -7, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}
               transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-              className="group rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-underline-expand"
+              onMouseMove={handleMouseMove}
+              className="group rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default card-corner-draw card-gold-glow card-mouse-glow transition-shadow duration-200 hover-underline-expand"
             >
               {/* Quote mark */}
               <svg className="w-6 h-6 text-[#d4a017]/20 group-hover:text-[#d4a017]/50 transition-colors duration-300 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">

@@ -8,7 +8,10 @@ export default function CTA({ onGetStarted }) {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   return (
-    <section className="relative py-32" ref={ref}>
+    <section className="relative py-32 overflow-hidden" ref={ref}>
+      {/* Pulsing radial glow behind CTA */}
+      <div className="cta-glow-bg" />
+
       <div className="max-w-3xl mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -48,7 +51,7 @@ export default function CTA({ onGetStarted }) {
           >
             Ready to measure your
             <br />
-            <span className="gradient-text-shimmer">carbon footprint?</span>
+            <span className="gradient-text-shift">carbon footprint?</span>
           </motion.h2>
 
           <motion.p
@@ -67,7 +70,7 @@ export default function CTA({ onGetStarted }) {
             transition={{ type: 'spring', stiffness: 250, damping: 16, delay: 0.32 }}
             whileHover={{ scale: 1.07, y: -3 }}
             whileTap={{ scale: 0.94 }}
-            className="relative px-10 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium overflow-hidden"
+            className="relative px-10 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium btn-pulse-glow overflow-hidden"
           >
             <span className="relative z-10">Start Tracking Now</span>
             {/* Shine sweep */}

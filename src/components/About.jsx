@@ -56,12 +56,15 @@ export default function About() {
           transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
-          <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
+          <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#d4a017]/20 bg-[#d4a017]/[0.06] text-[10px] font-bold text-[#d4a017] tracking-[0.2em] uppercase mb-5 badge-pulse">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
             About Us
           </span>
           <h2 className="font-serif text-3xl md:text-[2.75rem] font-semibold tracking-tight leading-tight mb-4">
             Built for the planet,{' '}
-            <span className="gradient-text">by people who care.</span>
+            <span className="gradient-text-shift">by people who care.</span>
           </h2>
           <p className="max-w-xl mx-auto text-gray-500 text-[15px] leading-relaxed">
             CarbonIQ was founded on a simple belief: you can't fix what you don't measure.
@@ -111,7 +114,7 @@ export default function About() {
           className="mb-20"
         >
           <h3 className="text-xl md:text-2xl font-serif font-semibold text-center mb-10 tracking-tight">
-            Our <span className="gradient-text">Values</span>
+            Our <span className="gradient-text-shift">Values</span>
           </h3>
           <motion.div
             variants={stagger}
@@ -125,7 +128,7 @@ export default function About() {
                 variants={valueSlide(i)}
                 whileHover={{ y: -7, scale: 1.05, borderColor: 'rgba(212,160,23,0.25)' }}
                 transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-corner-dots"
+                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-gold-sweep"
               >
                 <motion.span
                   className="text-2xl block mb-3"
@@ -148,7 +151,7 @@ export default function About() {
           className="text-center"
         >
           <h3 className="text-xl md:text-2xl font-serif font-semibold mb-10 tracking-tight">
-            The <span className="gradient-text">Creator</span>
+            The <span className="gradient-text-shift">Creator</span>
           </h3>
           <motion.div
             whileHover={{ y: -5, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}

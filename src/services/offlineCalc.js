@@ -1,22 +1,31 @@
 /**
  * Offline fallback carbon calculations.
- * Uses EPA 2024, DEFRA 2024, IPCC AR6, & DOE emission factors.
+ * Uses EPA 2025, eGRID 2023, DEFRA 2025, IPCC AR5, DOE & IEA emission factors.
  * All results in kg CO₂e (carbon-dioxide equivalent).
+ *
+ * Sources (verified March 2026):
+ *  - EPA "Greenhouse Gas Emissions from a Typical Passenger Vehicle" (Jun 2025)
+ *  - EPA eGRID2022 US national total output rate (823.1 lb CO₂/MWh) — Jan 2024
+ *  - EPA GHG Emission Factors Hub 2025 (Jan 2025)
+ *  - EPA Equivalencies Calculator — vehicle: 22.8 mpg, 8,887 g CO₂/gal; EV: 3.60 mi/kWh (DOE 2023)
+ *  - DEFRA 2025 GHG Conversion Factors (Jun 2025)
+ *  - Scarborough et al. 2023 (Nature Food) — diet factors
+ *  - IEA 2024 — streaming/data-centre energy
  */
 
 // ── Emission factors ──────────────────────────────────────
 const FACTORS = {
   car: {
-    gasoline: 0.404,   // kg CO₂e/mi — EPA avg passenger vehicle 2024
-    diesel:  0.367,    // kg CO₂e/mi — diesel sedan (EPA)
-    hybrid:  0.213,    // kg CO₂e/mi — ~47% less than gasoline (EPA)
-    electric: 0.092,   // 0.386 kg/kWh × 0.238 kWh/mi — DOE avg EV efficiency
+    gasoline: 0.400,   // kg CO₂/mi — EPA 2025: "about 400 grams CO₂ per mile" (8,887 g/gal ÷ 22.2 mpg)
+    diesel:  0.364,    // kg CO₂/mi — EPA: 10,180 g CO₂/gal ÷ ~28 mpg diesel sedan
+    hybrid:  0.195,    // kg CO₂/mi — EPA: 8,887 g CO₂/gal ÷ ~46 mpg avg hybrid fleet 2025
+    electric: 0.104,   // kg CO₂/mi — DOE avg EV 3.60 mi/kWh (0.278 kWh/mi) × 0.373 kg/kWh
   },
-  electricity: 0.386,  // kg CO₂e/kWh — EPA eGRID US national avg 2024
-  naturalGas: 5.31,    // kg CO₂e/therm — EPA GHG Emission Factors Hub
+  electricity: 0.373,  // kg CO₂/kWh — EPA eGRID2022 US national total output rate (823.1 lb/MWh)
+  naturalGas: 5.29,    // kg CO₂/therm — EPA: 0.1 mmbtu/therm × 14.43 kg C/mmbtu × 44/12
   flight: {
-    shortHaul: 255,    // kg CO₂e/pax — DEFRA 2024 economy ≤ 3 hrs incl. radiative forcing ×1.9
-    longHaul:  1102,   // kg CO₂e/pax — DEFRA 2024 economy > 3 hrs incl. radiative forcing ×1.9
+    shortHaul: 255,    // kg CO₂e/pax — DEFRA 2025 economy ≤ 3 hrs incl. radiative forcing
+    longHaul:  1102,   // kg CO₂e/pax — DEFRA 2025 economy > 3 hrs incl. radiative forcing
   },
   diet: {              // kg CO₂e/day — Scarborough et al. 2023 (Nature Food)
     heavy_meat: 7.19,
@@ -30,20 +39,20 @@ const FACTORS = {
     frequent: 19.5,
     heavy:    34.0,
   },
-  streaming: 0.036,    // kg CO₂e/hr — IEA 2023 data-centre energy per stream-hour
+  streaming: 0.036,    // kg CO₂e/hr — IEA 2024 data-centre energy per stream-hour
 };
 
 // US per-capita weekly benchmarks (for green-score grading)
 const BENCHMARKS = {
-  transport: 78,       // 193 mi/wk × 0.404
-  energy:    55,       // ~100 kWh + ~2.5 therms
+  transport: 77,       // ~193 mi/wk × 0.400
+  energy:    51,       // ~100 kWh × 0.373 + ~2.5 therms × 5.29
   flight:    10,       // annualised per-capita
   diet:      39.4,     // medium_meat × 7
   lifestyle: 13,       // avg shopping + ~10 hrs streaming
 };
 
 const WEEKLY_AVG =
-  BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet + BENCHMARKS.lifestyle; // ~195.4
+  BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet + BENCHMARKS.lifestyle; // ~190.4
 
 // ── Calculator ────────────────────────────────────────────
 export function calculateOffline(inputs) {
@@ -73,8 +82,8 @@ export function calculateOffline(inputs) {
 
   const totalKg = Math.round((transportKg + energyKg + flightKg + dietKg + lifestyleKg) * 100) / 100;
 
-  // A mature tree absorbs ~22 kg CO₂/year → ~0.42 kg/week
-  const treesEquivalent = Math.round(totalKg / 0.42);
+  // EPA: urban tree sequesters ~60 kg CO₂/year (0.060 MT) → ~1.15 kg/week
+  const treesEquivalent = Math.round(totalKg / 1.15);
 
   return {
     totalKg,

@@ -89,7 +89,7 @@ export default function Hero({ onGetStarted, onDemo }) {
           {/* Left — Copy */}
           <motion.div variants={stagger} initial="hidden" animate="visible">
             <motion.div variants={chipSlide} className="mb-8">
-              <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold text-gray-400 tracking-[0.2em] uppercase">
+              <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold text-gray-400 tracking-[0.2em] uppercase badge-pulse">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
@@ -106,7 +106,7 @@ export default function Hero({ onGetStarted, onDemo }) {
               <br />
               carbon footprint.
               <br />
-              <span className="gradient-text-shimmer">Then shrink it.</span>
+              <span className="gradient-text-shift">Then shrink it.</span>
             </motion.h1>
 
             <motion.p
@@ -123,7 +123,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                 whileHover={{ scale: 1.06, y: -3 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium overflow-hidden"
+                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium btn-pulse-glow overflow-hidden"
               >
                 <span className="relative z-10">Get Started</span>
                 {/* Shine sweep */}
@@ -149,7 +149,7 @@ export default function Hero({ onGetStarted, onDemo }) {
               variants={fadeIn}
               className="flex items-center gap-8 text-[11px] text-gray-500 uppercase tracking-widest font-medium"
             >
-              {['EPA 2024', 'AI Insights', '100% Free'].map((label, i) => (
+              {['EPA 2025', 'AI Insights', '100% Free', 'Works Offline'].map((label, i) => (
                 <motion.span
                   key={label}
                   initial={{ opacity: 0, x: -12 }}

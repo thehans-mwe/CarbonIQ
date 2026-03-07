@@ -78,7 +78,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} CarbonIQ. Built for a sustainable future.
           </p>
           <p className="text-[10px] text-gray-700">
-            EPA 2024 &middot; DEFRA 2024 &middot; IPCC AR6
+            EPA 2025 &middot; DEFRA 2025 &middot; IPCC AR5
           </p>
         </div>
       </div>

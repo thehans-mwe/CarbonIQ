@@ -1,14 +1,26 @@
 /**
  * API client — calls Vercel serverless functions.
  * Falls back to offline calculation if the API is unavailable.
+ * Checks navigator.onLine first to skip unnecessary network requests.
  */
 
 import { calculateOffline, offlineRecommendations } from './offlineCalc';
 
 const API_BASE = '/api';
 
+/** True when the browser reports no network connection */
+function isOffline() {
+  return typeof navigator !== 'undefined' && !navigator.onLine;
+}
+
 // ── Carbon estimate ──────────────────────────────────────
 export async function fetchCarbonEstimate(inputs) {
+  // Skip API entirely when browser is offline
+  if (isOffline()) {
+    console.info('Offline — using local emission factors');
+    return calculateOffline(inputs);
+  }
+
   try {
     // We send multiple estimate requests and aggregate
     const promises = [];
@@ -106,6 +118,12 @@ export async function fetchCarbonEstimate(inputs) {
 
 // ── AI Recommendations ───────────────────────────────────
 export async function fetchRecommendations(carbonData, inputs) {
+  // Skip API entirely when browser is offline
+  if (isOffline()) {
+    console.info('Offline — using local recommendations');
+    return offlineRecommendations(carbonData);
+  }
+
   try {
     const res = await fetch(`${API_BASE}/recommend`, {
       method: 'POST',
