@@ -31,17 +31,33 @@ const stats = [
   { label: 'Active Trackers', value: 2340, suffix: '+', icon: '📊' },
 ];
 
-/* ── animations ───────────────────────────────────── */
+/* ── DASHBOARD: elastic spring bounce cards + zoom-rotate charts ── */
 const ease = [0.22, 1, 0.36, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.13 } },
 };
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease } },
+/* Each stat card drops from a different height with elastic overshoot */
+const elasticBounce = (i) => ({
+  hidden: { opacity: 0, y: -(50 + i * 20), scale: 0.7 },
+  visible: {
+    opacity: 1, y: 0, scale: 1,
+    transition: { type: 'spring', stiffness: 120 + i * 30, damping: 10 + i * 2, delay: i * 0.08 },
+  },
+});
+
+/* Area chart zooms in with slight rotation */
+const zoomRotateLeft = {
+  hidden: { opacity: 0, scale: 0.85, rotate: -2, x: -30, filter: 'blur(8px)' },
+  visible: { opacity: 1, scale: 1, rotate: 0, x: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease } },
+};
+
+/* Pie chart flips in from the right */
+const flipInRight = {
+  hidden: { opacity: 0, rotateY: 15, x: 40, filter: 'blur(6px)' },
+  visible: { opacity: 1, rotateY: 0, x: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease } },
 };
 
 /* ── custom tooltip ───────────────────────────────── */
@@ -73,14 +89,20 @@ function PieTooltip({ active, payload }) {
 }
 
 /* ── stat card ────────────────────────────────────── */
-function StatCard({ label, value, suffix, icon, inView }) {
+function StatCard({ label, value, suffix, icon, inView, index }) {
   return (
     <motion.div
-      variants={fadeUp}
-      whileHover={{ y: -4 }}
-      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center transition-all duration-300 hover:border-white/[0.1] cursor-default"
+      variants={elasticBounce(index)}
+      whileHover={{ y: -8, scale: 1.05, rotateZ: index % 2 === 0 ? 1 : -1, borderColor: 'rgba(212,160,23,0.2)' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(212,160,23,0.08)] cursor-default"
     >
-      <span className="text-2xl block mb-3">{icon}</span>
+      <motion.span
+        className="text-2xl block mb-3"
+        initial={{ scale: 0, rotate: -45 }}
+        animate={inView ? { scale: [0, 1.3, 1], rotate: [- 45, 10, 0] } : {}}
+        transition={{ delay: 0.4 + index * 0.12, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+      >{icon}</motion.span>
       <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
         {inView ? <CountUp end={value} duration={2.2} separator="," /> : 0}
         <span className="gradient-text">{suffix}</span>
@@ -97,11 +119,17 @@ export default function Dashboard() {
   return (
     <section id="dashboard" className="relative py-32 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
+        {/* Subtle background glow */}
+        <div
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 50%, rgba(212,160,23,0.03) 0%, transparent 100%)' }}
+        />
+
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease }}
+          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.7, ease }}
           className="text-center mb-16"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -123,8 +151,8 @@ export default function Dashboard() {
           animate={inView ? 'visible' : 'hidden'}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12"
         >
-          {stats.map((s) => (
-            <StatCard key={s.label} {...s} inView={inView} />
+          {stats.map((s, i) => (
+            <StatCard key={s.label} {...s} inView={inView} index={i} />
           ))}
         </motion.div>
 
@@ -134,11 +162,13 @@ export default function Dashboard() {
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
           className="grid lg:grid-cols-5 gap-5"
+          style={{ perspective: 1200 }}
         >
-          {/* Area chart — 3 cols */}
+          {/* Area chart — 3 cols (zoom-rotate entrance) */}
           <motion.div
-            variants={fadeUp}
-            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6"
+            variants={zoomRotateLeft}
+            whileHover={{ borderColor: 'rgba(212,160,23,0.15)', scale: 1.01 }}
+            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(212,160,23,0.06)]"
           >
             <div className="flex items-center justify-between mb-5">
               <div>
@@ -171,10 +201,12 @@ export default function Dashboard() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Pie chart — 2 cols */}
+          {/* Pie chart — 2 cols (flip-in entrance) */}
           <motion.div
-            variants={fadeUp}
-            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col"
+            variants={flipInRight}
+            whileHover={{ borderColor: 'rgba(212,160,23,0.15)', scale: 1.01 }}
+            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(212,160,23,0.06)]"
+            style={{ transformStyle: 'preserve-3d' }}
           >
             <div className="mb-3">
               <h3 className="text-sm font-semibold text-white">Footprint Breakdown</h3>

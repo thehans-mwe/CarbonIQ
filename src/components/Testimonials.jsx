@@ -50,12 +50,20 @@ const ease = [0.22, 1, 0.36, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease } },
+/* TESTIMONIALS: waterfall cascade — each card drops from above with tilt correction */
+const waterfallCard = (i) => {
+  const tilt = [3, -2, 4, -3, 2, -4][i] || 0;
+  const xShift = [-20, 0, 20, -15, 5, 25][i] || 0;
+  return {
+    hidden: { opacity: 0, y: -40 - i * 8, x: xShift, rotate: tilt, scale: 0.9, filter: 'blur(6px)' },
+    visible: {
+      opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)',
+      transition: { type: 'spring', stiffness: 100, damping: 14, delay: i * 0.06 },
+    },
+  };
 };
 
 function Stars({ count }) {
@@ -83,9 +91,9 @@ export default function Testimonials() {
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease }}
+          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.7, ease }}
           className="text-center mb-16"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -107,12 +115,13 @@ export default function Testimonials() {
           animate={inView ? 'visible' : 'hidden'}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
         >
-          {testimonials.map((t) => (
+          {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              variants={fadeUp}
-              whileHover={{ y: -4 }}
-              className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default hover:border-white/[0.1] transition-all duration-300"
+              variants={waterfallCard(i)}
+              whileHover={{ y: -6, scale: 1.03, rotate: i % 2 === 0 ? 1 : -1, borderColor: 'rgba(212,160,23,0.15)' }}
+              transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+              className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default hover:shadow-[0_8px_32px_rgba(212,160,23,0.06)] transition-shadow duration-300"
             >
               {/* Quote mark */}
               <svg className="w-6 h-6 text-[#d4a017]/20 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
@@ -142,9 +151,9 @@ export default function Testimonials() {
 
         {/* Social proof bar */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.5, ease }}
+          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
+          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+          transition={{ duration: 0.7, delay: 0.6, ease }}
           className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-xs text-gray-600"
         >
           <div className="flex items-center gap-2">
