@@ -137,10 +137,10 @@ export default function Testimonials() {
             <motion.div
               key={t.name}
               variants={cardPop(i)}
-              whileHover={{ y: -7, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}
+              whileHover={{ y: -12, scale: 1.02 }}
               transition={{ type: 'spring', stiffness: 400, damping: 16 }}
               onMouseMove={handleMouseMove}
-              className="group rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default card-corner-draw card-gold-glow card-mouse-glow transition-shadow duration-200 hover-underline-expand"
+              className="group rounded-2xl border border-white/[0.06] p-6 flex flex-col cursor-default glass-card card-mouse-glow"
             >
               {/* Quote mark */}
               <svg className="w-6 h-6 text-[#d4a017]/20 group-hover:text-[#d4a017]/50 transition-colors duration-300 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">

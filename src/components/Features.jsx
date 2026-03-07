@@ -113,17 +113,13 @@ export default function Features() {
             <motion.div
               key={f.title}
               variants={cardVariants[i]}
-              whileHover={{ y: -8, scale: 1.03, transition: { type: 'spring', stiffness: 400, damping: 18 } }}
+              whileHover={{ y: -12, scale: 1.02, transition: { type: 'spring', stiffness: 400, damping: 18 } }}
               onMouseMove={handleMouseMove}
-              className="group relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] overflow-hidden card-corner-draw card-gold-glow card-mouse-glow transition-colors duration-200 hover-gold-top"
+              className="group relative rounded-2xl border border-white/[0.06] overflow-hidden glass-card card-mouse-glow"
             >
               {/* Feature number */}
               <span className="feature-number">{String(i + 1).padStart(2, '0')}</span>
 
-              {/* Hover gold sweep line */}
-              <div className="absolute inset-0 overflow-hidden pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a017]/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600" />
-              </div>
               {/* Image */}
               <div className="relative h-40 overflow-hidden">
                 <img
@@ -132,7 +128,7 @@ export default function Features() {
                   className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-110"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
                 <div className="absolute bottom-4 left-5">
                   <div className="w-9 h-9 rounded-lg bg-black/60 backdrop-blur-sm border border-white/[0.08] flex items-center justify-center text-[#d4a017] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
                     {f.icon}

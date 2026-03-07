@@ -172,7 +172,7 @@ export default function Hero({ onGetStarted, onDemo }) {
             className="relative hidden lg:block"
           >
             <motion.div
-              className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover-frame-glow card-corner-draw"
+              className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.5)] glass-card"
               style={{ y: imageY }}
               whileHover={{ scale: 1.03, y: -6 }}
               transition={{ type: 'spring', stiffness: 250, damping: 18 }}
@@ -190,7 +190,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                 initial={{ opacity: 0, y: 24, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 18 }}
-                className="absolute bottom-5 left-5 right-5 rounded-xl bg-black/60 backdrop-blur-md border border-white/[0.08] p-4 hover-top-accent card-gold-glow"
+                className="absolute bottom-5 left-5 right-5 rounded-xl bg-black/60 backdrop-blur-md border border-white/[0.08] p-4 hover-top-accent"
               >
                 <div className="flex items-center justify-between">
                   <div>

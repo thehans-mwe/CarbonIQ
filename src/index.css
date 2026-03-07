@@ -265,64 +265,39 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   transform: translateY(0);
 }
 
-/* ── Card: corner borders draw in on hover ── */
-.card-corner-draw { position: relative; }
-.card-corner-draw::before,
-.card-corner-draw::after {
+/* ── Glassmorphism card with gold accent bar ── */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.015) 100%);
+  backdrop-filter: blur(20px) saturate(150%);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.6s ease,
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-card:hover {
+  border-color: rgba(212,160,23,0.25);
+  box-shadow:
+    0 0 0 1px rgba(212,160,23,0.08),
+    0 25px 50px -12px rgba(0,0,0,0.5),
+    0 0 60px rgba(212,160,23,0.05);
+}
+.glass-card::before {
   content: '';
   position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a017, #f5c842, #d4a017, transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 20;
+  border-radius: 0;
   pointer-events: none;
-  z-index: 10;
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.25s ease;
-  opacity: 0;
 }
-/* Top-left corner */
-.card-corner-draw::before {
-  top: -1px; left: -1px;
-  width: 0; height: 0;
-  border-top: 2px solid #d4a017;
-  border-left: 2px solid #d4a017;
-  border-radius: inherit;
-  border-bottom: none;
-  border-right: none;
-  border-top-left-radius: inherit;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-/* Bottom-right corner */
-.card-corner-draw::after {
-  bottom: -1px; right: -1px;
-  width: 0; height: 0;
-  border-bottom: 2px solid #d4a017;
-  border-right: 2px solid #d4a017;
-  border-top: none;
-  border-left: none;
-  border-bottom-right-radius: inherit;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.card-corner-draw:hover::before,
-.card-corner-draw:hover::after {
-  width: 28px; height: 28px;
-  opacity: 1;
-}
-
-/* ── Card: gold glow outline fade-in + scale ── */
-.card-gold-glow {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.35s ease;
-}
-.card-gold-glow:hover {
-  transform: scale(1.02);
-  box-shadow: 0 0 0 1px rgba(212,160,23,0.15),
-              0 0 30px rgba(212,160,23,0.08),
-              0 8px 32px rgba(0,0,0,0.3);
-  border-color: rgba(212,160,23,0.2);
+.glass-card:hover::before {
+  transform: scaleX(1);
 }
 
 /* ── Input: gold underline grows from center outward ── */
@@ -619,20 +594,20 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   animation: orbFloat 25s ease-in-out infinite, orbFadeIn 1.5s ease-out forwards;
 }
 .bg-orb-1 {
-  width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(212,160,23,0.2) 0%, transparent 70%);
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(212,160,23,0.3) 0%, transparent 70%);
   top: -150px; left: -150px;
   animation-delay: 0s, 0.3s;
 }
 .bg-orb-2 {
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(245,200,66,0.14) 0%, transparent 70%);
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(245,200,66,0.22) 0%, transparent 70%);
   top: 45%; right: -120px;
   animation-delay: -8s, 0.5s;
 }
 .bg-orb-3 {
-  width: 350px; height: 350px;
-  background: radial-gradient(circle, rgba(196,155,18,0.12) 0%, transparent 70%);
+  width: 450px; height: 450px;
+  background: radial-gradient(circle, rgba(196,155,18,0.18) 0%, transparent 70%);
   bottom: -80px; left: 25%;
   animation-delay: -16s, 0.7s;
 }
@@ -646,8 +621,8 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   top: 0; left: 0;
   width: 100%; height: 100%;
   background-image:
-    linear-gradient(rgba(212,160,23,0.018) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212,160,23,0.018) 1px, transparent 1px);
+    linear-gradient(rgba(212,160,23,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,160,23,0.04) 1px, transparent 1px);
   background-size: 60px 60px;
   z-index: 0;
   pointer-events: none;
@@ -675,10 +650,10 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   border-radius: inherit;
   background: radial-gradient(
     500px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(212,160,23,0.06), transparent 40%
+    rgba(212,160,23,0.12), transparent 40%
   );
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.6s ease;
   pointer-events: none;
   z-index: 0;
 }

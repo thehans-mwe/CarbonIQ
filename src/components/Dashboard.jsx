@@ -93,9 +93,9 @@ function StatCard({ label, value, suffix, icon, inView, index }) {
   return (
     <motion.div
       variants={statDrop(index)}
-      whileHover={{ y: -6, scale: 1.05, borderColor: 'rgba(212,160,23,0.25)' }}
+      whileHover={{ y: -10, scale: 1.04 }}
       transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center hover-gold-shadow card-corner-draw cursor-default"
+      className="rounded-xl border border-white/[0.06] p-6 text-center glass-card cursor-default"
     >
       <motion.span
         className="text-2xl block mb-3"
@@ -169,9 +169,9 @@ export default function Dashboard() {
           {/* Area chart — 3 cols (zoom-rotate entrance) */}
           <motion.div
             variants={chartReveal}
-            whileHover={{ borderColor: 'rgba(212,160,23,0.2)', y: -3 }}
+            whileHover={{ y: -6 }}
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 hover-border-reveal card-gold-glow"
+            className="lg:col-span-3 rounded-2xl border border-white/[0.06] p-6 glass-card"
           >
             <div className="flex items-center justify-between mb-5">
               <div>
@@ -207,9 +207,9 @@ export default function Dashboard() {
           {/* Pie chart — 2 cols (flip-in entrance) */}
           <motion.div
             variants={pieReveal}
-            whileHover={{ borderColor: 'rgba(212,160,23,0.2)', y: -3 }}
+            whileHover={{ y: -6 }}
             transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col hover-border-reveal card-gold-glow"
+            className="lg:col-span-2 rounded-2xl border border-white/[0.06] p-6 flex flex-col glass-card"
           >
             <div className="mb-3">
               <h3 className="text-sm font-semibold text-white">Footprint Breakdown</h3>

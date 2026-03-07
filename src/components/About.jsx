@@ -86,9 +86,9 @@ export default function About() {
             <motion.div
               key={m.label}
               variants={milestoneScale(i)}
-              whileHover={{ y: -6, scale: 1.06, borderColor: 'rgba(212,160,23,0.25)' }}
+              whileHover={{ y: -10, scale: 1.04 }}
               transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-              className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] py-6 px-4 text-center hover-inner-shine card-corner-draw card-gold-glow"
+              className="rounded-xl border border-white/[0.06] py-6 px-4 text-center glass-card"
             >
               <div className="text-2xl md:text-3xl font-bold text-white">
                 {inView ? (
@@ -126,9 +126,9 @@ export default function About() {
               <motion.div
                 key={v.title}
                 variants={valueSlide(i)}
-                whileHover={{ y: -7, scale: 1.05, borderColor: 'rgba(212,160,23,0.25)' }}
+                whileHover={{ y: -10, scale: 1.04 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-gold-sweep"
+                className="rounded-xl border border-white/[0.06] p-5 text-center cursor-default glass-card"
               >
                 <motion.span
                   className="text-2xl block mb-3"
@@ -154,9 +154,9 @@ export default function About() {
             The <span className="gradient-text-shift">Creator</span>
           </h3>
           <motion.div
-            whileHover={{ y: -5, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}
+            whileHover={{ y: -10, scale: 1.03 }}
             transition={{ type: 'spring', stiffness: 400, damping: 16 }}
-            className="inline-flex flex-col items-center rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-8 max-w-xs mx-auto hover-halo card-corner-draw card-gold-glow"
+            className="inline-flex flex-col items-center rounded-2xl border border-white/[0.06] p-8 max-w-xs mx-auto glass-card"
           >
             <img
               src="https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a"

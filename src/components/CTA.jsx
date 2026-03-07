@@ -17,7 +17,7 @@ export default function CTA({ onGetStarted }) {
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={inView ? { opacity: 1, scale: 1, y: 0 } : {}}
           transition={{ type: 'spring', stiffness: 180, damping: 18 }}
-          className="relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-12 md:p-16 overflow-hidden hover-glow-ring card-corner-draw"
+          className="relative rounded-2xl border border-white/[0.06] p-12 md:p-16 overflow-hidden glass-card"
         >
           {/* Dot mesh */}
           <div
