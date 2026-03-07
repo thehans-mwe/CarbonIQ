@@ -46,22 +46,29 @@ const testimonials = [
   },
 ];
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.16, 1, 0.3, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.08 } },
 };
 
-/* TESTIMONIALS: waterfall cascade — each card drops from above with tilt correction */
-const waterfallCard = (i) => {
-  const tilt = [3, -2, 4, -3, 2, -4][i] || 0;
-  const xShift = [-20, 0, 20, -15, 5, 25][i] || 0;
+/* Cards pop in with scale + spring — each row staggers visibly */
+const cardPop = (i) => {
+  const directions = [
+    { x: -20, y: 20 },   // top-left
+    { x: 0, y: 30 },     // top-center
+    { x: 20, y: 20 },    // top-right
+    { x: -20, y: 20 },   // bottom-left
+    { x: 0, y: 30 },     // bottom-center
+    { x: 20, y: 20 },    // bottom-right
+  ];
+  const d = directions[i] || { x: 0, y: 30 };
   return {
-    hidden: { opacity: 0, y: -40 - i * 8, x: xShift, rotate: tilt, scale: 0.9, filter: 'blur(6px)' },
+    hidden: { opacity: 0, x: d.x, y: d.y, scale: 0.9 },
     visible: {
-      opacity: 1, y: 0, x: 0, rotate: 0, scale: 1, filter: 'blur(0px)',
-      transition: { type: 'spring', stiffness: 100, damping: 14, delay: i * 0.06 },
+      opacity: 1, x: 0, y: 0, scale: 1,
+      transition: { type: 'spring', stiffness: 200, damping: 18, delay: i * 0.05 },
     },
   };
 };
@@ -91,9 +98,9 @@ export default function Testimonials() {
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.7, ease }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -118,13 +125,13 @@ export default function Testimonials() {
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              variants={waterfallCard(i)}
-              whileHover={{ y: -6, scale: 1.03, rotate: i % 2 === 0 ? 1 : -1, borderColor: 'rgba(212,160,23,0.15)' }}
-              transition={{ type: 'spring', stiffness: 280, damping: 18 }}
-              className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default hover:shadow-[0_8px_32px_rgba(212,160,23,0.06)] transition-shadow duration-300"
+              variants={cardPop(i)}
+              whileHover={{ y: -7, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+              className="group rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-underline-expand"
             >
               {/* Quote mark */}
-              <svg className="w-6 h-6 text-[#d4a017]/20 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-[#d4a017]/20 group-hover:text-[#d4a017]/50 transition-colors duration-300 mb-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
               </svg>
               <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-1">
@@ -151,9 +158,9 @@ export default function Testimonials() {
 
         {/* Social proof bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.7, delay: 0.6, ease }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.2, ease }}
           className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 text-xs text-gray-600"
         >
           <div className="flex items-center gap-2">

@@ -2,38 +2,44 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 /* ── easing ─────────────────────────────────────────────── */
-const ease = [0.22, 1, 0.36, 1];
-const spring = { type: 'spring', stiffness: 80, damping: 18 };
+const smooth = [0.16, 1, 0.3, 1];
+const snappy = { type: 'spring', stiffness: 250, damping: 20 };
 
 /* ── stagger container ──────────────────────────────────── */
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.16, delayChildren: 0.15 } },
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
-/* ── HERO uses: 3D perspective tilt + blur-up + slide ──── */
-const blurUp = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(12px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.85, ease } },
+/* ── entrance variants — each feels different ──────────── */
+const chipSlide = {
+  hidden: { opacity: 0, x: -40, scale: 0.9 },
+  visible: { opacity: 1, x: 0, scale: 1, transition: { ...snappy } },
 };
 
-const slideRight = {
-  hidden: { opacity: 0, x: -50, filter: 'blur(8px)' },
-  visible: { opacity: 1, x: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease } },
+const headingReveal = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 180, damping: 22 } },
 };
 
-/* 3D perspective entrance — rotates in from tilted state */
-const perspective3D = {
-  hidden: { opacity: 0, rotateX: 12, rotateY: -8, scale: 0.9, filter: 'blur(10px)' },
-  visible: {
-    opacity: 1, rotateX: 0, rotateY: 0, scale: 1, filter: 'blur(0px)',
-    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] },
-  },
+const paragraphFade = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: smooth } },
+};
+
+const buttonsRise = {
+  hidden: { opacity: 0, y: 28, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 18 } },
+};
+
+const imagePop = {
+  hidden: { opacity: 0, scale: 0.88, y: 30 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 160, damping: 20 } },
 };
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 1.2, ease: 'easeOut' } },
+  visible: { opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
 /* ── component ──────────────────────────────────────────── */
@@ -82,7 +88,7 @@ export default function Hero({ onGetStarted, onDemo }) {
 
           {/* Left — Copy */}
           <motion.div variants={stagger} initial="hidden" animate="visible">
-            <motion.div variants={slideRight} className="mb-8">
+            <motion.div variants={chipSlide} className="mb-8">
               <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] text-[10px] font-semibold text-gray-400 tracking-[0.2em] uppercase">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
@@ -93,7 +99,7 @@ export default function Hero({ onGetStarted, onDemo }) {
             </motion.div>
 
             <motion.h1
-              variants={blurUp}
+              variants={headingReveal}
               className="font-serif text-[2.75rem] sm:text-5xl md:text-6xl font-semibold leading-[1.08] tracking-tight mb-6"
             >
               Measure your
@@ -104,20 +110,20 @@ export default function Hero({ onGetStarted, onDemo }) {
             </motion.h1>
 
             <motion.p
-              variants={blurUp}
+              variants={paragraphFade}
               className="text-gray-400 text-base md:text-[17px] leading-relaxed max-w-md mb-10"
             >
               Five quick questions. Science-backed emissions breakdown.
               Personalized AI tips to cut your impact — all in under 2 minutes.
             </motion.p>
 
-            <motion.div variants={blurUp} className="flex flex-wrap items-center gap-4 mb-14">
+            <motion.div variants={buttonsRise} className="flex flex-wrap items-center gap-4 mb-14">
               <motion.button
                 onClick={onGetStarted}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.96 }}
-                transition={spring}
-                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide overflow-hidden transition-shadow duration-300 hover:shadow-[0_4px_32px_rgba(212,160,23,0.35)]"
+                whileHover={{ scale: 1.06, y: -3 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium overflow-hidden"
               >
                 <span className="relative z-10">Get Started</span>
                 {/* Shine sweep */}
@@ -130,10 +136,10 @@ export default function Hero({ onGetStarted, onDemo }) {
               </motion.button>
               <motion.button
                 onClick={onDemo}
-                whileHover={{ scale: 1.05, borderColor: 'rgba(212,160,23,0.3)' }}
-                whileTap={{ scale: 0.96 }}
-                transition={spring}
-                className="px-8 py-3.5 rounded-full border border-white/[0.08] text-white/60 font-medium text-sm hover:text-white transition-all duration-300"
+                whileHover={{ scale: 1.06, borderColor: 'rgba(212,160,23,0.4)' }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                className="px-8 py-3.5 rounded-full border border-white/[0.08] text-white/60 font-medium text-sm btn-gold-line btn-premium hover:text-white transition-colors duration-300"
               >
                 View Demo
               </motion.button>
@@ -148,7 +154,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                   key={label}
                   initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.1 + i * 0.12, duration: 0.5, ease }}
+                  transition={{ delay: 0.7 + i * 0.1, duration: 0.35, ease: smooth }}
                   className="flex items-center gap-1.5"
                 >
                   <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -160,17 +166,16 @@ export default function Hero({ onGetStarted, onDemo }) {
 
           {/* Right — Visual (3D perspective entrance) */}
           <motion.div
-            variants={perspective3D}
+            variants={imagePop}
             initial="hidden"
             animate="visible"
             className="relative hidden lg:block"
-            style={{ perspective: 1200 }}
           >
             <motion.div
-              className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.5)]"
-              style={{ y: imageY, transformStyle: 'preserve-3d' }}
-              whileHover={{ scale: 1.02, rotateY: 2, rotateX: -1 }}
-              transition={{ duration: 0.5, ease }}
+              className="relative rounded-2xl overflow-hidden border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover-frame-glow card-corner-draw"
+              style={{ y: imageY }}
+              whileHover={{ scale: 1.03, y: -6 }}
+              transition={{ type: 'spring', stiffness: 250, damping: 18 }}
             >
               <img
                 src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop&q=80"
@@ -182,10 +187,10 @@ export default function Hero({ onGetStarted, onDemo }) {
               <motion.div style={{ opacity: overlayOpacity }} className="absolute inset-0 bg-black pointer-events-none" />
 
               <motion.div
-                initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                transition={{ delay: 0.9, duration: 0.7, ease }}
-                className="absolute bottom-5 left-5 right-5 rounded-xl bg-black/60 backdrop-blur-md border border-white/[0.08] p-4"
+                initial={{ opacity: 0, y: 24, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 18 }}
+                className="absolute bottom-5 left-5 right-5 rounded-xl bg-black/60 backdrop-blur-md border border-white/[0.08] p-4 hover-top-accent card-gold-glow"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -205,10 +210,10 @@ export default function Hero({ onGetStarted, onDemo }) {
 
             {/* Floating tree card with continuous float */}
             <motion.div
-              initial={{ opacity: 0, x: 30, scale: 0.9 }}
+              initial={{ opacity: 0, x: 40, scale: 0.85 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ delay: 1.1, duration: 0.7, ease }}
-              className="absolute -top-4 -right-4 rounded-xl bg-[#0a0a0a] border border-white/[0.08] p-3.5 shadow-xl animate-float-diagonal"
+              transition={{ delay: 0.65, type: 'spring', stiffness: 200, damping: 16 }}
+              className="absolute -top-4 -right-4 rounded-xl bg-[#0a0a0a] border border-white/[0.08] p-3.5 shadow-xl animate-float"
             >
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-[#d4a017]/15 flex items-center justify-center text-sm">🌱</div>
@@ -221,10 +226,10 @@ export default function Hero({ onGetStarted, onDemo }) {
 
             {/* Additional floating accent — CO₂ badge */}
             <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              initial={{ opacity: 0, y: 30, scale: 0.85 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 1.3, duration: 0.6, ease }}
-              className="absolute -bottom-3 -left-5 rounded-lg bg-[#0a0a0a] border border-white/[0.08] px-3 py-2 shadow-xl animate-float-fast"
+              transition={{ delay: 0.8, type: 'spring', stiffness: 200, damping: 16 }}
+              className="absolute -bottom-3 -left-5 rounded-lg bg-[#0a0a0a] border border-white/[0.08] px-3 py-2 shadow-xl animate-float-slow"
             >
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
@@ -238,7 +243,7 @@ export default function Hero({ onGetStarted, onDemo }) {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.6, duration: 0.8 }}
+          transition={{ delay: 1.0, duration: 0.5 }}
           className="flex justify-center mt-8 lg:mt-0"
         >
           <motion.div

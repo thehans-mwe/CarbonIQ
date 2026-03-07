@@ -15,39 +15,30 @@ const values = [
   { icon: '⚡', title: 'Simplicity', description: 'Complex climate data, delivered in the simplest possible interface.' },
 ];
 
-const ease = [0.22, 1, 0.36, 1];
+const ease = [0.16, 1, 0.3, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
-/* ABOUT: radial burst — milestones pop-rotate, values explode from center */
-const milestonePop = (i) => {
-  const rotations = [6, -4, 5];
-  return {
-    hidden: { opacity: 0, scale: 0.4, rotate: rotations[i] || 0, filter: 'blur(8px)' },
-    visible: {
-      opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)',
-      transition: { type: 'spring', stiffness: 160, damping: 12, delay: i * 0.08 },
-    },
-  };
-};
+/* Milestones: spring scale from center */
+const milestoneScale = (i) => ({
+  hidden: { opacity: 0, scale: 0.8, y: 15 },
+  visible: {
+    opacity: 1, scale: 1, y: 0,
+    transition: { type: 'spring', stiffness: 240, damping: 18, delay: i * 0.08 },
+  },
+});
 
-const valueBurst = (i) => {
-  /* 4 cards radiate outward at different angles */
-  const offsets = [
-    { x: -50, y: -30, rotate: -6 },
-    { x: -20, y: 50, rotate: 4 },
-    { x: 20, y: 50, rotate: -4 },
-    { x: 50, y: -30, rotate: 6 },
-  ];
-  const o = offsets[i] || offsets[0];
+/* Values: alternating slide direction */
+const valueSlide = (i) => {
+  const fromLeft = i % 2 === 0;
   return {
-    hidden: { opacity: 0, x: o.x, y: o.y, rotate: o.rotate, scale: 0.7, filter: 'blur(6px)' },
+    hidden: { opacity: 0, x: fromLeft ? -40 : 40, y: 10 },
     visible: {
-      opacity: 1, x: 0, y: 0, rotate: 0, scale: 1, filter: 'blur(0px)',
-      transition: { type: 'spring', stiffness: 110, damping: 14, delay: 0.1 + i * 0.07 },
+      opacity: 1, x: 0, y: 0,
+      transition: { type: 'spring', stiffness: 200, damping: 20, delay: i * 0.07 },
     },
   };
 };
@@ -60,9 +51,9 @@ export default function About() {
       <div className="max-w-6xl mx-auto px-6">
         {/* Section heading */}
         <motion.div
-          initial={{ opacity: 0, y: 28, filter: 'blur(10px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.8, ease }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -91,10 +82,10 @@ export default function About() {
           {milestones.map((m, i) => (
             <motion.div
               key={m.label}
-              variants={milestonePop(i)}
-              whileHover={{ y: -6, scale: 1.06, rotate: i % 2 === 0 ? 1.5 : -1.5, borderColor: 'rgba(212,160,23,0.18)' }}
-              transition={{ type: 'spring', stiffness: 260, damping: 16 }}
-              className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] py-6 px-4 text-center transition-shadow duration-300 hover:shadow-[0_8px_24px_rgba(212,160,23,0.08)]"
+              variants={milestoneScale(i)}
+              whileHover={{ y: -6, scale: 1.06, borderColor: 'rgba(212,160,23,0.25)' }}
+              transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+              className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] py-6 px-4 text-center hover-inner-shine card-corner-draw card-gold-glow"
             >
               <div className="text-2xl md:text-3xl font-bold text-white">
                 {inView ? (
@@ -114,9 +105,9 @@ export default function About() {
 
         {/* Our Values */}
         <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(6px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.7, delay: 0.15, ease }}
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 200, damping: 22, delay: 0.05 }}
           className="mb-20"
         >
           <h3 className="text-xl md:text-2xl font-serif font-semibold text-center mb-10 tracking-tight">
@@ -131,16 +122,16 @@ export default function About() {
             {values.map((v, i) => (
               <motion.div
                 key={v.title}
-                variants={valueBurst(i)}
-                whileHover={{ y: -8, scale: 1.05, rotate: i % 2 === 0 ? -1.5 : 1.5, borderColor: 'rgba(212,160,23,0.18)' }}
-                transition={{ type: 'spring', stiffness: 260, damping: 16 }}
-                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default hover:shadow-[0_8px_24px_rgba(212,160,23,0.06)] transition-shadow duration-300"
+                variants={valueSlide(i)}
+                whileHover={{ y: -7, scale: 1.05, borderColor: 'rgba(212,160,23,0.25)' }}
+                transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+                className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-5 text-center cursor-default card-corner-draw card-gold-glow transition-shadow duration-200 hover-corner-dots"
               >
                 <motion.span
                   className="text-2xl block mb-3"
-                  initial={{ scale: 0, rotate: -20 }}
-                  animate={inView ? { scale: 1, rotate: 0 } : {}}
-                  transition={{ delay: 0.4 + i * 0.1, type: 'spring', stiffness: 200, damping: 12 }}
+                  initial={{ scale: 0 }}
+                  animate={inView ? { scale: 1 } : {}}
+                  transition={{ delay: 0.15 + i * 0.06, type: 'spring', stiffness: 300, damping: 16 }}
                 >{v.icon}</motion.span>
                 <h4 className="text-sm font-semibold text-white mb-1.5">{v.title}</h4>
                 <p className="text-xs text-gray-500 leading-relaxed">{v.description}</p>
@@ -151,19 +142,18 @@ export default function About() {
 
         {/* Creator */}
         <motion.div
-          initial={{ opacity: 0, rotateY: 15, scale: 0.85, filter: 'blur(10px)' }}
-          animate={inView ? { opacity: 1, rotateY: 0, scale: 1, filter: 'blur(0px)' } : {}}
-          transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.35 }}
+          initial={{ opacity: 0, y: 30, scale: 0.94 }}
+          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+          transition={{ type: 'spring', stiffness: 180, damping: 20, delay: 0.1 }}
           className="text-center"
-          style={{ perspective: 1000 }}
         >
           <h3 className="text-xl md:text-2xl font-serif font-semibold mb-10 tracking-tight">
             The <span className="gradient-text">Creator</span>
           </h3>
           <motion.div
-            whileHover={{ y: -4, scale: 1.02, borderColor: 'rgba(212,160,23,0.15)' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            className="inline-flex flex-col items-center rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-8 max-w-xs mx-auto hover:shadow-[0_8px_32px_rgba(212,160,23,0.06)] transition-shadow duration-300"
+            whileHover={{ y: -5, scale: 1.03, borderColor: 'rgba(212,160,23,0.2)' }}
+            transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+            className="inline-flex flex-col items-center rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-8 max-w-xs mx-auto hover-halo card-corner-draw card-gold-glow"
           >
             <img
               src="https://api.dicebear.com/8.x/notionists/svg?seed=HansDev42&backgroundColor=0a0a0a"

@@ -45,36 +45,24 @@ const features = [
   },
 ];
 
-/* ── FEATURES: each card has unique entrance direction + 3D rotations ── */
-const ease = [0.22, 1, 0.36, 1];
+/* ── FEATURES: directional entrances per grid position ── */
+const ease = [0.16, 1, 0.3, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.18 } },
+  visible: { transition: { staggerChildren: 0.12 } },
 };
 
-/* Each card wipes in from a different edge with unique 3D rotation */
+/* Each card slides from its nearest edge */
 const cardVariants = [
-  // top-left: slide from left with Y-axis tilt
-  {
-    hidden: { opacity: 0, x: -60, rotateY: 8, filter: 'blur(8px)' },
-    visible: { opacity: 1, x: 0, rotateY: 0, filter: 'blur(0px)', transition: { duration: 0.85, ease } },
-  },
-  // top-right: slide from right with Y-axis tilt
-  {
-    hidden: { opacity: 0, x: 60, rotateY: -8, filter: 'blur(8px)' },
-    visible: { opacity: 1, x: 0, rotateY: 0, filter: 'blur(0px)', transition: { duration: 0.85, ease } },
-  },
-  // bottom-left: rise from below with X-axis tilt
-  {
-    hidden: { opacity: 0, y: 60, rotateX: -8, filter: 'blur(8px)' },
-    visible: { opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)', transition: { duration: 0.85, ease } },
-  },
-  // bottom-right: scale + rotate in
-  {
-    hidden: { opacity: 0, scale: 0.8, rotate: 3, filter: 'blur(8px)' },
-    visible: { opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)', transition: { duration: 0.85, ease } },
-  },
+  // top-left: slides from left
+  { hidden: { opacity: 0, x: -50, scale: 0.94 }, visible: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 20 } } },
+  // top-right: slides from right
+  { hidden: { opacity: 0, x: 50, scale: 0.94 }, visible: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 200, damping: 20 } } },
+  // bottom-left: rises from below-left
+  { hidden: { opacity: 0, y: 50, x: -20 }, visible: { opacity: 1, y: 0, x: 0, transition: { type: 'spring', stiffness: 180, damping: 20 } } },
+  // bottom-right: rises from below-right
+  { hidden: { opacity: 0, y: 50, x: 20 }, visible: { opacity: 1, y: 0, x: 0, transition: { type: 'spring', stiffness: 180, damping: 20 } } },
 ];
 
 /* ── component ─────────────────────────────────────────── */
@@ -86,9 +74,9 @@ export default function Features() {
       <div className="max-w-6xl mx-auto px-6" ref={ref}>
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.7, ease }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-20"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -109,26 +97,24 @@ export default function Features() {
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
           className="grid md:grid-cols-2 gap-5"
-          style={{ perspective: 1000 }}
         >
           {features.map((f, i) => (
             <motion.div
               key={f.title}
               variants={cardVariants[i]}
-              whileHover={{ y: -8, rotateX: -2, rotateY: i % 2 === 0 ? 2 : -2, scale: 1.02, transition: { duration: 0.35 } }}
-              className="group relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] overflow-hidden hover:border-white/[0.12] hover:shadow-[0_12px_48px_rgba(212,160,23,0.08)] transition-all duration-300"
-              style={{ transformStyle: 'preserve-3d' }}
+              whileHover={{ y: -8, scale: 1.03, transition: { type: 'spring', stiffness: 400, damping: 18 } }}
+              className="group relative rounded-2xl border border-white/[0.06] bg-[#0a0a0a] overflow-hidden card-corner-draw card-gold-glow transition-colors duration-200 hover-gold-top"
             >
               {/* Hover gold sweep line */}
               <div className="absolute inset-0 overflow-hidden pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a017]/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#d4a017]/40 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-600" />
               </div>
               {/* Image */}
               <div className="relative h-40 overflow-hidden">
                 <img
                   src={f.image}
                   alt={f.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-400 group-hover:scale-110"
                   loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />

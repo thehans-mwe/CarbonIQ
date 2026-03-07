@@ -31,33 +31,33 @@ const stats = [
   { label: 'Active Trackers', value: 2340, suffix: '+', icon: '📊' },
 ];
 
-/* ── DASHBOARD: elastic spring bounce cards + zoom-rotate charts ── */
-const ease = [0.22, 1, 0.36, 1];
+/* ── DASHBOARD: spring-drop stat cards + distinct chart entries ── */
+const ease = [0.16, 1, 0.3, 1];
 
 const stagger = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.13 } },
+  visible: { transition: { staggerChildren: 0.1 } },
 };
 
-/* Each stat card drops from a different height with elastic overshoot */
-const elasticBounce = (i) => ({
-  hidden: { opacity: 0, y: -(50 + i * 20), scale: 0.7 },
+/* Stat cards spring-drop from above with cascading stiffness */
+const statDrop = (i) => ({
+  hidden: { opacity: 0, y: -35, scale: 0.9 },
   visible: {
     opacity: 1, y: 0, scale: 1,
-    transition: { type: 'spring', stiffness: 120 + i * 30, damping: 10 + i * 2, delay: i * 0.08 },
+    transition: { type: 'spring', stiffness: 220 + i * 30, damping: 18, delay: i * 0.06 },
   },
 });
 
-/* Area chart zooms in with slight rotation */
-const zoomRotateLeft = {
-  hidden: { opacity: 0, scale: 0.85, rotate: -2, x: -30, filter: 'blur(8px)' },
-  visible: { opacity: 1, scale: 1, rotate: 0, x: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease } },
+/* Area chart scales up from bottom-left origin */
+const chartReveal = {
+  hidden: { opacity: 0, scale: 0.92, y: 20 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { type: 'spring', stiffness: 180, damping: 22 } },
 };
 
-/* Pie chart flips in from the right */
-const flipInRight = {
-  hidden: { opacity: 0, rotateY: 15, x: 40, filter: 'blur(6px)' },
-  visible: { opacity: 1, rotateY: 0, x: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease } },
+/* Pie chart slides + scales from right */
+const pieReveal = {
+  hidden: { opacity: 0, x: 30, scale: 0.92 },
+  visible: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 180, damping: 22 } },
 };
 
 /* ── custom tooltip ───────────────────────────────── */
@@ -92,16 +92,16 @@ function PieTooltip({ active, payload }) {
 function StatCard({ label, value, suffix, icon, inView, index }) {
   return (
     <motion.div
-      variants={elasticBounce(index)}
-      whileHover={{ y: -8, scale: 1.05, rotateZ: index % 2 === 0 ? 1 : -1, borderColor: 'rgba(212,160,23,0.2)' }}
-      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center transition-shadow duration-300 hover:shadow-[0_12px_40px_rgba(212,160,23,0.08)] cursor-default"
+      variants={statDrop(index)}
+      whileHover={{ y: -6, scale: 1.05, borderColor: 'rgba(212,160,23,0.25)' }}
+      transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+      className="rounded-xl border border-white/[0.06] bg-[#0a0a0a] p-6 text-center hover-gold-shadow card-corner-draw cursor-default"
     >
       <motion.span
         className="text-2xl block mb-3"
-        initial={{ scale: 0, rotate: -45 }}
-        animate={inView ? { scale: [0, 1.3, 1], rotate: [- 45, 10, 0] } : {}}
-        transition={{ delay: 0.4 + index * 0.12, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+        initial={{ scale: 0 }}
+        animate={inView ? { scale: 1 } : {}}
+        transition={{ delay: 0.2 + index * 0.06, type: 'spring', stiffness: 300, damping: 16 }}
       >{icon}</motion.span>
       <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">
         {inView ? <CountUp end={value} duration={2.2} separator="," /> : 0}
@@ -127,9 +127,9 @@ export default function Dashboard() {
 
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 24, filter: 'blur(8px)' }}
-          animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
-          transition={{ duration: 0.7, ease }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="text-center mb-16"
         >
           <span className="inline-block text-[10px] font-semibold text-gray-500 tracking-[0.25em] uppercase mb-5">
@@ -162,13 +162,13 @@ export default function Dashboard() {
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
           className="grid lg:grid-cols-5 gap-5"
-          style={{ perspective: 1200 }}
         >
           {/* Area chart — 3 cols (zoom-rotate entrance) */}
           <motion.div
-            variants={zoomRotateLeft}
-            whileHover={{ borderColor: 'rgba(212,160,23,0.15)', scale: 1.01 }}
-            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(212,160,23,0.06)]"
+            variants={chartReveal}
+            whileHover={{ borderColor: 'rgba(212,160,23,0.2)', y: -3 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            className="lg:col-span-3 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 hover-border-reveal card-gold-glow"
           >
             <div className="flex items-center justify-between mb-5">
               <div>
@@ -203,10 +203,10 @@ export default function Dashboard() {
 
           {/* Pie chart — 2 cols (flip-in entrance) */}
           <motion.div
-            variants={flipInRight}
-            whileHover={{ borderColor: 'rgba(212,160,23,0.15)', scale: 1.01 }}
-            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col transition-shadow duration-300 hover:shadow-[0_12px_48px_rgba(212,160,23,0.06)]"
-            style={{ transformStyle: 'preserve-3d' }}
+            variants={pieReveal}
+            whileHover={{ borderColor: 'rgba(212,160,23,0.2)', y: -3 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            className="lg:col-span-2 rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 flex flex-col hover-border-reveal card-gold-glow"
           >
             <div className="mb-3">
               <h3 className="text-sm font-semibold text-white">Footprint Breakdown</h3>

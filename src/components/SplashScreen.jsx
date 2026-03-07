@@ -34,6 +34,20 @@ export default function SplashScreen({ onFinished }) {
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center"
         >
+          {/* Minimal glowing particles */}
+          {[
+            { top: '20%', left: '15%', delay: '0s' },
+            { top: '70%', left: '80%', delay: '1s' },
+            { top: '40%', left: '85%', delay: '0.5s' },
+            { top: '80%', left: '25%', delay: '1.5s' },
+            { top: '15%', left: '70%', delay: '0.7s' },
+          ].map((p, i) => (
+            <div
+              key={i}
+              className="particle"
+              style={{ top: p.top, left: p.left, animationDelay: p.delay }}
+            />
+          ))}
           {/* Logo icon */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
@@ -73,7 +87,7 @@ export default function SplashScreen({ onFinished }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.3 }}
-            className="relative h-[2px] rounded-full bg-white/[0.04] overflow-hidden mb-6"
+            className="relative h-[2px] rounded-full bg-white/[0.04] overflow-hidden mb-6 scanner-line"
             style={{ width: 180 }}
           >
             <motion.div

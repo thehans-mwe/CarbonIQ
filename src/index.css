@@ -172,55 +172,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
 .animate-float-slow { animation: float 7s ease-in-out infinite; }
 .animate-float-fast { animation: float 3.5s ease-in-out infinite; }
 
-/* ── Diagonal float ── */
-@keyframes float-diagonal {
-  0%, 100% { transform: translate(0, 0) rotate(0deg); }
-  25%      { transform: translate(4px, -8px) rotate(1deg); }
-  50%      { transform: translate(-2px, -12px) rotate(-0.5deg); }
-  75%      { transform: translate(-6px, -6px) rotate(0.5deg); }
-}
-.animate-float-diagonal { animation: float-diagonal 8s ease-in-out infinite; }
-
-/* ── Border glow pulse ── */
-@keyframes border-glow {
-  0%, 100% { border-color: rgba(255,255,255,0.06); box-shadow: 0 0 0 rgba(212,160,23,0); }
-  50%      { border-color: rgba(212,160,23,0.15); box-shadow: 0 0 30px rgba(212,160,23,0.06); }
-}
-.animate-border-glow { animation: border-glow 4s ease-in-out infinite; }
-
-/* ── Card inner glow on hover ── */
-@keyframes card-glow-sweep {
-  0%   { opacity: 0; transform: translateX(-100%); }
-  50%  { opacity: 1; }
-  100% { opacity: 0; transform: translateX(100%); }
-}
-
-/* ── Pulse ring ── */
-@keyframes pulse-ring {
-  0%   { transform: scale(1); opacity: 0.4; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
-.animate-pulse-ring::after {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: inherit;
-  border: 1px solid rgba(212,160,23,0.3);
-  animation: pulse-ring 2.5s ease-out infinite;
-}
-
-/* ── Gradient line scan ── */
-@keyframes line-scan {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* ── Subtle background pan ── */
-@keyframes bg-pan {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+/* ── Gentle float (kept for Hero floating cards) ── */
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
@@ -230,10 +182,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   .animate-float,
   .animate-float-slow,
   .animate-float-fast,
-  .animate-float-diagonal,
-  .gradient-text-shimmer,
-  .animate-border-glow { animation: none !important; }
-  .animate-pulse-ring::after { animation: none !important; }
+  .gradient-text-shimmer { animation: none !important; }
 }
 
 /* ── Button lift ── */
@@ -263,4 +212,367 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
 /* ── Score glow ── */
 .score-glow {
   background: radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%);
+}
+
+/* ═════════════════════════════════════════════════════
+   PREMIUM MICRO-INTERACTIONS
+   ═════════════════════════════════════════════════════ */
+
+/* ── Button: gold line slides across top edge L→R ── */
+.btn-gold-line { position: relative; overflow: hidden; }
+.btn-gold-line::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, #f5c842, #d4a017, transparent);
+  transform: translateX(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 20;
+}
+.btn-gold-line:hover::before {
+  transform: translateX(100%);
+}
+
+/* ── Button: shimmer sweep across surface ── */
+.btn-shimmer { position: relative; overflow: hidden; }
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
+  transform: skewX(-15deg);
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 15;
+}
+.btn-shimmer:hover::after {
+  left: 150%;
+}
+
+/* ── Button: subtle elevation lift ── */
+.btn-premium {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-premium:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(212,160,23,0.2), 0 2px 8px rgba(0,0,0,0.3);
+}
+.btn-premium:active {
+  transform: translateY(0);
+}
+
+/* ── Card: corner borders draw in on hover ── */
+.card-corner-draw { position: relative; }
+.card-corner-draw::before,
+.card-corner-draw::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.25s ease;
+  opacity: 0;
+}
+/* Top-left corner */
+.card-corner-draw::before {
+  top: -1px; left: -1px;
+  width: 0; height: 0;
+  border-top: 2px solid #d4a017;
+  border-left: 2px solid #d4a017;
+  border-radius: inherit;
+  border-bottom: none;
+  border-right: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+/* Bottom-right corner */
+.card-corner-draw::after {
+  bottom: -1px; right: -1px;
+  width: 0; height: 0;
+  border-bottom: 2px solid #d4a017;
+  border-right: 2px solid #d4a017;
+  border-top: none;
+  border-left: none;
+  border-bottom-right-radius: inherit;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.card-corner-draw:hover::before,
+.card-corner-draw:hover::after {
+  width: 28px; height: 28px;
+  opacity: 1;
+}
+
+/* ── Card: gold glow outline fade-in + scale ── */
+.card-gold-glow {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s ease;
+}
+.card-gold-glow:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 1px rgba(212,160,23,0.15),
+              0 0 30px rgba(212,160,23,0.08),
+              0 8px 32px rgba(0,0,0,0.3);
+  border-color: rgba(212,160,23,0.2);
+}
+
+/* ── Input: gold underline grows from center outward ── */
+.input-gold-underline { position: relative; }
+.input-gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 2px;
+  background: linear-gradient(90deg, #d4a017, #f5c842, #d4a017);
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  border-radius: 1px;
+  z-index: 10;
+}
+.input-gold-underline:focus-within::after {
+  width: 100%;
+}
+/* Subtle underglow on focus */
+.input-gold-underline:focus-within {
+  box-shadow: 0 4px 12px rgba(212,160,23,0.08);
+}
+
+/* ── Nav: animated gold underline from center ── */
+.nav-underline { position: relative; }
+.nav-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 50%;
+  width: 0; height: 1.5px;
+  background: linear-gradient(90deg, transparent, #f5c842, transparent);
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.nav-underline:hover::after {
+  width: 80%;
+}
+.nav-underline.nav-active::after {
+  width: 70%;
+  background: #d4a017;
+}
+
+/* ── Tab: gold underline that stays when active ── */
+.tab-underline { position: relative; }
+.tab-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 2px;
+  background: #d4a017;
+  transform: translateX(-50%);
+  transition: width 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  border-radius: 1px;
+}
+.tab-underline:hover::after {
+  width: 60%;
+}
+.tab-underline.tab-active::after {
+  width: 70%;
+  background: linear-gradient(90deg, #d4a017, #f5c842);
+}
+
+/* ── Loading: gold scanning line ── */
+@keyframes scan-line {
+  0%   { left: -20%; }
+  100% { left: 120%; }
+}
+.scanner-line {
+  position: relative;
+  overflow: hidden;
+}
+.scanner-line::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -20%;
+  width: 20%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,0.25), rgba(245,200,66,0.4), rgba(212,160,23,0.25), transparent);
+  animation: scan-line 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ── Glowing particles (minimal, for loading bg) ── */
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50%      { transform: translateY(-12px) scale(1.3); opacity: 0.7; }
+}
+.particle {
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: #d4a017;
+  position: absolute;
+  animation: particle-float 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ── Reduced motion: also suppress new animations ── */
+@media (prefers-reduced-motion: reduce) {
+  .scanner-line::before,
+  .particle { animation: none !important; }
+  .btn-gold-line::before,
+  .btn-shimmer::after { transition: none !important; }
+}
+
+/* ═════════════════════════════════════════════════════
+   HOVER DECORATIONS — lightweight, GPU-friendly
+   ═════════════════════════════════════════════════════ */
+
+/* 1. Gold top-line reveal (Features) */
+.hover-gold-top { position: relative; }
+.hover-gold-top::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d4a017, transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.2s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
+  z-index: 10;
+  border-radius: 1rem 1rem 0 0;
+}
+.hover-gold-top:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* 2. Ambient gold shadow (Dashboard stat cards) */
+.hover-gold-shadow {
+  transition: box-shadow 0.25s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+.hover-gold-shadow:hover {
+  box-shadow: 0 0 28px rgba(212,160,23,0.18), 0 10px 40px rgba(0,0,0,0.35);
+  border-color: rgba(212,160,23,0.28);
+}
+
+/* 3. Border color transition (Dashboard charts) */
+.hover-border-reveal {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.hover-border-reveal:hover {
+  border-color: rgba(212,160,23,0.25) !important;
+  box-shadow: 0 6px 32px rgba(212,160,23,0.1);
+}
+
+/* 4. Bottom line expand (Testimonials) */
+.hover-underline-expand { position: relative; }
+.hover-underline-expand::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%;
+  width: 0; height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.5), transparent);
+  transform: translateX(-50%);
+  transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
+  border-radius: 1px;
+  z-index: 10;
+}
+.hover-underline-expand:hover::after {
+  width: 80%;
+}
+
+/* 5. Inner top shine (About milestones) */
+.hover-inner-shine { position: relative; overflow: hidden; }
+.hover-inner-shine::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, rgba(212,160,23,0.09) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 0;
+}
+.hover-inner-shine:hover::before {
+  opacity: 1;
+}
+
+/* 6. Corner dots (About values) */
+.hover-corner-dots { position: relative; }
+.hover-corner-dots::before,
+.hover-corner-dots::after {
+  content: '';
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(245,200,66,0.75);
+  transform: scale(0);
+  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+.hover-corner-dots::before { top: 8px; right: 8px; }
+.hover-corner-dots::after  { bottom: 8px; left: 8px; transition-delay: 0.04s; }
+.hover-corner-dots:hover::before,
+.hover-corner-dots:hover::after {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* 7. Soft halo (About creator) */
+.hover-halo {
+  transition: box-shadow 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.hover-halo:hover {
+  box-shadow: 0 0 48px rgba(212,160,23,0.14), 0 10px 40px rgba(0,0,0,0.35);
+}
+
+/* 8. Frame glow (Hero image) */
+.hover-frame-glow {
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.hover-frame-glow:hover {
+  border-color: rgba(212,160,23,0.3) !important;
+  box-shadow: 0 10px 48px rgba(212,160,23,0.14), 0 0 0 1px rgba(212,160,23,0.14);
+}
+
+/* 9. Top accent line (Hero overlay) */
+.hover-top-accent { position: relative; }
+.hover-top-accent::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.5), transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 0.2s, transform 0.25s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
+  z-index: 10;
+}
+.hover-top-accent:hover::before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* 10. Soft glow ring (CTA) */
+.hover-glow-ring {
+  transition: box-shadow 0.35s cubic-bezier(0.22,1,0.36,1),
+              border-color 0.35s;
+}
+.hover-glow-ring:hover {
+  border-color: rgba(212,160,23,0.28) !important;
+  box-shadow: 0 0 60px rgba(212,160,23,0.14), inset 0 1px 0 rgba(212,160,23,0.15);
 }

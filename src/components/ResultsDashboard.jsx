@@ -224,7 +224,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={onRecalculate}
-              className="px-4 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-white/50 hover:text-white/80 hover:border-white/[0.12] transition-all uppercase tracking-wider font-medium"
+              className="px-4 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs text-white/50 hover:text-white/80 hover:border-white/[0.12] transition-all uppercase tracking-wider font-medium btn-gold-line btn-premium"
             >
               Recalculate
             </motion.button>
@@ -238,7 +238,7 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-8"
         >
-          <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden">
+          <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.06] overflow-hidden card-corner-draw card-gold-glow">
             {/* Thin accent line at top */}
             <div className="h-[1px]" style={{ background: `linear-gradient(90deg, transparent 10%, ${emotion.ring}40 50%, transparent 90%)` }} />
 
@@ -465,9 +465,9 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`relative px-5 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap flex items-center gap-2 uppercase tracking-wider ${
+                    className={`relative px-5 py-2.5 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap flex items-center gap-2 uppercase tracking-wider tab-underline ${
                       activeTab === tab.id
-                        ? 'bg-white/[0.06] text-white'
+                        ? 'bg-white/[0.06] text-white tab-active'
                         : 'text-white/30 hover:text-white/60'
                     }`}
                   >
@@ -677,7 +677,8 @@ export default function ResultsDashboard({ carbonData, recommendations, inputs, 
                     className="space-y-3"
                   >
                     {aiLoading ? (
-                      <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.06] p-12 text-center">
+                      <div className="rounded-2xl bg-[#0a0a0a] border border-white/[0.06] p-12 text-center relative overflow-hidden">
+                        <div className="scanner-line absolute inset-0 pointer-events-none" />
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}

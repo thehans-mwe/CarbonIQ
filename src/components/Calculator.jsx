@@ -174,10 +174,10 @@ function CleanSelect({ label, icon, options, ...props }) {
       <label className="text-sm text-gray-400 flex items-center gap-2">
         <span>{icon}</span> {label}
       </label>
-      <div className="relative">
+      <div className="relative input-gold-underline">
         <select
           {...props}
-          className="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-white text-sm outline-none appearance-none cursor-pointer transition-all duration-200 focus:border-[#d4a017]/40 focus:shadow-[0_0_0_3px_rgba(212,160,23,0.06)]"
+          className="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-white text-sm outline-none appearance-none cursor-pointer transition-all duration-200 focus:border-[#d4a017]/40"
         >
           {options.map((o) => (
             <option key={o.value} value={o.value} className="bg-[#0a0a0a] text-white">
@@ -282,7 +282,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
+          className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.4)] card-corner-draw card-gold-glow"
         >
           {/* Step title */}
           <AnimatePresence mode="wait" custom={dir}>
@@ -427,7 +427,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                 disabled={loading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_16px_rgba(212,160,23,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2.5"
+                className="px-8 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_16px_rgba(212,160,23,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2.5 btn-gold-line btn-shimmer btn-premium"
               >
                 {loading ? (
                   <>
@@ -453,7 +453,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
                 onClick={nextStep}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_12px_rgba(212,160,23,0.15)]"
+                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_12px_rgba(212,160,23,0.15)] btn-gold-line btn-shimmer btn-premium"
               >
                 Continue
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

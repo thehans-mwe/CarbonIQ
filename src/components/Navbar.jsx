@@ -44,7 +44,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
         <div className="hidden md:flex items-center gap-8">
           <button
             onClick={onDashboard}
-            className="text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
+            className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
           >
             Dashboard
           </button>
@@ -52,7 +52,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
             <button
               key={l.label}
               onClick={() => onNavigateSection?.(l.section)}
-              className="text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
+              className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
             >
               {l.label}
             </button>
@@ -61,7 +61,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
             onClick={onDashboard}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="px-5 py-2 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black text-[13px] font-semibold transition-shadow duration-300 hover:shadow-[0_2px_20px_rgba(212,160,23,0.25)]"
+            className="btn-gold-line btn-shimmer btn-premium px-5 py-2 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black text-[13px] font-semibold"
           >
             Get Started
           </motion.button>
