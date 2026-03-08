@@ -41,6 +41,12 @@ h1, h2, h3 {
   color: #fff;
 }
 
+/* ── Focus reset — no default blue outlines ── */
+button:focus, button:focus-visible,
+[role="option"]:focus, [role="listbox"]:focus {
+  outline: none;
+}
+
 /* ── Glass ── */
 .glass {
   background: rgba(10,10,10,0.8);
@@ -227,7 +233,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   width: 100%; height: 2px;
   background: linear-gradient(90deg, transparent, #f5c842, #d4a017, transparent);
   transform: translateX(-100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
   z-index: 20;
 }
@@ -291,7 +297,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   background: linear-gradient(90deg, transparent, #d4a017, #f5c842, #d4a017, transparent);
   transform: scaleX(0);
   transform-origin: left;
-  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 20;
   border-radius: 0;
   pointer-events: none;
@@ -419,7 +425,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   background: linear-gradient(90deg, transparent, #d4a017, transparent);
   opacity: 0;
   transform: scaleX(0);
-  transition: opacity 0.2s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  transition: opacity 0.3s, transform 1.5s cubic-bezier(0.22,1,0.36,1);
   pointer-events: none;
   z-index: 10;
   border-radius: 1rem 1rem 0 0;
@@ -523,7 +529,7 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
   width: 100%; height: 2px;
   background: linear-gradient(90deg, transparent 0%, #d4a017 30%, #f5c842 50%, #d4a017 70%, transparent 100%);
   transform: translateX(-100%);
-  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
   z-index: 20;
 }

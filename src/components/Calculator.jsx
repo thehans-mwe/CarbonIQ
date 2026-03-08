@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── step config ─────────────────────────────────────── */
@@ -167,27 +167,84 @@ function CardSelector({ options, value, onChange, layoutId }) {
   );
 }
 
-/* ─── select dropdown (clean) ─────────────────────────── */
-function CleanSelect({ label, icon, options, ...props }) {
+/* ─── custom select dropdown ──────────────────────────── */
+function CleanSelect({ label, icon, options, value, onChange, ...props }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
+  const current = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   return (
     <div className="space-y-2">
       <label className="text-sm text-gray-400 flex items-center gap-2">
         <span>{icon}</span> {label}
       </label>
-      <div className="relative input-gold-underline">
-        <select
-          {...props}
-          className="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-white text-sm outline-none appearance-none cursor-pointer transition-all duration-200 focus:border-[#d4a017]/40"
+      <div className="relative" ref={ref}>
+        <button
+          type="button"
+          onClick={() => setOpen((p) => !p)}
+          className="w-full px-4 py-3.5 rounded-xl bg-white/[0.03] border border-white/[0.06] text-white text-sm outline-none cursor-pointer transition-all duration-300 flex items-center justify-between focus:border-[#d4a017]/40 input-gold-underline"
         >
-          {options.map((o) => (
-            <option key={o.value} value={o.value} className="bg-[#0a0a0a] text-white">
-              {o.emoji ? `${o.emoji}  ${o.label}` : o.label}
-            </option>
-          ))}
-        </select>
-        <svg className="absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-        </svg>
+          <span className="flex items-center gap-2.5">
+            {current?.emoji && <span>{current.emoji}</span>}
+            <span>{current?.label || 'Select'}</span>
+          </span>
+          <motion.svg
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
+            className="w-4 h-4 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </motion.svg>
+        </button>
+
+        <AnimatePresence>
+          {open && (
+            <motion.ul
+              initial={{ opacity: 0, y: -8, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.97 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute z-50 top-full left-0 right-0 mt-2 rounded-xl border border-white/[0.08] bg-[#0c0c0c]/95 backdrop-blur-xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+            >
+              {options.map((o) => {
+                const selected = o.value === value;
+                return (
+                  <li key={o.value}>
+                    <button
+                      type="button"
+                      onClick={() => { onChange({ target: { value: o.value } }); setOpen(false); }}
+                      className={`w-full px-4 py-3 flex items-center gap-2.5 text-sm outline-none transition-all duration-300 ${
+                        selected
+                          ? 'bg-[#d4a017]/15 text-[#f5c842]'
+                          : 'text-gray-300 hover:bg-[#d4a017]/10 hover:text-white'
+                      }`}
+                    >
+                      {o.emoji && <span>{o.emoji}</span>}
+                      <span className="font-medium">{o.label}</span>
+                      {selected && (
+                        <svg className="w-3.5 h-3.5 text-[#d4a017] ml-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </motion.ul>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -120,10 +120,10 @@ export default function Hero({ onGetStarted, onDemo }) {
             <motion.div variants={buttonsRise} className="flex flex-wrap items-center gap-4 mb-14">
               <motion.button
                 onClick={onGetStarted}
-                whileHover={{ scale: 1.06, y: -3 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide btn-gold-line btn-shimmer btn-premium btn-pulse-glow overflow-hidden"
+                whileHover={{ scale: 1.08, y: -4 }}
+                whileTap={{ scale: 0.93 }}
+                transition={{ type: 'spring', stiffness: 600, damping: 14 }}
+                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide overflow-hidden shadow-[0_4px_20px_rgba(212,160,23,0.3)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.4)]"
               >
                 <span className="relative z-10">Get Started</span>
                 {/* Shine sweep */}
@@ -131,7 +131,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent -skew-x-12"
                   initial={{ x: '-100%' }}
                   animate={{ x: '200%' }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 4, ease: 'easeInOut' }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2, ease: 'easeInOut' }}
                 />
               </motion.button>
               <motion.button
