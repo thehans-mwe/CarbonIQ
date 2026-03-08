@@ -1,8 +1,58 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [react()],
+  css: {
+    postcss: {
+      plugins: [
+        tailwindcss({
+          content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                serif: ['Cormorant Garamond', 'Georgia', 'Times New Roman', 'serif'],
+              },
+              colors: {
+                navy: { 900: '#000000', 800: '#0a0a0a', 700: '#141414', 600: '#1a1a1a' },
+                accent: { green: '#d4a017', blue: '#f5c842', cyan: '#e6b830', purple: '#c49b12' },
+              },
+              borderRadius: { '2xl': '1rem', '3xl': '1.5rem', '4xl': '2rem' },
+              boxShadow: {
+                glow: '0 0 40px rgba(212, 160, 23, 0.2)',
+                'glow-lg': '0 0 60px rgba(212, 160, 23, 0.25)',
+                'glow-xl': '0 0 80px rgba(212, 160, 23, 0.3)',
+                glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                'glass-lg': '0 16px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.03)',
+                lift: '0 20px 60px -12px rgba(0,0,0,0.6)',
+                'inner-glow': 'inset 0 1px 0 rgba(255,255,255,0.06)',
+              },
+              backdropBlur: { xs: '2px' },
+              animation: {
+                float: 'float 6s ease-in-out infinite',
+                'float-slow': 'float 8s ease-in-out infinite',
+                'float-slower': 'float 10s ease-in-out infinite',
+                'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                gradient: 'gradient 8s ease infinite',
+                shimmer: 'shimmer 2s ease-in-out infinite',
+              },
+              keyframes: {
+                float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-20px)' } },
+                pulseGlow: { '0%, 100%': { opacity: '0.4' }, '50%': { opacity: '0.8' } },
+                gradient: { '0%, 100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+                shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
+              },
+            },
+          },
+          plugins: [],
+        }),
+        autoprefixer(),
+      ],
+    },
+  },
   build: {
     rollupOptions: {
       output: {
