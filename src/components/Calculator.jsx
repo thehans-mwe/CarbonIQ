@@ -1,5 +1,6 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { calculateOffline } from '../services/offlineCalc';
 
 /* ─── step config ─────────────────────────────────────── */
 const STEPS = [
@@ -290,6 +291,7 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
   };
 
   const isLast = step === STEPS.length - 1;
+  const preview = useMemo(() => calculateOffline(form), [form]);
 
   return (
     <motion.section
@@ -461,6 +463,45 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
               )}
             </AnimatePresence>
           </div>
+
+          {/* Live estimate (instant feedback) */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 md:p-5"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] text-white/30 uppercase tracking-[0.25em]">Live estimate</p>
+                <p className="text-xs text-white/50 mt-1">Updates instantly as you adjust inputs.</p>
+              </div>
+              <div className="text-right">
+                <div className="text-3xl font-serif font-bold text-white tabular-nums">
+                  {preview.totalKg.toFixed(1)} <span className="text-lg text-[#f5c842]/80 font-medium">kg CO₂</span>
+                </div>
+                <p className="text-[10px] text-white/30 mt-0.5">Offline model preview</p>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+              {[
+                { k: 'transportKg', label: 'Transport', icon: '🚗', color: '#f5c842' },
+                { k: 'energyKg', label: 'Energy', icon: '⚡', color: '#d4a017' },
+                { k: 'flightKg', label: 'Flights', icon: '✈️', color: '#c49b12' },
+                { k: 'dietKg', label: 'Food', icon: '🥗', color: '#e6b830' },
+                { k: 'lifestyleKg', label: 'Lifestyle', icon: '🛍️', color: '#b8860b' },
+              ]
+                .filter((x) => (preview[x.k] || 0) > 0)
+                .map((x) => (
+                  <div key={x.k} className="flex items-center gap-2">
+                    <span className="text-base" style={{ color: x.color }}>{x.icon}</span>
+                    <span className="text-white/70">{x.label}:</span>
+                    <span className="ml-auto text-white font-semibold tabular-nums">{preview[x.k].toFixed(1)} <span className="text-[10px] text-white/30">kg</span></span>
+                  </div>
+                ))}
+            </div>
+          </motion.div>
 
           {/* Navigation */}
           <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/[0.04]">

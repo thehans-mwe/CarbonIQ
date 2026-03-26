@@ -1,13 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-
-/* ── Emission factors (from offlineCalc.js) ──────────── */
-const FACTORS = {
-  car: { gasoline: 0.404, diesel: 0.367, hybrid: 0.213, electric: 0.092 },
-  electricity: 0.386,
-  naturalGas: 5.31,
-  diet: { heavy_meat: 7.19, medium_meat: 5.63, vegetarian: 3.81, vegan: 2.89 },
-};
+import { EMISSION_FACTORS } from '../services/offlineCalc';
 
 /* ── Slider component ────────────────────────────────── */
 function SimSlider({ label, icon, value, onChange, min, max, step, unit, savings }) {
@@ -74,28 +67,38 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
   const [elecReduction, setElecReduction] = useState(initElecReduction);
 
   // Calculate savings
-  const { newTotal, savings, transportSaved, energySaved, dietSaved } = useMemo(() => {
+  const { newTotal, savings, transportSavedBike, transportSavedTransit, energySaved, dietSaved } = useMemo(() => {
     const fuelType = inputs?.fuelType || 'gasoline';
     const dailyMiles = (Number(inputs?.carMiles) || 0) / 7;
-    const factor = FACTORS.car[fuelType] || FACTORS.car.gasoline;
+    const carKgPerMile = EMISSION_FACTORS.car[fuelType] ?? EMISSION_FACTORS.car.gasoline;
+    const carDailyKg = dailyMiles * carKgPerMile;
 
-    // Transport: biking/transit replaces car days
-    const daysReplaced = Math.min(bikeDays + transitDays, 7);
-    const transportSaved = dailyMiles * factor * daysReplaced * (bikeDays > 0 ? 1 : 0.7); // transit still has some emissions
+    // Transport: convert “replacement days” into kg saved.
+    // Bike has very low operational emissions; transit isn't zero.
+    const BIKE_SAVED_FRAC = 0.98; // approximation
+    const TRANSIT_SAVED_FRAC = 0.70; // approximation
+    const totalDays = bikeDays + transitDays;
+    const scale = totalDays > 7 ? 7 / totalDays : 1;
+    const effectiveBikeDays = bikeDays * scale;
+    const effectiveTransitDays = transitDays * scale;
 
-    // Energy: % reduction in electricity
+    const transportSavedBike = carDailyKg * effectiveBikeDays * BIKE_SAVED_FRAC;
+    const transportSavedTransit = carDailyKg * effectiveTransitDays * TRANSIT_SAVED_FRAC;
+    const transportSaved = transportSavedBike + transportSavedTransit;
+
+    // Energy: % reduction in electricity (gas unchanged in this simulator)
     const elecKwh = Number(inputs?.electricityKwh) || 0;
-    const energySaved = (elecReduction / 100) * elecKwh * FACTORS.electricity;
+    const energySaved = (elecReduction / 100) * elecKwh * EMISSION_FACTORS.electricity;
 
     // Diet: switching to a lighter diet
-    const currentDietDaily = FACTORS.diet[initDiet] || FACTORS.diet.medium_meat;
-    const newDietDaily = FACTORS.diet[dietSwitch] || currentDietDaily;
+    const currentDietDaily = EMISSION_FACTORS.diet[initDiet] ?? EMISSION_FACTORS.diet.medium_meat;
+    const newDietDaily = EMISSION_FACTORS.diet[dietSwitch] ?? currentDietDaily;
     const dietSaved = Math.max(0, (currentDietDaily - newDietDaily) * 7);
 
     const totalSaved = transportSaved + energySaved + dietSaved;
     const newTotal = Math.max(0, original - totalSaved);
 
-    return { newTotal, savings: totalSaved, transportSaved, energySaved, dietSaved };
+    return { newTotal, savings: totalSaved, transportSavedBike, transportSavedTransit, energySaved, dietSaved };
   }, [bikeDays, transitDays, dietSwitch, elecReduction, inputs, original, initDiet]);
 
   const savingsPct = original > 0 ? Math.round((savings / original) * 100) : 0;
@@ -131,7 +134,7 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
             onChange={setBikeDays}
             min={0} max={7} step={1}
             unit=" days/wk"
-            savings={transportSaved * (bikeDays > 0 ? 1 : 0)}
+            savings={transportSavedBike}
           />
 
           <SimSlider
@@ -141,7 +144,7 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
             onChange={setTransitDays}
             min={0} max={7} step={1}
             unit=" days/wk"
-            savings={transitDays > 0 ? transportSaved * 0.3 : 0}
+            savings={transportSavedTransit}
           />
 
           <SimSlider

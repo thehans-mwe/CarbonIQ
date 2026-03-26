@@ -42,6 +42,9 @@ const FACTORS = {
   streaming: 0.036,    // kg CO₂e/hr — IEA 2024 data-centre energy per stream-hour
 };
 
+// Re-exported for components that need to present consistent “what-if” / previews.
+export const EMISSION_FACTORS = FACTORS;
+
 // US per-capita weekly benchmarks (for green-score grading)
 const BENCHMARKS = {
   transport: 77,       // ~193 mi/wk × 0.400
