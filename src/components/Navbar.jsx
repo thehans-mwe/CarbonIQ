@@ -35,13 +35,13 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
         scrolled
-          ? 'bg-black/90 backdrop-blur-md py-3'
+          ? 'bg-black/90 backdrop-blur-md py-3 border-b border-white/[0.05]'
           : 'bg-transparent py-5'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
+      <div className="section-shell flex items-center justify-between">
         {/* Logo */}
-        <button onClick={onHome} className="flex items-center gap-2.5 group">
+        <button onClick={onHome} className="flex items-center gap-2.5 group focus-ring">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#f5c842] flex items-center justify-center transition-transform duration-300 group-hover:scale-105">
             <svg className="w-4 h-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -56,7 +56,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
         <div className="hidden md:flex items-center gap-8">
           <button
             onClick={onDashboard}
-            className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
+            className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200 focus-ring"
           >
             Dashboard
           </button>
@@ -64,7 +64,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
             <button
               key={l.label}
               onClick={() => onNavigateSection?.(l.section)}
-              className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200"
+              className="nav-underline text-[13px] text-gray-500 hover:text-white transition-colors duration-200 focus-ring"
             >
               {l.label}
             </button>
@@ -73,7 +73,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
             onClick={onDashboard}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="btn-gold-line btn-shimmer btn-premium px-5 py-2 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black text-[13px] font-semibold"
+            className="btn-gold-line btn-shimmer btn-premium px-5 py-2 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black text-[13px] font-semibold focus-ring"
           >
             Get Started
           </motion.button>
@@ -98,7 +98,9 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
         {/* Mobile toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1.5"
+          className="md:hidden w-8 h-8 flex flex-col items-center justify-center gap-1.5 focus-ring"
+          aria-expanded={mobileOpen}
+          aria-label="Toggle menu"
         >
           <motion.span
             animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}

@@ -83,7 +83,7 @@ export default function Hero({ onGetStarted, onDemo }) {
       </div>
 
       {/* ── Content ── */}
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-20">
+      <div className="relative z-10 section-shell pt-32 pb-20">
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center min-h-[calc(100vh-8rem)]">
 
           {/* Left — Copy */}
@@ -111,7 +111,7 @@ export default function Hero({ onGetStarted, onDemo }) {
 
             <motion.p
               variants={paragraphFade}
-              className="text-gray-400 text-base md:text-[17px] leading-relaxed max-w-md mb-10"
+              className="text-gray-300/80 text-base md:text-[17px] leading-relaxed max-w-md mb-10"
             >
               Five quick questions. Science-backed emissions breakdown.
               Personalized AI tips to cut your impact — all in under 2 minutes.
@@ -123,7 +123,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                 whileHover={{ scale: 1.08, y: -4 }}
                 whileTap={{ scale: 0.93 }}
                 transition={{ type: 'spring', stiffness: 600, damping: 14 }}
-                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide overflow-hidden shadow-[0_4px_20px_rgba(212,160,23,0.3)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.4)]"
+                className="group relative px-8 py-3.5 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm tracking-wide overflow-hidden shadow-[0_4px_20px_rgba(212,160,23,0.3)] hover:shadow-[0_8px_30px_rgba(212,160,23,0.4)] focus-ring"
               >
                 <span className="relative z-10">Get Started</span>
                 {/* Shine sweep */}
@@ -139,7 +139,7 @@ export default function Hero({ onGetStarted, onDemo }) {
                 whileHover={{ scale: 1.06, borderColor: 'rgba(212,160,23,0.4)' }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                className="px-8 py-3.5 rounded-full border border-white/[0.08] text-white/60 font-medium text-sm btn-gold-line btn-premium hover:text-white transition-colors duration-300"
+                className="px-8 py-3.5 rounded-full border border-white/[0.08] text-white/60 font-medium text-sm btn-gold-line btn-premium hover:text-white transition-colors duration-300 focus-ring"
               >
                 View Demo
               </motion.button>

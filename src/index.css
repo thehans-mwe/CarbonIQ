@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --gold-1: #f5c842;
+  --gold-2: #d4a017;
+  --panel-1: rgba(12, 12, 12, 0.95);
+  --panel-2: rgba(8, 8, 8, 0.98);
+  --panel-border: rgba(255, 255, 255, 0.06);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -218,6 +226,35 @@ input[type="range"]::-moz-range-thumb, .sim-slider::-moz-range-thumb {
 /* ── Score glow ── */
 .score-glow {
   background: radial-gradient(circle, rgba(212,160,23,0.06) 0%, transparent 70%);
+}
+
+/* ── Layout helpers ── */
+.section-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.panel-surface {
+  background: linear-gradient(180deg, var(--panel-1), var(--panel-2));
+  border: 1px solid var(--panel-border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.panel-surface-soft {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.panel-divider {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Accessible focus ring ── */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.18);
 }
 
 /* ═════════════════════════════════════════════════════

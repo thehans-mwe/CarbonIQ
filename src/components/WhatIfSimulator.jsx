@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { EMISSION_FACTORS } from '../services/offlineCalc';
+import { getCountryFactors } from '../services/countries';
 
 /* ── Slider component ────────────────────────────────── */
 function SimSlider({ label, icon, value, onChange, min, max, step, unit, savings }) {
@@ -70,7 +71,8 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
   const { newTotal, savings, transportSavedBike, transportSavedTransit, energySaved, dietSaved } = useMemo(() => {
     const fuelType = inputs?.fuelType || 'gasoline';
     const dailyMiles = (Number(inputs?.carMiles) || 0) / 7;
-    const carKgPerMile = EMISSION_FACTORS.car[fuelType] ?? EMISSION_FACTORS.car.gasoline;
+    const c = getCountryFactors(inputs?.country || 'us');
+    const carKgPerMile = (c.car && c.car[fuelType]) ?? EMISSION_FACTORS.car[fuelType] ?? EMISSION_FACTORS.car.gasoline;
     const carDailyKg = dailyMiles * carKgPerMile;
 
     // Transport: convert “replacement days” into kg saved.
@@ -88,7 +90,7 @@ export default function WhatIfSimulator({ carbonData, inputs }) {
 
     // Energy: % reduction in electricity (gas unchanged in this simulator)
     const elecKwh = Number(inputs?.electricityKwh) || 0;
-    const energySaved = (elecReduction / 100) * elecKwh * EMISSION_FACTORS.electricity;
+    const energySaved = (elecReduction / 100) * elecKwh * (c.electricity ?? EMISSION_FACTORS.electricity);
 
     // Diet: switching to a lighter diet
     const currentDietDaily = EMISSION_FACTORS.diet[initDiet] ?? EMISSION_FACTORS.diet.medium_meat;

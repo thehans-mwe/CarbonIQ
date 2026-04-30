@@ -46,14 +46,14 @@ export async function fetchCarbonEstimate(inputs) {
 
     const gasOfflineKg = offlineParts.energyKg - electricityOfflineKg;
 
-    const res = await fetch(`${API_BASE}/carbon`, {
+      const res = await fetch(`${API_BASE}/carbon`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         type: 'electricity',
         electricity_unit: 'kwh',
         electricity_value: Number(inputs.electricityKwh),
-        country: 'us',
+          country: inputs.country || 'us',
       }),
     });
 

@@ -21,10 +21,18 @@ const fuelOptions = [
 const dietOptions = [
   { value: 'heavy_meat',  label: 'Heavy meat',  emoji: '🥩' },
   { value: 'medium_meat', label: 'Some meat',   emoji: '🍗' },
+const countryOptions = [
+  { value: 'us', label: 'United States', emoji: '🇺🇸' },
+  { value: 'uk', label: 'United Kingdom', emoji: '🇬🇧' },
+  { value: 'de', label: 'Germany', emoji: '🇩🇪' },
+  { value: 'au', label: 'Australia', emoji: '🇦🇺' },
+  { value: 'cn', label: 'China', emoji: '🇨🇳' },
+  { value: 'in', label: 'India', emoji: '🇮🇳' },
+];
   { value: 'vegetarian',  label: 'Vegetarian',  emoji: '🥬' },
   { value: 'vegan',       label: 'Vegan',       emoji: '🌱' },
 ];
-
+    country: 'us',
 const shoppingOptions = [
   { value: 'minimal',  label: 'Minimal',   emoji: '🧘' },
   { value: 'average',  label: 'Average',   emoji: '🛒' },
@@ -299,280 +307,274 @@ export default function Calculator({ onCalculate, onBack, onDemo }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen pt-28 pb-20 px-6 relative"
+      className="min-h-screen pt-28 pb-20 relative"
     >
-      <div className="max-w-xl mx-auto">
-        {/* Back */}
-        <motion.button
-          initial={{ opacity: 0, x: -16 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={onBack}
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-10 group"
-        >
-          <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-          </svg>
-          Back
-        </motion.button>
-
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10"
-        >
-          <h1 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight mb-3">
-            Your past <span className="gradient-text">7 days</span>
-          </h1>
-          <p className="text-gray-500 text-sm max-w-md leading-relaxed">
-            Pre-filled with typical values. Slide to adjust, then calculate.
-          </p>
-        </motion.div>
-
-        {/* Step indicators */}
-        <StepIndicators currentStep={step} onGoToStep={goToStep} />
-
-        {/* Progress bar */}
-        <ProgressBar step={step} total={STEPS.length} />
-
-        {/* ── Main card ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-          className="rounded-2xl border border-white/[0.06] bg-[#0a0a0a] p-6 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.4)] card-corner-draw card-gold-glow"
-        >
-          {/* Step title */}
-          <AnimatePresence mode="wait" custom={dir}>
-            <motion.div
-              key={`title-${step}`}
-              custom={dir}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.25 }}
-              className="mb-8"
-            >
-              <div className="flex items-center justify-between mb-1">
-                <div className="flex items-center gap-3">
-                  <span className="text-xl">{STEPS[step].icon}</span>
-                  <h3 className="text-lg font-semibold text-white">{STEPS[step].label}</h3>
-                </div>
-                <span className="text-[11px] text-gray-600 font-medium">
-                  {step + 1}/{STEPS.length}
-                </span>
-              </div>
-              <p className="text-xs text-gray-500 ml-9">{STEPS[step].desc}</p>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Step content */}
-          <div className="min-h-[200px]">
-            <AnimatePresence mode="wait" custom={dir}>
-              {step === 0 && (
-                <motion.div key="transport" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
-                  <SliderInput
-                    label="Miles driven"
-                    icon="🛣️"
-                    unit="mi"
-                    min={0} max={500} step={5}
-                    hint="US avg ~100 mi/week"
-                    value={form.carMiles}
-                    onChange={set('carMiles')}
-                  />
-                  <CleanSelect
-                    label="Fuel type"
-                    icon="⛽"
-                    options={fuelOptions}
-                    value={form.fuelType}
-                    onChange={set('fuelType')}
-                  />
-                </motion.div>
-              )}
-
-              {step === 1 && (
-                <motion.div key="energy" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
-                  <SliderInput
-                    label="Electricity"
-                    icon="💡"
-                    unit="kWh"
-                    min={0} max={500} step={5}
-                    hint="US avg ~200 kWh/week"
-                    value={form.electricityKwh}
-                    onChange={set('electricityKwh')}
-                  />
-                  <SliderInput
-                    label="Natural gas"
-                    icon="🔥"
-                    unit="therms"
-                    min={0} max={20} step={0.5}
-                    hint="US avg ~3 therms/week"
-                    value={form.gasUsage}
-                    onChange={set('gasUsage')}
-                  />
-                </motion.div>
-              )}
-
-              {step === 2 && (
-                <motion.div key="flights" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
-                  <SliderInput
-                    label="Short-haul flights (< 3 hrs)"
-                    icon="🛫"
-                    unit="flights"
-                    min={0} max={8} step={1}
-                    hint="~244 kg CO₂ each"
-                    value={form.shortFlights}
-                    onChange={set('shortFlights')}
-                  />
-                  <SliderInput
-                    label="Long-haul flights (3+ hrs)"
-                    icon="🌍"
-                    unit="flights"
-                    min={0} max={6} step={1}
-                    hint="~1,020 kg CO₂ each"
-                    value={form.longFlights}
-                    onChange={set('longFlights')}
-                  />
-                </motion.div>
-              )}
-
-              {step === 3 && (
-                <motion.div key="diet" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
-                  <p className="text-xs text-gray-500 mb-4">Pick what best describes your diet this week.</p>
-                  <CardSelector options={dietOptions} value={form.dietType} onChange={updateDiet} layoutId="diet" />
-                </motion.div>
-              )}
-
-              {step === 4 && (
-                <motion.div key="lifestyle" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
-                  <div>
-                    <p className="text-xs text-gray-500 mb-4">Your shopping habits this week.</p>
-                    <CardSelector options={shoppingOptions} value={form.shoppingHabit} onChange={updateShopping} layoutId="shop" />
-                  </div>
-                  <SliderInput
-                    label="Streaming"
-                    icon="📺"
-                    unit="hrs"
-                    min={0} max={60} step={1}
-                    hint="Netflix, YouTube, etc."
-                    value={form.streamingHours}
-                    onChange={set('streamingHours')}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* Live estimate (instant feedback) */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 md:p-5"
+      <div className="section-shell">
+        <div className="max-w-xl mx-auto">
+          {/* Back */}
+          <motion.button
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={onBack}
+            className="flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors mb-10 group focus-ring"
           >
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-[10px] text-white/30 uppercase tracking-[0.25em]">Live estimate</p>
-                <p className="text-xs text-white/50 mt-1">Updates instantly as you adjust inputs.</p>
-              </div>
-              <div className="text-right">
-                <div className="text-3xl font-serif font-bold text-white tabular-nums">
-                  {preview.totalKg.toFixed(1)} <span className="text-lg text-[#f5c842]/80 font-medium">kg CO₂</span>
-                </div>
-                <p className="text-[10px] text-white/30 mt-0.5">Offline model preview</p>
-              </div>
-            </div>
+            <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+            </svg>
+            Back
+          </motion.button>
 
-            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
-              {[
-                { k: 'transportKg', label: 'Transport', icon: '🚗', color: '#f5c842' },
-                { k: 'energyKg', label: 'Energy', icon: '⚡', color: '#d4a017' },
-                { k: 'flightKg', label: 'Flights', icon: '✈️', color: '#c49b12' },
-                { k: 'dietKg', label: 'Food', icon: '🥗', color: '#e6b830' },
-                { k: 'lifestyleKg', label: 'Lifestyle', icon: '🛍️', color: '#b8860b' },
-              ]
-                .filter((x) => (preview[x.k] || 0) > 0)
-                .map((x) => (
-                  <div key={x.k} className="flex items-center gap-2">
-                    <span className="text-base" style={{ color: x.color }}>{x.icon}</span>
-                    <span className="text-white/70">{x.label}:</span>
-                    <span className="ml-auto text-white font-semibold tabular-nums">{preview[x.k].toFixed(1)} <span className="text-[10px] text-white/30">kg</span></span>
-                  </div>
-                ))}
-            </div>
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-10"
+          >
+            <h1 className="font-serif text-3xl md:text-4xl font-semibold tracking-tight mb-3">
+              Your past <span className="gradient-text">7 days</span>
+            </h1>
+            <p className="text-gray-500 text-sm max-w-md leading-relaxed">
+              Pre-filled with typical values. Slide to adjust, then calculate.
+            </p>
           </motion.div>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-10 pt-6 border-t border-white/[0.04]">
-            <button
-              type="button"
-              onClick={prevStep}
-              className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-                step === 0 ? 'opacity-0 pointer-events-none' : 'text-gray-500 hover:text-white hover:bg-white/[0.04]'
-              }`}
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-              </svg>
-              Back
-            </button>
+        {/* Country selector */}
+        <div className="max-w-xl mx-auto mb-4">
+          <CleanSelect
+            label="Country"
+            icon="🌍"
+            options={countryOptions}
+            value={form.country}
+            onChange={set('country')}
+          />
+        </div>
+          {/* Step indicators */}
+          <StepIndicators currentStep={step} onGoToStep={goToStep} />
 
-            {isLast ? (
-              <motion.button
-                type="button"
-                onClick={handleSubmit}
-                disabled={loading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_16px_rgba(212,160,23,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2.5 btn-gold-line btn-shimmer btn-premium"
-              >
-                {loading ? (
-                  <>
-                    <motion.span
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                      className="inline-block w-4 h-4 border-2 border-black/20 border-t-black rounded-full"
-                    />
-                    Analyzing…
-                  </>
-                ) : (
-                  <>
-                    Calculate
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </>
-                )}
-              </motion.button>
-            ) : (
-              <motion.button
-                type="button"
-                onClick={nextStep}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_12px_rgba(212,160,23,0.15)] btn-gold-line btn-shimmer btn-premium"
-              >
-                Continue
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
-              </motion.button>
-            )}
-          </div>
-        </motion.div>
+          {/* Progress bar */}
+          <ProgressBar step={step} total={STEPS.length} />
 
-        {/* Demo */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center mt-8">
-          <button
-            type="button"
-            onClick={onDemo}
-            className="text-sm text-gray-600 hover:text-gray-400 transition-colors duration-200 underline underline-offset-4 decoration-gray-800 hover:decoration-gray-600"
+          {/* ── Main card ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-2xl p-6 md:p-10 panel-surface card-corner-draw card-gold-glow"
           >
-            Skip — use demo data instead
-          </button>
-        </motion.div>
-      </div>
-    </motion.section>
-  );
-}
+            {/* Step title */}
+            <AnimatePresence mode="wait" custom={dir}>
+              <motion.div
+                key={`title-${step}`}
+                custom={dir}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+                className="mb-8"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{STEPS[step].icon}</span>
+                    <h3 className="text-lg font-semibold text-white">{STEPS[step].label}</h3>
+                  </div>
+                  <span className="text-[11px] text-gray-600 font-medium">
+                    {step + 1}/{STEPS.length}
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500 ml-9">{STEPS[step].desc}</p>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Step content */}
+            <div className="min-h-[200px]">
+              <AnimatePresence mode="wait" custom={dir}>
+                {step === 0 && (
+                  <motion.div key="transport" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
+                    <SliderInput
+                      label="Miles driven"
+                      icon="🛣️"
+                      unit="mi"
+                      min={0} max={500} step={5}
+                      hint="US avg ~100 mi/week"
+                      value={form.carMiles}
+                      onChange={set('carMiles')}
+                    />
+                    <CleanSelect
+                      label="Fuel type"
+                      icon="⛽"
+                      options={fuelOptions}
+                      value={form.fuelType}
+                      onChange={set('fuelType')}
+                    />
+                  </motion.div>
+                )}
+
+                {step === 1 && (
+                  <motion.div key="energy" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
+                    <SliderInput
+                      label="Electricity"
+                      icon="💡"
+                      unit="kWh"
+                      min={0} max={500} step={5}
+                      hint="US avg ~200 kWh/week"
+                      value={form.electricityKwh}
+                      onChange={set('electricityKwh')}
+                    />
+                    <SliderInput
+                      label="Natural gas"
+                      icon="🔥"
+                      unit="therms"
+                      min={0} max={20} step={0.5}
+                      hint="US avg ~3 therms/week"
+                      value={form.gasUsage}
+                      onChange={set('gasUsage')}
+                    />
+                  </motion.div>
+                )}
+
+                {step === 2 && (
+                  <motion.div key="flights" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
+                    <SliderInput
+                      label="Short-haul flights (< 3 hrs)"
+                      icon="🛫"
+                      unit="flights"
+                      min={0} max={8} step={1}
+                      hint="~244 kg CO₂ each"
+                      value={form.shortFlights}
+                      onChange={set('shortFlights')}
+                    />
+                    <SliderInput
+                      label="Long-haul flights (3+ hrs)"
+                      icon="🌍"
+                      unit="flights"
+                      min={0} max={6} step={1}
+                      hint="~1,020 kg CO₂ each"
+                      value={form.longFlights}
+                      onChange={set('longFlights')}
+                    />
+                  </motion.div>
+                )}
+
+                {step === 3 && (
+                  <motion.div key="diet" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}>
+                    <p className="text-xs text-gray-500 mb-4">Pick what best describes your diet this week.</p>
+                    <CardSelector options={dietOptions} value={form.dietType} onChange={updateDiet} layoutId="diet" />
+                  </motion.div>
+                )}
+
+                {step === 4 && (
+                  <motion.div key="lifestyle" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }} className="space-y-6">
+                    <div>
+                      <p className="text-xs text-gray-500 mb-4">Your shopping habits this week.</p>
+                      <CardSelector options={shoppingOptions} value={form.shoppingHabit} onChange={updateShopping} layoutId="shop" />
+                    </div>
+                    <SliderInput
+                      label="Streaming"
+                      icon="📺"
+                      unit="hrs"
+                      min={0} max={60} step={1}
+                      hint="Netflix, YouTube, etc."
+                      value={form.streamingHours}
+                      onChange={set('streamingHours')}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Live estimate (instant feedback) */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-8 rounded-xl p-4 md:p-5 panel-surface-soft"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="text-[10px] text-white/30 uppercase tracking-[0.25em]">Live estimate</p>
+                  <p className="text-xs text-white/50 mt-1">Updates instantly as you adjust inputs.</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-serif font-bold text-white tabular-nums">
+                    {preview.totalKg.toFixed(1)} <span className="text-lg text-[#f5c842]/80 font-medium">kg CO₂</span>
+                  </div>
+                  <p className="text-[10px] text-white/30 mt-0.5">Offline model preview</p>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+                {[
+                  { k: 'transportKg', label: 'Transport', icon: '🚗', color: '#f5c842' },
+                  { k: 'energyKg', label: 'Energy', icon: '⚡', color: '#d4a017' },
+                  { k: 'flightKg', label: 'Flights', icon: '✈️', color: '#c49b12' },
+                  { k: 'dietKg', label: 'Food', icon: '🥗', color: '#e6b830' },
+                  { k: 'lifestyleKg', label: 'Lifestyle', icon: '🛍️', color: '#b8860b' },
+                ]
+                  .filter((x) => (preview[x.k] || 0) > 0)
+                  .map((x) => (
+                    <div key={x.k} className="flex items-center gap-2">
+                      <span className="text-base" style={{ color: x.color }}>{x.icon}</span>
+                      <span className="text-white/70">{x.label}:</span>
+                      <span className="ml-auto text-white font-semibold tabular-nums">{preview[x.k].toFixed(1)} <span className="text-[10px] text-white/30">kg</span></span>
+                    </div>
+                  ))}
+              </div>
+            </motion.div>
+
+            {/* Navigation */}
+            <div className="flex items-center justify-between mt-10 pt-6 panel-divider">
+              <button
+                type="button"
+                onClick={prevStep}
+                className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 focus-ring ${
+                  step === 0 ? 'opacity-0 pointer-events-none' : 'text-gray-500 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Back
+              </button>
+
+              {isLast ? (
+                <motion.button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-8 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_16px_rgba(212,160,23,0.2)] disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2.5 btn-gold-line btn-shimmer btn-premium focus-ring"
+                >
+                  {loading ? (
+                    <>
+                      <motion.span
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        className="inline-block w-4 h-4 border-2 border-black/20 border-t-black rounded-full"
+                      />
+                      Analyzing…
+                    </>
+                  ) : (
+                    <>
+                      Calculate
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                      </svg>
+                    </>
+                  )}
+                </motion.button>
+              ) : (
+                <motion.button
+                  type="button"
+                  onClick={nextStep}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#d4a017] to-[#f5c842] text-black font-semibold text-sm shadow-[0_2px_12px_rgba(212,160,23,0.15)] btn-gold-line btn-shimmer btn-premium focus-ring"
+                >
+                  Continue
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </motion.button>
+              )}

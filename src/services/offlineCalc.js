@@ -13,49 +13,52 @@
  *  - IEA 2024 — streaming/data-centre energy
  */
 
-// ── Emission factors ──────────────────────────────────────
-const FACTORS = {
+// ── Emission factors (defaults) ──────────────────────────
+import { getCountryFactors } from './countries';
+
+const DEFAULT_FACTORS = {
   car: {
-    gasoline: 0.400,   // kg CO₂/mi — EPA 2025: "about 400 grams CO₂ per mile" (8,887 g/gal ÷ 22.2 mpg)
-    diesel:  0.364,    // kg CO₂/mi — EPA: 10,180 g CO₂/gal ÷ ~28 mpg diesel sedan
-    hybrid:  0.195,    // kg CO₂/mi — EPA: 8,887 g CO₂/gal ÷ ~46 mpg avg hybrid fleet 2025
-    electric: 0.104,   // kg CO₂/mi — DOE avg EV 3.60 mi/kWh (0.278 kWh/mi) × 0.373 kg/kWh
+    gasoline: 0.400,
+    diesel: 0.364,
+    hybrid: 0.195,
+    electric: 0.104,
   },
-  electricity: 0.373,  // kg CO₂/kWh — EPA eGRID2022 US national total output rate (823.1 lb/MWh)
-  naturalGas: 5.29,    // kg CO₂/therm — EPA: 0.1 mmbtu/therm × 14.43 kg C/mmbtu × 44/12
+  electricity: 0.373,
+  naturalGas: 5.29,
   flight: {
-    shortHaul: 255,    // kg CO₂e/pax — DEFRA 2025 economy ≤ 3 hrs incl. radiative forcing
-    longHaul:  1102,   // kg CO₂e/pax — DEFRA 2025 economy > 3 hrs incl. radiative forcing
+    shortHaul: 255,
+    longHaul: 1102,
   },
-  diet: {              // kg CO₂e/day — Scarborough et al. 2023 (Nature Food)
+  diet: {
     heavy_meat: 7.19,
     medium_meat: 5.63,
     vegetarian: 3.81,
     vegan: 2.89,
   },
-  shopping: {          // kg CO₂e/week — composite of EPA + WRAP 2023
-    minimal:  2.5,
-    average:  9.0,
+  shopping: {
+    minimal: 2.5,
+    average: 9.0,
     frequent: 19.5,
-    heavy:    34.0,
+    heavy: 34.0,
   },
-  streaming: 0.036,    // kg CO₂e/hr — IEA 2024 data-centre energy per stream-hour
+  streaming: 0.036,
 };
 
 // Re-exported for components that need to present consistent “what-if” / previews.
 export const EMISSION_FACTORS = FACTORS;
 
 // US per-capita weekly benchmarks (for green-score grading)
-const BENCHMARKS = {
-  transport: 77,       // ~193 mi/wk × 0.400
-  energy:    51,       // ~100 kWh × 0.373 + ~2.5 therms × 5.29
-  flight:    10,       // annualised per-capita
-  diet:      39.4,     // medium_meat × 7
-  lifestyle: 13,       // avg shopping + ~10 hrs streaming
+const GLOBAL_DEFAULT_BENCHMARKS = {
+  transport: 77,
+  energy: 51,
+  flight: 10,
+  diet: 39.4,
+  lifestyle: 13,
 };
 
-const WEEKLY_AVG =
-  BENCHMARKS.transport + BENCHMARKS.energy + BENCHMARKS.flight + BENCHMARKS.diet + BENCHMARKS.lifestyle; // ~190.4
+function sumBenchmarks(b) {
+  return (b.transport || 0) + (b.energy || 0) + (b.flight || 0) + (b.diet || 0) + (b.lifestyle || 0);
+}
 
 // ── Calculator ────────────────────────────────────────────
 export function calculateOffline(inputs) {
@@ -69,12 +72,22 @@ export function calculateOffline(inputs) {
     dietType = 'medium_meat',
     shoppingHabit = 'average',
     streamingHours = 0,
+    country = 'us',
   } = inputs;
+  // Merge country-specific overrides
+  const cFactors = getCountryFactors(country || 'us');
+  const FACTORS = {
+    ...DEFAULT_FACTORS,
+    electricity: cFactors.electricity || DEFAULT_FACTORS.electricity,
+    car: {
+      ...DEFAULT_FACTORS.car,
+      gasoline: cFactors.car?.gasoline || DEFAULT_FACTORS.car.gasoline,
+      electric: cFactors.car?.electric || DEFAULT_FACTORS.car.electric,
+    },
+  };
 
   const transportKg = Number(carMiles) * (FACTORS.car[fuelType] || FACTORS.car.gasoline);
-  const energyKg =
-    Number(electricityKwh) * FACTORS.electricity +
-    Number(gasUsage) * FACTORS.naturalGas;
+  const energyKg = Number(electricityKwh) * FACTORS.electricity + Number(gasUsage) * FACTORS.naturalGas;
   const flightKg =
     Number(shortFlights) * FACTORS.flight.shortHaul +
     Number(longFlights) * FACTORS.flight.longHaul;
@@ -88,6 +101,9 @@ export function calculateOffline(inputs) {
   // EPA: urban tree sequesters ~60 kg CO₂/year (0.060 MT) → ~1.15 kg/week
   const treesEquivalent = Math.round(totalKg / 1.15);
 
+  // Benchmarks for comparison
+  const benchmarks = inputs && inputs.country ? getCountryFactors(inputs.country).benchmarks || GLOBAL_DEFAULT_BENCHMARKS : GLOBAL_DEFAULT_BENCHMARKS;
+
   return {
     totalKg,
     transportKg: Math.round(transportKg * 100) / 100,
@@ -97,8 +113,12 @@ export function calculateOffline(inputs) {
     lifestyleKg: Math.round(lifestyleKg * 100) / 100,
     treesEquivalent,
     source: 'offline',
+    benchmarks,
   };
 }
+
+// Export core/default emission factors for use by other components (simulator, UI)
+export const EMISSION_FACTORS = DEFAULT_FACTORS;
 
 // ── Offline AI recommendations fallback ──────────────────
 export function offlineRecommendations(carbonData) {
