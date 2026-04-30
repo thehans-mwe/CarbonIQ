@@ -44,9 +44,6 @@ const DEFAULT_FACTORS = {
   streaming: 0.036,
 };
 
-// Re-exported for components that need to present consistent “what-if” / previews.
-export const EMISSION_FACTORS = FACTORS;
-
 // US per-capita weekly benchmarks (for green-score grading)
 const GLOBAL_DEFAULT_BENCHMARKS = {
   transport: 77,
@@ -59,6 +56,10 @@ const GLOBAL_DEFAULT_BENCHMARKS = {
 function sumBenchmarks(b) {
   return (b.transport || 0) + (b.energy || 0) + (b.flight || 0) + (b.diet || 0) + (b.lifestyle || 0);
 }
+
+// Default benchmarks used by offlineRecommendations when no country is provided
+const BENCHMARKS = GLOBAL_DEFAULT_BENCHMARKS;
+const WEEKLY_AVG = sumBenchmarks(BENCHMARKS);
 
 // ── Calculator ────────────────────────────────────────────
 export function calculateOffline(inputs) {

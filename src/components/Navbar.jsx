@@ -35,7 +35,7 @@ export default function Navbar({ onDashboard, onNavigateSection, onHome }) {
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-400 ${
         scrolled
-          ? 'bg-black/90 backdrop-blur-md py-3 border-b border-white/[0.05]'
+          ? 'bg-black/90 backdrop-blur-md py-3 border-b border-black/90 shadow-[0_1px_0_rgba(0,0,0,0.9)]'
           : 'bg-transparent py-5'
       }`}
     >
