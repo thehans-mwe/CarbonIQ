@@ -243,8 +243,12 @@ export default function Calculator({ onCalculate = async () => {}, onBack = () =
             <p className="text-sm text-gray-500">Pre-filled with typical values. Slide to adjust, then calculate.</p>
           </motion.div>
 
-          <div className="max-w-xl mx-auto mb-4">
-            <CleanSelect label="Country" icon="🌍" options={countryOptions} value={form.country} onChange={set('country')} />
+          <div className="max-w-xl mx-auto mb-5 rounded-2xl border border-white/[0.06] bg-white/[0.025] p-4">
+            <div className="mb-2">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-[#f5c842]">Choose your nation</p>
+              <p className="text-xs text-gray-500 mt-1">This changes the comparison data and emission factors shown below.</p>
+            </div>
+            <CleanSelect label="Nation" icon="🌍" options={countryOptions} value={form.country} onChange={set('country')} />
           </div>
 
           <StepIndicators currentStep={step} onGoToStep={goToStep} />
